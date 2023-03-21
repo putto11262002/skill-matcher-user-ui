@@ -1,20 +1,53 @@
-# Skill Matcher
+# INFO310 - Skill Matcher
 
-___
 
-## About Our Project
+# About Our Project
 
 Our project is to develop an app that could assist members of the university to exchange skills and knowledge. The app
 would match users based on their desired skills to learn and skills they possess. With this app, users could connect
-with other users who possess the knowledge they seek to acquire, while also sharing their own skills with others.
+with other users who possess the knowledge they seek to acquire, while also sharing their own skills by teaching others.
 
-## Stakeholders
+---
+## 1) Feasibility study
+**Technical**: 
+- **Frontend language/ framework: React.JS** 
+  - Enables more dynamic and interactive user experiences
+  - Extensive documentation, resources, and support
+  - Developer friendly 
+- **Backend language/framework:  Node JS with Nest.JS framework**
+  - Use same language as frontend reduce development effort
+  - Nest.JS very well supported framework
+- **DMS: MongoDB**
+  - High scalability 
+  - Store data in JSON-based document which is highly compatible with Javascript
+  - Has active community which provide extensive support and resource
+
+**Operational:**
+- **Database access**: We will need access to the student database by requesting permission from the University IT staff to validate student input. 
+- **Legal**: Ensure the app complies with current laws and regulations, such as data privacy laws, by obtaining licences and permissions. 
+- **Security**: Implement appropriate security measures such as multi-factor authentication, hashing passwords, and encrypting personal details to protect users' sensitive information. 
+- **Informing users**: We must inform users of significant decisions such as new features, changes to legal information, terms and conditions, and data breaches.
+- **Project plan**: We also have a product backlog to help us keep on track with the current sprints, release plan, and many more. That would be sufficient in helping us keep track of the project.
+
+ **Schedule**
+- **Timeline:** We have been allocated sufficient time for INFO310 to complete the project, we have to ensure that the project timeline is feasible based on the resources available.  
+
+**Resource:**
+- **University facilities:** We have access to university facilities such as labs, meeting rooms, university-hosted Gitbucket as VCS (version control system), and Office365. 
+- **Online resources** We also have access to free online services such as Google Suite, various websites, and YouTube tutorials can be quite helpful. 
+- **Customer support system:** We will need to consider using a customer support system such as Freshdesk that can convert customer requests via email, web, phone, and many more into tickets to improve productivity. 
+- **App management:** We would also need to consider an issue tracking system such as Jira to manage customer issues, and track ongoing development on the features in the app.
+
+
+
+---
+## **2) Stakeholders**
 
 - **User**: A university student or staff could sign up to use the application as a user. Within the application a user
   could be a learner and/or a tutor. It’s important to consider their needs as high priority when designing the user
   interface and features for the app.
-    - **Learner**: a user that seeks to learn skills from other users tutors
-    - **Tutor**: a user that offers to share their knowledge to other users.
+    - **Learner**: a user that seeks to learn skills from other users (tutors).
+    - **Tutor**: a user that offers to share their knowledge to other users (learners).
 - **University Staff**: They would be interested in using the application and providing input on security concerns and
   data privacy revolved around student information.
 - **App administrator**: would be responsible for managing the app’s backend ensuring its smooth operation. They may
@@ -22,9 +55,10 @@ with other users who possess the knowledge they seek to acquire, while also shar
 - **Developers**: Would be responsible for building and maintaining the app. There may be a need for collaboration with
   other stakeholders to ensure the app meets their needs.
 
-## Functional Requirements
+---
+## **3) Functional Requirements**
 
-- **Sign-up and log-in**: User shall be able to signup and login with username/email
+- **Sign-up and log-in**: User shall be able to signup and login with username and email.
 - **Profile creation**: Users shall be able to create a profile with information about their skills, interests, and
   skills
   they hope to acquire.
@@ -50,11 +84,12 @@ with other users who possess the knowledge they seek to acquire, while also shar
   plan in place to handle user reports and how we enforce community guidelines.
 - **Scheduling meeting**:  Users shall be able to schedule sessions with their matches.
 
+---
 ## Non-Functional Requirement
 
 - **Availability**: The system should be available 90% of the time, apart from scheduled system maintenance and updates.
-- **Performance**: The system should be handle high traffic of up to 25k+
-  users ([21000+ students and up to 25,000+](https://www.otago.ac.nz/about/quickstats.html#6)). Initial page loading
+- **Performance**: The system should be handle high traffic of up to 25k+ 
+  users ([21000+ students and up to 4000+ staff](https://www.otago.ac.nz/about/quickstats.html#6)). Initial page loading
   times should be roughly two seconds.
 - **Scalability**: The system should be designed to automatically scale as the user base grows. The current university
   student and staff population is roughly at 25,000+. The application should be able to handle a large number of
@@ -62,8 +97,9 @@ with other users who possess the knowledge they seek to acquire, while also shar
 - **Usability**: The design of the user interface to be intuitive enough for user to navigate around without any
   previous training. The user interface should be responsive - being able to adjust to support laptop, tablet and mobile
   screen.
-- **Security**: User personal information should be encrypted at rest and in transit.
+- **Security**: User personal information should be encrypted at rest and in transit. 
 
+---
 ## User Stories
 
 1. **Signup and Login**: As a user, I want to be able to easily create an account and sign in with my university email address or username so I can start teaching or learning a skill.
