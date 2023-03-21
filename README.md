@@ -29,6 +29,7 @@ with other users who possess the knowledge they seek to acquire, while also shar
 - **Informing users**: We must inform users of significant decisions such as new features, changes to legal information, terms and conditions, and data breaches.
 - **Project plan**: We also have a product backlog to help us keep on track with the current sprints, release plan, and many more. That would be sufficient in helping us keep track of the project.
 
+
  **Schedule**
 - **Timeline:** We have been allocated sufficient time for INFO310 to complete the project, we have to ensure that the project timeline is feasible based on the resources available.  
 
