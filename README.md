@@ -85,7 +85,7 @@ with other users who possess the knowledge they seek to acquire, while also shar
 - **Scheduling meeting**:  Users shall be able to schedule sessions with their matches.
 
 ---
-## Non-Functional Requirement
+## **4) Non-Functional Requirement**
 
 - **Availability**: The system should be available 90% of the time, apart from scheduled system maintenance and updates.
 - **Performance**: The system should be handle high traffic of up to 25k+ 
@@ -100,7 +100,7 @@ with other users who possess the knowledge they seek to acquire, while also shar
 - **Security**: User personal information should be encrypted at rest and in transit. 
 
 ---
-## User Stories
+## **5) User Stories**
 
 1. **Signup and Login**: As a user, I want to be able to easily create an account and sign in with my university email address or username so I can start teaching or learning a skill.
 2. **Create Profile**: As a user, I want to be able to input my details and upload my profile image.
@@ -110,8 +110,6 @@ with other users who possess the knowledge they seek to acquire, while also shar
 6. **Search skills**: As a learner, I want to be able to easily search for a tutor by the skills I want to learn so that I can find the best match for my needs efficiently.
 7. **Viewing Profile**: As a learner, I want to be able to see detailed information about each tutor I'm matched with, including their qualifications, experience, and availability, so I can choose who's more suitable based on my needs.
 8. **Matching history**: As a user, I want to be able to view a record of my past matches so I can keep track of my progress and plan future sessions more effectively.
-
-## Feasibility Study
 
 ## High-level Class diagram
 
