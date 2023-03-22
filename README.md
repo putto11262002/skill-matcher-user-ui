@@ -1,7 +1,7 @@
 # INFO310 - Skill Matcher
 
 
-# About Our Project
+## About Our Project
 
 Our project is to develop an app that could assist members of the university to exchange skills and knowledge. The app
 would match users based on their desired skills to learn and skills they possess. With this app, users could connect
@@ -24,11 +24,16 @@ with other users who possess the knowledge they seek to acquire, while also shar
 
 **Operational:**
 - **Database access**: We will need access to the student database by requesting permission from the University IT staff to validate student input. 
-- **Legal**: Ensure the app complies with current laws and regulations, such as data privacy laws, by obtaining licences and permissions. 
-- **Security**: Implement appropriate security measures such as multi-factor authentication, hashing passwords, and encrypting personal details to protect users' sensitive information. 
 - **Informing users**: We must inform users of significant decisions such as new features, changes to legal information, terms and conditions, and data breaches.
 - **Project plan**: We also have a product backlog to help us keep on track with the current sprints, release plan, and many more. That would be sufficient in helping us keep track of the project.
 
+**Legal**: 
+- **Privacy law**: Ensure the system complies with current privacy law.
+- **Licenses**: Ensure we have permission to used external intellectual properties.  
+
+**Security**: 
+- **Protect user data**: We need to encrypt sensitive data at rest and in transit. 
+- **Authentication**: Our authentication service needs to comply to good authentication practices such as using multi-factor authentication, password hashing and salting. 
 
  **Schedule**
 - **Timeline:** We have been allocated sufficient time for INFO310 to complete the project, we have to ensure that the project timeline is feasible based on the resources available.  
