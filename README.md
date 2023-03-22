@@ -49,6 +49,8 @@ with other users who possess the knowledge they seek to acquire, while also shar
 - **Reporting system**: Allow users to report inappropriate behaviour or content. Also, we have to ensure that we have a
   plan in place to handle user reports and how we enforce community guidelines.
 - **Scheduling meeting**:  Users shall be able to schedule sessions with their matches.
+- **Matching suggestion**: The system shall provide users with matching recommendations. This recommendation should be
+  done based on the skills the user possesses and the skills the user wants to learn.
 
 ## Non-Functional Requirement
 
@@ -66,14 +68,27 @@ with other users who possess the knowledge they seek to acquire, while also shar
 
 ## User Stories
 
-1. **Signup and Login**: As a user, I want to be able to easily create an account and sign in with my university email address or username so I can start teaching or learning a skill.
+1. **Creating an account**: As a user, I want to be able to easily create an account and sign in with my university email address or username so I can start teaching or learning a skill.
 2. **Create Profile**: As a user, I want to be able to input my details and upload my profile image.
 3. **Adding qualifications/skills**: As a tutor, I want to be able to add the skill/s and qualifications to my profile so that learners can find me based on my experience and expertise.
 4. **Adding skills**: As a learner, I want to be able to add the skills that I want to learn on my profile so tutors can find me and also have an idea of my preferences, interests and needs.
-5. **Matching**: As a tutor/leaner, I want to be able to match with a leaner/tutor who posses the skill I want to learn and desire to learn the skill that I possess. 
-6. **Search skills**: As a learner, I want to be able to easily search for a tutor by the skills I want to learn so that I can find the best match for my needs efficiently.
-7. **Viewing Profile**: As a learner, I want to be able to see detailed information about each tutor I'm matched with, including their qualifications, experience, and availability, so I can choose who's more suitable based on my needs.
-8. **Matching history**: As a user, I want to be able to view a record of my past matches so I can keep track of my progress and plan future sessions more effectively.
+5. **Matching**: As a user, I want to match with other users who possess the skills I want to learn and desire to learn the skills I possess.
+6. **Search skills**: As a user, I want to be able to search and filter other users by their skills they want to learn and the skill they possess .
+7. **Viewing Profile**: As a learner, I want to be able to see detailed information about each tutor I'm matched with, including their qualifications, experience, and reviews, so I can choose who's more suitable based on my needs.
+8. **Messaging: As a learner**, I want to be able to message the tutor I have matched with so we can discuss goals, schedules, and questions and arrange meetings.
+9. **Rating tutor**: As a learner, I want to be able to rate my tutor after each session so other students can benefit from my experience and make informed decisions with my matches.
+10. **Rating learner**: As a tutor, I want to be able to rate my learner after each session so other tutors can make informed decisions about a match.
+11. **Viewing reviews**: As a user, I want to be able to see the other users' ratings and reviews from other users so I can decide if I wish to accept a match.
+12. **Matching history**: As a user, I want to be able to view a record of my past matches so I can keep track of my progress and plan future sessions more effectively.
+13. **Abuse report**: As a user, I want to be able to report inappropriate behavior or violations of the app policies by other users so that it protects others and creates a safe space and community for users.  
+14. **Monitor abuse report**: As an admin, I want to be able to review user reports for inappropriate behavior to make sure they are reasonable and take appropriate action if necessary so the app remains a trusted and reliable platform for learning and teaching.
+15. **Accounts Suspension**: As an admin, I want to be able to suspend user accounts if they have violated the app rules so that the community stays safe and respectful.
+16. **Activity monitor**: As an admin, I want to be able to monitor the app's usage and performance (e.g., number of users, server uptime, etc.) so that I can ensure the app is running smoothly.
+17. **Unmatching**: As a user, I want to have the option to unmatch with a user I've matched with because I've changed my mind.
+18. **Deleting account**: As a user, I want to be able to delete my account and all associated data so I can easily leave the app when I no longer need it.
+19. **Updating skills**: As a user, I want to be able to update my skills and their proficiency levels on my profile at any time, so I can find suitable matches to improvise my learning or teaching experience.
+20. **Scheduling and Calendar integrations**: As a learner/tutor I want to be able to schedule sessions with our matches.
+21. **Matching suggestion**: As a user I want the system to recommend other users that have the skills I want to learn and want to learn the skills I possess.
 
 ## Feasibility Study
 
