@@ -4,7 +4,7 @@
 
 To install all dependency run
 ```bash
-yarn
+yarn isntall
 ```
 
 For development mode:
