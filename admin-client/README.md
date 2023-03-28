@@ -2,6 +2,11 @@
 
 ## Getting Started
 
+To install all dependency run
+```bash
+yarn
+```
+
 For development mode:
 
 ```bash
@@ -11,6 +16,7 @@ yarn dev
 For production mode:
 
 ```bash
+yarn build
 yarn start
 ```
 
