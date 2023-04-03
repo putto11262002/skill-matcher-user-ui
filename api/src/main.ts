@@ -1,9 +1,16 @@
+import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
+
+  // config allowed domain
+  app.enableCors();
+  
   if(process.env.NODE_ENV === 'development'){
     const config = new DocumentBuilder()
     .setTitle('Skill Matcher')
@@ -13,6 +20,18 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
   }
-  await app.listen(8080);
+  await app.listen(configService.get('app.port'));
+  const appUrl = await app.getUrl();
+  const mongoConfig = await configService.get('mongo');
+  process.env.NODE_ENV === 'development' &&
+    Logger.log(
+      `Using the following mongo config\n${JSON.stringify(mongoConfig)}`,
+      'mongo',
+    );
+  Logger.log(
+    `Server running on ${appUrl} in ${
+      process.env.NODE_ENV || 'development'
+    } mode`,
+  );
 }
 bootstrap();
