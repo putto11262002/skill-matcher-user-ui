@@ -3,6 +3,7 @@
 ## Getting Started
 
 To install all dependency run
+
 ```bash
 yarn isntall
 ```
