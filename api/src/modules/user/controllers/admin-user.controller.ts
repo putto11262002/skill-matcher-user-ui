@@ -18,10 +18,10 @@ import { Pagination } from 'src/common/dto/responses/Pagination.dto';
 import { Roles } from 'src/modules/auth/decorators/roles.decorator';
 import { AuthGuard } from 'src/modules/auth/guards/auth.guard';
 import { RoleGuard } from 'src/modules/auth/guards/role.guard';
-import { CreateUserDto } from '../dtos/request/create-user.dto';
-import { SearchUserDto } from '../dtos/request/search-user.dto';
-import { UpdateUserDto } from '../dtos/request/update-user.dto';
-import { UserDto } from '../dtos/response/user.dto';
+import { CreateUserDto } from '../dtos/requests/create-user.dto';
+import { SearchUserDto } from '../dtos/requests/search-user.dto';
+import { UpdateUserDto } from '../dtos/requests/update-user.dto';
+import { UserDto } from '../dtos/responses/user.dto';
 import { UserService } from '../services/user.service';
 
 @ApiTags('Admin')

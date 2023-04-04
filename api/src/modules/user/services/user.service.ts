@@ -7,8 +7,8 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
-import { CreateUserDto } from '../dtos/request/create-user.dto';
-import { UpdateUserDto } from '../dtos/request/update-user.dto';
+import { CreateUserDto } from '../dtos/requests/create-user.dto';
+import { UpdateUserDto } from '../dtos/requests/update-user.dto';
 import { User } from '../schemas/user.schema';
 import { omit } from 'lodash';
 import {
@@ -16,7 +16,7 @@ import {
   USER_ROLE,
   USER_STATUS,
 } from '../constants/user.constat';
-import { SearchUserDto } from '../dtos/request/search-user.dto';
+import { SearchUserDto } from '../dtos/requests/search-user.dto';
 import { AuthService } from 'src/modules/auth/services/auth.service';
 
 @Injectable()

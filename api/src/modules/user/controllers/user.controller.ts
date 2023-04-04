@@ -3,13 +3,13 @@ import { ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from 'src/modules/auth/decorators/current-user.decorator';
 import { JwtAccessTokenPayloadDto } from 'src/modules/auth/dtos/request/jwt-access-token-payload.dto';
 import { AuthGuard } from 'src/modules/auth/guards/auth.guard';
-import { UpdateUserDto } from '../dtos/request/update-user.dto';
-import { UserDto } from '../dtos/response/user.dto';
+import { UpdateUserDto } from '../dtos/requests/update-user.dto';
+import { UserDto } from '../dtos/responses/user.dto';
 import { UserService } from '../services/user.service';
 import {omit} from "lodash"
 import { NOT_ALLOWED_SELF_UPDATE, ONLY_ADMIN_SEARCH_FIELDS } from '../constants/user.constat';
-import { CreateUserDto } from '../dtos/request/create-user.dto';
-import { SearchUserDto } from '../dtos/request/search-user.dto';
+import { CreateUserDto } from '../dtos/requests/create-user.dto';
+import { SearchUserDto } from '../dtos/requests/search-user.dto';
 import { Pagination } from 'src/common/dto/responses/Pagination.dto';
 @ApiTags('User')
 @Controller('user')

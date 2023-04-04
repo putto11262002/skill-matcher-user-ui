@@ -16,7 +16,7 @@ import { JwtRefreshTokenPayload } from '../dtos/request/jwt-refresh-token-payloa
 import { UserService } from 'src/modules/user/services/user.service';
 import { User } from 'src/modules/user/schemas/user.schema';
 import { SignUpDto } from '../dtos/request/sign-up.dto';
-import { CreateProfileDto, CreateUserDto } from 'src/modules/user/dtos/request/create-user.dto';
+import { CreateProfileDto, CreateUserDto } from 'src/modules/user/dtos/requests/create-user.dto';
 
 @Injectable()
 export class AuthService {

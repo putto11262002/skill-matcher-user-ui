@@ -8,8 +8,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from 'src/modules/user/dtos/request/create-user.dto';
-import { UserDto } from 'src/modules/user/dtos/response/user.dto';
+import { CreateUserDto } from 'src/modules/user/dtos/requests/create-user.dto';
+import { UserDto } from 'src/modules/user/dtos/responses/user.dto';
 import { UserService } from 'src/modules/user/services/user.service';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import { JwtAccessTokenPayloadDto } from '../dtos/request/jwt-access-token-payload.dto';
