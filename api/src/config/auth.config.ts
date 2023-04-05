@@ -1,6 +1,7 @@
 import { registerAs } from '@nestjs/config';
 
 export default registerAs('auth', () => ({
+  disable: process.env.DISABLE_AUTH || false,  // for development
   jwt: {
     accessToken: {
       secret: 'secret',

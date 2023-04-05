@@ -10,15 +10,20 @@ import { ROLES_KEY } from '../decorators/roles.decorator';
 import { Request } from 'express';
 import { AuthService } from '../services/auth.service';
 import { UserDto } from 'src/modules/user/dtos/responses/user.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class RoleGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     private readonly authService: AuthService,
+    private readonly configService: ConfigService
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    if(this.configService.get("auth.disable")){
+      return true;
+    }
     const requiredRoles = this.reflector.getAllAndOverride<string[]>(
       ROLES_KEY,
       [context.getHandler(), context.getClass()],

@@ -7,12 +7,16 @@ import { CanActivate } from '@nestjs/common';
 import { Request } from 'express';
 import { UserDto } from 'src/modules/user/dtos/responses/user.dto';
 import { AuthService } from '../services/auth.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService, private readonly configService: ConfigService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    if(this.configService.get("auth.disable")){
+      return true;
+    }
 
     const req: Request = context.switchToHttp().getRequest();
     const token =
