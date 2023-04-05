@@ -6,3 +6,9 @@ body,
   padding: 0;
   height: 100vh;
 }
+
+a {
+  width: 100%;
+  text-decoration: none;
+  color: var(--mui-palette-text-main);
+}

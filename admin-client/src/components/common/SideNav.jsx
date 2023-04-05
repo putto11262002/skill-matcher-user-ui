@@ -15,6 +15,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import AddIcon from '@mui/icons-material/Add';
 import Toolbar from '@mui/material/Toolbar';
 import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
+import Link from 'next/link';
 const drawerWidth = 240;
 
 const Menu = () => {
@@ -24,21 +25,25 @@ const Menu = () => {
       {/* <Divider /> */}
       <List>
         <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <AddIcon />
-            </ListItemIcon>
-            <ListItemText>Add User</ListItemText>
-          </ListItemButton>
+          <Link href='/user/add'>
+            <ListItemButton>
+              <ListItemIcon>
+                <AddIcon />
+              </ListItemIcon>
+              <ListItemText>Add User</ListItemText>
+            </ListItemButton>
+          </Link>
         </ListItem>
 
         <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <ViewHeadlineIcon />
-            </ListItemIcon>
-            <ListItemText>View users</ListItemText>
-          </ListItemButton>
+          <Link href='/user'>
+            <ListItemButton>
+              <ListItemIcon>
+                <ViewHeadlineIcon />
+              </ListItemIcon>
+              <ListItemText>View users</ListItemText>
+            </ListItemButton>
+          </Link>
         </ListItem>
       </List>
       <Divider />
