@@ -1,4 +1,3 @@
-import userService from '@/services/user.service';
 import { createSlice } from '@reduxjs/toolkit';
 import { signIn, signOut } from '../thunks/user.thunk';
 import authService from '@/services/auth.service';

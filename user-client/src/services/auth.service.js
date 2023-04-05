@@ -1,6 +1,5 @@
 import api from './api';
 import tokenService from './token.service';
-import userService from './user.service';
 
 export class AuthService {
   async refresh() {
