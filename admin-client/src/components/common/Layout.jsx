@@ -18,7 +18,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { useTheme } from '@mui/material';
+import { Container, useTheme } from '@mui/material';
 const drawerWidth = 240;
 const Layout = ({ children }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -42,8 +42,10 @@ const Layout = ({ children }) => {
           }}
         >
           <Toolbar />
+          <Container height='100%'  sx={{paddingY: 5}}  maxWidth='md'>
 
           {children}
+          </Container>
         </Box>
       </Box>
     </>
