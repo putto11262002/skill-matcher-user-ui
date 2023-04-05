@@ -7,12 +7,27 @@ export class AuthService {
     return api.post('/auth/refresh', { refreshToken: tokenService.getLocalRefreshToken() });
   }
 
+  setLocalUser(user) {
+    if (typeof window === 'undefined') return null;
+    return window.localStorage.setItem('user', user ? JSON.stringify(user) : null);
+  }
+
+  getLocalUser() {
+    if (typeof window === 'undefined') return null;
+    return JSON.parse(window.localStorage.getItem('user'));
+  }
+
+  removeLocalUser() {
+    if (typeof window === undefined) return null;
+    return window.localStorage.removeItem('user');
+  }
+
   async signIn(usernameOrEmail, password) {
     const res = await api.post('/auth/sign-in', { usernameOrEmail, password });
     const { accessToken, refreshToken, user } = await res.data;
     tokenService.setLocalAccessToken(accessToken);
     tokenService.setLocalRefreshToken(refreshToken);
-    userService.setLocalUser(user);
+    this.setLocalUser(user);
     return res;
   }
 
@@ -20,7 +35,7 @@ export class AuthService {
     const res = await api.delete('/auth/sign-out');
     tokenService.removeLocalAccessToken();
     tokenService.removeLocalRefreshToken();
-    userService.removeLocalUser();
+    this.removeLocalUser();
     return res;
   }
 }

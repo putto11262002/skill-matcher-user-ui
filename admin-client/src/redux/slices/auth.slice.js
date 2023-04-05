@@ -1,8 +1,9 @@
 import userService from '@/services/user.service';
 import { createSlice } from '@reduxjs/toolkit';
 import { signIn, signOut } from '../thunks/user.thunk';
+import authService from '@/services/auth.service';
 
-const user = userService.getLocalUser();
+const user = authService.getLocalUser();
 export const authSlice = createSlice({
   name: 'auth',
   initialState: {
