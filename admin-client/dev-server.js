@@ -1,4 +1,4 @@
-require("dotenv").config(); // require dotenv
-const cli = require("next/dist/cli/next-dev");
+require('dotenv').config(); // require dotenv
+const cli = require('next/dist/cli/next-dev');
 
-cli.nextDev(["-p", process.env.PORT || 8082]);
+cli.nextDev(['-p', process.env.PORT || 8082]);
