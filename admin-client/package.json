@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "node prod-server.js",
     "lint": "next lint",
-    "format": "prettier --write src/**/*.{js,jsx} --config ./.prettierrc"
+    "format": "prettier --write --ignore-path .gitignore ."
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
