@@ -36,11 +36,13 @@ export class AuthController {
   @Post('sign-in')
   @HttpCode(HttpStatus.OK)
   async signIn(@Body() payload: LoginDto) {
-    const { refreshToken, accessToken } = await this.authService.signIn(
+    const { refreshToken, accessToken, user} = await this.authService.signIn(
       payload.usernameOrEmail,
       payload.password,
     );
-    return { refreshToken, accessToken };
+
+   
+    return { refreshToken, accessToken, user: new UserDto(user) };
   }
 
   @Post('refresh')

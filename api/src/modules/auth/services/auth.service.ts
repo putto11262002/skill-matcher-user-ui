@@ -60,7 +60,7 @@ export class AuthService {
       }),
     ]);
     await this.userService.updateRefreshToken(user._id, refreshToken);
-    return { refreshToken, accessToken };
+    return { refreshToken, accessToken, user };
   }
 
   async signOut(id: ObjectId | string) {
