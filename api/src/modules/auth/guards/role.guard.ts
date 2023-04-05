@@ -21,9 +21,9 @@ export class RoleGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    if(this.configService.get("auth.disable")){
-      return true;
-    }
+    // if(this.configService.get("auth.disable")){
+    //   return true;
+    // }
     const requiredRoles = this.reflector.getAllAndOverride<string[]>(
       ROLES_KEY,
       [context.getHandler(), context.getClass()],
