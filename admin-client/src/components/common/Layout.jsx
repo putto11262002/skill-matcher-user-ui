@@ -29,7 +29,7 @@ const Layout = ({ children }) => {
 
   return (
     <>
-      <CssBaseline />
+      
       <Box sx={{ display: "flex" }}>
         <TopBar handleDrawerToggle={handleDrawerToggle} />
         <SideNav
