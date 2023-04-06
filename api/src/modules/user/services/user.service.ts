@@ -58,7 +58,7 @@ export class UserService {
     return createdUser;
   }
 
-  async updateById(id: string | ObjectId, user: UpdateUserDto): Promise<User>{
+  async updateById(id: string | ObjectId, user: UpdateUserDto): Promise<User> {
     const exist = await this.userModel.exists({ _id: id });
     if (!exist) {
       throw new HttpException(
@@ -67,7 +67,7 @@ export class UserService {
       );
     }
     omit(user, NOT_ALLOWED_UPDATE);
-   
+
     const updatedUser = await this.userModel.findOneAndUpdate(
       { _id: id },
       user,
@@ -76,7 +76,7 @@ export class UserService {
     return updatedUser;
   }
 
-  async deleteById(id: string | ObjectId): Promise<void>{
+  async deleteById(id: string | ObjectId): Promise<void> {
     const exist = await this.userModel.exists({ _id: id });
     if (!exist) {
       throw new HttpException(
@@ -87,7 +87,7 @@ export class UserService {
     await this.userModel.deleteOne({ _id: id });
   }
 
-  async getById(id: string | ObjectId): Promise<User | null>{
+  async getById(id: string | ObjectId): Promise<User | null> {
     const user = await this.userModel.findOne({ _id: id });
     if (!user) {
       // throw new HttpException("User with this id does not exist.", HttpStatus.NOT_FOUND);
@@ -96,7 +96,7 @@ export class UserService {
     return user;
   }
 
-  async getByEmail(email: string): Promise<User | null>{
+  async getByEmail(email: string): Promise<User | null> {
     const user = await this.userModel.findOne({ email });
     if (!user) {
       // throw new HttpException("User with is email does not exist.", HttpStatus.NOT_FOUND)
@@ -105,7 +105,7 @@ export class UserService {
     return user;
   }
 
-  async getByUsername(username: string): Promise<User | null>{
+  async getByUsername(username: string): Promise<User | null> {
     const user = await this.userModel.findOne({ username });
     if (!user) {
       // throw new HttpException("User with this username does not exist.", HttpStatus.NOT_FOUND);
@@ -114,12 +114,23 @@ export class UserService {
     return user;
   }
 
-  async updateRefreshToken(id: ObjectId | string, refreshToken: string): Promise<void>{
+  async updateRefreshToken(
+    id: ObjectId | string,
+    refreshToken: string,
+  ): Promise<void> {
     await this.userModel.updateOne({ _id: id }, { refreshToken });
   }
 
-  async search(query: SearchUserDto): Promise<{total: number, users: User[]}>{
-    const [users, total] = await Promise.all([this.userModel.find({}).skip(query.pageNumber * query.pageSize).limit(query.pageSize), this.userModel.find({}).countDocuments()]);
-    return { users, total}
+  async search(
+    query: SearchUserDto,
+  ): Promise<{ total: number; users: User[] }> {
+    const [users, total] = await Promise.all([
+      this.userModel
+        .find({})
+        .skip(query.pageNumber * query.pageSize)
+        .limit(query.pageSize),
+      this.userModel.find({}).countDocuments(),
+    ]);
+    return { users, total };
   }
 }

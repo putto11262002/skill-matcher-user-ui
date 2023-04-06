@@ -1,17 +1,17 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsNumber, IsNumberString, IsOptional } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNumber, IsNumberString, IsOptional } from 'class-validator';
 
 export class SearchDto {
-    @ApiProperty()
-    @IsOptional()
-    pageNumber: number;
+  @ApiProperty()
+  @IsOptional()
+  pageNumber: number;
 
-    @ApiProperty()
-    @IsOptional()
-    pageSize: number;
+  @ApiProperty()
+  @IsOptional()
+  pageSize: number;
 
-    constructor(pageNumber?: number, pageSize?: number){
-        this.pageNumber = pageNumber || 0;
-        this.pageSize = pageSize || 12;
-    }
+  constructor(pageNumber?: number, pageSize?: number) {
+    this.pageNumber = pageNumber || 0;
+    this.pageSize = pageSize || 12;
+  }
 }

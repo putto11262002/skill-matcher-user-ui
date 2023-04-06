@@ -28,11 +28,10 @@ class ProfileDto {
   @ApiProperty()
   phoneNumber: string;
 
-
   @ApiProperty()
   contactEmail: string;
 
-  constructor(profile: Profile){
+  constructor(profile: Profile) {
     this.firstName = profile.firstName;
     this.lastName = profile.lastName;
     this.contactEmail = profile.contactEmail;
@@ -46,9 +45,8 @@ class ProfileDto {
 }
 
 export class UserDto {
-
   @ApiProperty()
-  _id: string | ObjectId; 
+  _id: string | ObjectId;
 
   @ApiProperty()
   username: string;
