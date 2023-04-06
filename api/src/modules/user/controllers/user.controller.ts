@@ -32,7 +32,7 @@ export class UserController {
   @Put('self')
   @HttpCode(HttpStatus.NO_CONTENT)
   async updateSelf(@CurrentUser() currentUser: JwtAccessTokenPayloadDto, @Body() payload: UpdateUserDto) {
-    return this.userService.updateById(currentUser.id, omit(payload, NOT_ALLOWED_SELF_UPDATE));
+    await this.userService.updateById(currentUser.id, omit(payload, NOT_ALLOWED_SELF_UPDATE));
   }
 
 

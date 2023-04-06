@@ -27,7 +27,7 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
-  async signUp(user: SignUpDto){
+  async signUp(user: SignUpDto): Promise<void>{
      // verify  email first
 
      const createdUser = await this.userService.create(
@@ -37,7 +37,7 @@ export class AuthService {
     // send verification email
   }
 
-  async signIn(usernameOrEmail: string, password) {
+  async signIn(usernameOrEmail: string, password): Promise<{refreshToken: string, accessToken: string, user: User}>{
     const [userByUsername, userByEmail] = await Promise.all([
       this.userService.getByUsername(usernameOrEmail),
       this.userService.getByEmail(usernameOrEmail),
@@ -63,26 +63,26 @@ export class AuthService {
     return { refreshToken, accessToken, user };
   }
 
-  async signOut(id: ObjectId | string) {
-    return this.userService.updateRefreshToken(id, null);
+  async signOut(id: ObjectId | string): Promise<void>{
+    await this.userService.updateRefreshToken(id, null);
   }
 
-  async hashPassword(password) {
+  async hashPassword(password): Promise<string>{
     const salt = await bcrypt.genSalt();
     return bcrypt.hash(password, salt);
   }
 
-  async verifyPassword(password, hash) {
+  async verifyPassword(password, hash): Promise<boolean>{
     return bcrypt.compare(password, hash);
   }
 
-  async generateAccessToken(payload: JwtAccessTokenPayloadDto) {
+  async generateAccessToken(payload: JwtAccessTokenPayloadDto): Promise<string>{
     const secret = this.configService.get('auth.jwt.accessToken.secret');
     const expiresIn = this.configService.get('auth.jwt.accessToken.expiresIn');
     return this.jwtService.signAsync(payload, {secret,  expiresIn });
   }
 
-  async generateRefreshToken(payload: JwtRefreshTokenPayload) {
+  async generateRefreshToken(payload: JwtRefreshTokenPayload): Promise<string>{
     const secret = this.configService.get('auth.jwt.refreshToken.secret');
     const expiresIn = this.configService.get('auth.jwt.refreshToken.expiresIn');
     return this.jwtService.signAsync(payload, {secret,  expiresIn });
@@ -123,7 +123,7 @@ export class AuthService {
     return {payload, user};
   }
 
-  async refresh(refreshToken: string) {
+  async refresh(refreshToken: string): Promise<string>{
     const {payload, user} = await this.verifyRefreshToken(refreshToken);
     const accessToken = await this.generateAccessToken({
       id: user._id,

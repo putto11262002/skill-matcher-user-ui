@@ -28,14 +28,13 @@ export class AuthController {
   ) {}
   @Post('sign-up')
   @HttpCode(HttpStatus.CREATED)
-  async signUp(@Body() payload: SignUpDto) {
+  async signUp(@Body() payload: SignUpDto): Promise<void>{
     await this.authService.signUp(payload);
-    return;
   }
 
   @Post('sign-in')
   @HttpCode(HttpStatus.OK)
-  async signIn(@Body() payload: LoginDto) {
+  async signIn(@Body() payload: LoginDto): Promise<{refreshToken: string, accessToken: string, user: UserDto}> {
     const { refreshToken, accessToken, user} = await this.authService.signIn(
       payload.usernameOrEmail,
       payload.password,
@@ -47,7 +46,7 @@ export class AuthController {
 
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
-  async refresh(@Body() payload: RefreshDto) {
+  async refresh(@Body() payload: RefreshDto): Promise<{accessToken: string}> {
     const accessToken = await this.authService.refresh(payload.refreshToken);
     return { accessToken };
   }
@@ -55,8 +54,8 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Delete('sign-out')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async signOut(@CurrentUser() currentUser: JwtAccessTokenPayloadDto) {
-    return this.authService.signOut(currentUser.id)
+  async signOut(@CurrentUser() currentUser: JwtAccessTokenPayloadDto): Promise<void> {
+    this.authService.signOut(currentUser.id)
     
   }
 }
