@@ -121,7 +121,7 @@ export class UserService {
   async search(query: SearchUserDto) {
     console.log((query.pageNumber - 1) * query.pageSize)
 
-    const [users, total] = await Promise.all([this.userModel.find({}).skip((query.pageNumber - 1) * query.pageSize).limit(query.pageSize), this.userModel.find({}).countDocuments()]);
+    const [users, total] = await Promise.all([this.userModel.find({}).skip((query.pageNumber) * query.pageSize).limit(query.pageSize), this.userModel.find({}).countDocuments()]);
     return { users, total}
   }
 }
