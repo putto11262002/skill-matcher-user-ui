@@ -17,9 +17,9 @@ export class AuthGuard implements CanActivate {
 
    
   
-    // if(this.configService.get("auth.disable")){
-    //   return true;
-    // }
+    if(this.configService.get("auth.disable")){
+      return true;
+    }
 
 
     const req: Request = context.switchToHttp().getRequest();
