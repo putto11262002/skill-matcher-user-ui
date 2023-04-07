@@ -27,8 +27,6 @@ export class SignUpDto {
   @IsString()
   lastName: string;
 
-  
-
   constructor(username: string, email: string, password: string) {
     this.username = username;
     this.email = email;

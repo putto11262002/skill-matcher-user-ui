@@ -17,11 +17,11 @@ export class RoleGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     private readonly authService: AuthService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    if(this.configService.get("auth.disable")){
+    if (this.configService.get('auth.disable')) {
       return true;
     }
     const requiredRoles = this.reflector.getAllAndOverride<string[]>(
@@ -38,11 +38,7 @@ export class RoleGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
-
-
-   
-    const {payload, user} = await this.authService.verifyAccessToken(token);
-   
+    const { payload, user } = await this.authService.verifyAccessToken(token);
 
     if (requiredRoles && !requiredRoles.includes(user.role)) {
       throw new ForbiddenException();

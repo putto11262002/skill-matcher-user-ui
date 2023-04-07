@@ -16,7 +16,10 @@ import { JwtRefreshTokenPayload } from '../dtos/request/jwt-refresh-token-payloa
 import { UserService } from 'src/modules/user/services/user.service';
 import { User } from 'src/modules/user/schemas/user.schema';
 import { SignUpDto } from '../dtos/request/sign-up.dto';
-import { CreateProfileDto, CreateUserDto } from 'src/modules/user/dtos/requests/create-user.dto';
+import {
+  CreateProfileDto,
+  CreateUserDto,
+} from 'src/modules/user/dtos/requests/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -27,17 +30,23 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
-  async signUp(user: SignUpDto){
-     // verify  email first
+  async signUp(user: SignUpDto): Promise<void> {
+    // verify  email first
 
-     const createdUser = await this.userService.create(
-      {username : user.username, email: user.email, password: user.password, profile: {firstName: user.firstName, lastName: user.lastName}} as any
-    );
+    const createdUser = await this.userService.create({
+      username: user.username,
+      email: user.email,
+      password: user.password,
+      profile: { firstName: user.firstName, lastName: user.lastName },
+    } as any);
 
     // send verification email
   }
 
-  async signIn(usernameOrEmail: string, password) {
+  async signIn(
+    usernameOrEmail: string,
+    password,
+  ): Promise<{ refreshToken: string; accessToken: string; user: User }> {
     const [userByUsername, userByEmail] = await Promise.all([
       this.userService.getByUsername(usernameOrEmail),
       this.userService.getByEmail(usernameOrEmail),
@@ -63,68 +72,69 @@ export class AuthService {
     return { refreshToken, accessToken, user };
   }
 
-  async signOut(id: ObjectId | string) {
-    return this.userService.updateRefreshToken(id, null);
+  async signOut(id: ObjectId | string): Promise<void> {
+    await this.userService.updateRefreshToken(id, null);
   }
 
-  async hashPassword(password) {
+  async hashPassword(password): Promise<string> {
     const salt = await bcrypt.genSalt();
     return bcrypt.hash(password, salt);
   }
 
-  async verifyPassword(password, hash) {
+  async verifyPassword(password, hash): Promise<boolean> {
     return bcrypt.compare(password, hash);
   }
 
-  async generateAccessToken(payload: JwtAccessTokenPayloadDto) {
+  async generateAccessToken(
+    payload: JwtAccessTokenPayloadDto,
+  ): Promise<string> {
     const secret = this.configService.get('auth.jwt.accessToken.secret');
     const expiresIn = this.configService.get('auth.jwt.accessToken.expiresIn');
-    return this.jwtService.signAsync(payload, {secret,  expiresIn });
+    return this.jwtService.signAsync(payload, { secret, expiresIn });
   }
 
-  async generateRefreshToken(payload: JwtRefreshTokenPayload) {
+  async generateRefreshToken(payload: JwtRefreshTokenPayload): Promise<string> {
     const secret = this.configService.get('auth.jwt.refreshToken.secret');
     const expiresIn = this.configService.get('auth.jwt.refreshToken.expiresIn');
-    return this.jwtService.signAsync(payload, {secret,  expiresIn });
+    return this.jwtService.signAsync(payload, { secret, expiresIn });
   }
 
   async verifyRefreshToken(
     refreshToken: string,
-  ): Promise<{payload: JwtRefreshTokenPayload, user: User}> {
+  ): Promise<{ payload: JwtRefreshTokenPayload; user: User }> {
     const secret = this.configService.get('auth.jwt.refreshToken.secret');
-    var payload: any = {}
-    try{
-      payload = await this.jwtService.verifyAsync(refreshToken, {secret });
-    }catch{
-      throw new UnauthorizedException()
+    var payload: any = {};
+    try {
+      payload = await this.jwtService.verifyAsync(refreshToken, { secret });
+    } catch {
+      throw new UnauthorizedException();
     }
-    const user = await this.userService.getById(payload.id)
-    if(user?.refreshToken !== refreshToken){
-      throw new UnauthorizedException()
+    const user = await this.userService.getById(payload.id);
+    if (user?.refreshToken !== refreshToken) {
+      throw new UnauthorizedException();
     }
-    return {payload, user};
-
+    return { payload, user };
   }
 
   async verifyAccessToken(
     accessToken: string,
-  ): Promise<{payload: JwtAccessTokenPayloadDto, user: User}> {
+  ): Promise<{ payload: JwtAccessTokenPayloadDto; user: User }> {
     const secret = this.configService.get('auth.jwt.accessToken.secret');
-    var payload: any = {}
-    try{
-       payload = await this.jwtService.verifyAsync(accessToken, {secret});
-    }catch(e){
+    var payload: any = {};
+    try {
+      payload = await this.jwtService.verifyAsync(accessToken, { secret });
+    } catch (e) {
       throw new UnauthorizedException();
     }
     const user = await this.userService.getById(payload.id);
-    if(!user?.refreshToken){
-      throw new UnauthorizedException()
+    if (!user?.refreshToken) {
+      throw new UnauthorizedException();
     }
-    return {payload, user};
+    return { payload, user };
   }
 
-  async refresh(refreshToken: string) {
-    const {payload, user} = await this.verifyRefreshToken(refreshToken);
+  async refresh(refreshToken: string): Promise<string> {
+    const { payload, user } = await this.verifyRefreshToken(refreshToken);
     const accessToken = await this.generateAccessToken({
       id: user._id,
       username: user.username,

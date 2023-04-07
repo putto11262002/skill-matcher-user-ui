@@ -8,6 +8,6 @@ export default registerAs('mongo', () => ({
     useUnifiedTopology: true,
     authMechanism: 'DEFAULT',
     // enable when db user is an admin/root
-    authSource: "admin",
+    authSource: 'admin',
   } as MongoClientOptions,
 }));
