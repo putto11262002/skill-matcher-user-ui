@@ -1,4 +1,4 @@
-# SKill Matcher Development Guide
+# Skill Matcher Development Guide
 
 ## Required software for local development.
 - Git
@@ -18,7 +18,7 @@
 	git clone https://isgb.otago.ac.nz/info310/git/sutpu703/skill-matcher.git
 	```
 
-## Set up MongoDB with docker
+## Set up MongoDB with Docker
 - At the root of the project run the following command
 	```{bash}
 	docker-compose up -d
