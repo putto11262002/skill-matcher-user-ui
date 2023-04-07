@@ -42,9 +42,8 @@ const Layout = ({ children }) => {
           }}
         >
           <Toolbar />
-          <Container height='100%'  sx={{paddingY: 5}}  maxWidth='md'>
-
-          {children}
+          <Container height='100%' sx={{ paddingY: 5 }} maxWidth='md'>
+            {children}
           </Container>
         </Box>
       </Box>
