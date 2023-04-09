@@ -14,10 +14,10 @@ import {
 } from '@nestjs/common';
 
 import { ApiTags } from '@nestjs/swagger';
-import { Pagination } from 'src/common/dto/responses/Pagination.dto';
-import { Roles } from 'src/modules/auth/decorators/roles.decorator';
-import { AuthGuard } from 'src/modules/auth/guards/auth.guard';
-import { RoleGuard } from 'src/modules/auth/guards/role.guard';
+import { Pagination } from '../../../common/dtos/responses/pagination.dto';
+import { Roles } from '../../../modules/auth/decorators/roles.decorator';
+import { AuthGuard } from '../../../modules/auth/guards/auth.guard';
+import { RoleGuard } from '../../../modules/auth/guards/role.guard';
 import { CreateUserDto } from '../dtos/requests/create-user.dto';
 import { SearchUserDto } from '../dtos/requests/search-user.dto';
 import { UpdateUserDto } from '../dtos/requests/update-user.dto';

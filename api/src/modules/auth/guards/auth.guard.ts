@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { CanActivate } from '@nestjs/common';
 import { Request } from 'express';
-import { UserDto } from 'src/modules/user/dtos/responses/user.dto';
 import { AuthService } from '../services/auth.service';
 import { ConfigService } from '@nestjs/config';
 

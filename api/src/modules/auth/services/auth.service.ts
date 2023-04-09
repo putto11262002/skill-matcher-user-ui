@@ -13,13 +13,10 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { JwtAccessTokenPayloadDto } from '../dtos/request/jwt-access-token-payload.dto';
 import { JwtRefreshTokenPayload } from '../dtos/request/jwt-refresh-token-payload.dto';
-import { UserService } from 'src/modules/user/services/user.service';
-import { User } from 'src/modules/user/schemas/user.schema';
+import { UserService } from '../../../modules/user/services/user.service';
+import { User } from '../../../modules/user/schemas/user.schema';
 import { SignUpDto } from '../dtos/request/sign-up.dto';
-import {
-  CreateProfileDto,
-  CreateUserDto,
-} from 'src/modules/user/dtos/requests/create-user.dto';
+
 
 @Injectable()
 export class AuthService {

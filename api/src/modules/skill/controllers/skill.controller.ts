@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpException, HttpStatus, Param, Post, UseGuards} from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { AuthGuard } from "src/modules/auth/guards/auth.guard";
+import { AuthGuard } from "../../auth/guards/auth.guard";
 import { SkillService } from "../services/skill.service";
 import { SkillDto } from "../dtos/responses/skill.dto";
 import { CreateSkillDto } from "../dtos/requests/create-skill.dto";

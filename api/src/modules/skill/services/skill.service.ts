@@ -1,5 +1,4 @@
 import {Injectable, Inject, forwardRef, BadRequestException, NotFoundException} from "@nestjs/common"
-import { UserService } from "src/modules/user/services/user.service";
 import { CreateSkillDto } from "../dtos/requests/create-skill.dto";
 import { Skill } from "../schemas/skill.schema";
 import {Model} from 'mongoose'

@@ -17,7 +17,7 @@ import {
   USER_STATUS,
 } from '../constants/user.constat';
 import { SearchUserDto } from '../dtos/requests/search-user.dto';
-import { AuthService } from 'src/modules/auth/services/auth.service';
+import { AuthService } from '../../../modules/auth/services/auth.service';
 
 @Injectable()
 export class UserService {
@@ -112,6 +112,21 @@ export class UserService {
       return null;
     }
     return user;
+  }
+
+  async existByUsername(username: string): Promise<boolean> {
+    const id = await this.userModel.exists({username})
+    return id ? true : false;
+  }
+
+  async existById(id: ObjectId | string): Promise<boolean> {
+    const _id = await this.userModel.exists({_id: id})
+    return _id ? true : false;
+  }
+
+  async existByEmail(email: string): Promise<boolean>{
+    const id = await this.userModel.exists({email})
+    return id ? true : false
   }
 
   async updateRefreshToken(

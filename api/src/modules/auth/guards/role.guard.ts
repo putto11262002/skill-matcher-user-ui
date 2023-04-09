@@ -9,7 +9,6 @@ import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '../decorators/roles.decorator';
 import { Request } from 'express';
 import { AuthService } from '../services/auth.service';
-import { UserDto } from 'src/modules/user/dtos/responses/user.dto';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()

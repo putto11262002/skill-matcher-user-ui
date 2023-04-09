@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { Roles } from "src/modules/auth/decorators/roles.decorator";
-import { RoleGuard } from "src/modules/auth/guards/role.guard";
+import { Roles } from "../../auth/decorators/roles.decorator";
+import { RoleGuard } from "../../auth/guards/role.guard";
 import { CreateSkillDto } from "../dtos/requests/create-skill.dto";
 import { SkillService } from "../services/skill.service";
 import { SkillDto } from "../dtos/responses/skill.dto";
