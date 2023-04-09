@@ -4,6 +4,7 @@ import {
   HttpStatus,
   Inject,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
@@ -85,6 +86,13 @@ export class UserService {
       );
     }
     await this.userModel.deleteOne({ _id: id });
+  }
+
+  async deleteByUsername(username: string): Promise<void>{
+    const exist = await this.userModel.exists({username});
+    if(!exist){
+      throw new NotFoundException('User with this username does not exists')
+    }
   }
 
   async getById(id: string | ObjectId): Promise<User | null> {
