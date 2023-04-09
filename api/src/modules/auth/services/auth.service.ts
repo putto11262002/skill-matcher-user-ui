@@ -27,7 +27,7 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
-  async signUp(user: SignUpDto): Promise<void> {
+  async signUp(user: SignUpDto): Promise<User> {
     // verify  email first
 
     const createdUser = await this.userService.create({
@@ -38,6 +38,7 @@ export class AuthService {
     } as any);
 
     // send verification email
+    return createdUser
   }
 
   async signIn(
