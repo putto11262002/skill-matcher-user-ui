@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { signIn, signOut } from '../thunks/user.thunk';
 import authService from '@/services/auth.service';
+import { signUp } from '../thunks/user.thunk';
 
 const user = authService.getLocalUser();
 export const authSlice = createSlice({
@@ -14,6 +14,20 @@ export const authSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
+      .addCase(signUp.pending, (state, action) => ({
+        ...state,
+        loading: true,
+      }))
+      .addCase(signUp.fulfilled, (state, { payload }) => ({
+        ...state,
+        loading: false,
+        user: payload.user,
+      }))
+      .addCase(signUp.rejected, (state, { payload }) => ({
+        ...state,
+        loading: false,
+        error: payload,
+      }))
       .addCase(signIn.pending, (state, action) => ({
         ...state,
         loading: true,
