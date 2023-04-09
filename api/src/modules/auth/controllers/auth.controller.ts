@@ -27,8 +27,9 @@ export class AuthController {
   ) {}
   @Post('sign-up')
   @HttpCode(HttpStatus.CREATED)
-  async signUp(@Body() payload: SignUpDto): Promise<void> {
-    await this.authService.signUp(payload);
+  async signUp(@Body() payload: SignUpDto): Promise<Partial<UserDto>> {
+    const user = await this.authService.signUp(payload);
+    return new UserDto(user).toSelfResponse()
   }
 
   @Post('sign-in')
