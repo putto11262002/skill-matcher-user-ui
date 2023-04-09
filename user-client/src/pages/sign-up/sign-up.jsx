@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 
 const SignUpPage = () => {
-    const { control, handleSubmit, getValues } = useForm({
+    const { control, handleSubmit } = useForm({
         defaultValues: { name: '', email: '', password: '' },
     });
 
