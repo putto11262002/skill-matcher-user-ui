@@ -71,4 +71,13 @@ api.interceptors.response.use(
   },
 );
 
+api.signUp = async ({ name, email, password }) => {
+  try {
+    const res = await authService.signUp(name, email, password);
+    return res.data;
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
+
 export default api;
