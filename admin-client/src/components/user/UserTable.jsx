@@ -15,7 +15,9 @@ import { useQuery } from '@tanstack/react-query';
 import userService from '@/services/user.service';
 import { USER_PAGE_SIZE } from '@/constants/user.contant';
 import Link from 'next/link';
-const COLUMNS = ['username', 'email', 'status', 'role'];
+const COLUMNS = ['username', 'email', 'status', 'role', 'actions'];
+import EditIcon from '@mui/icons-material/Edit';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 // TODO add search and filter, add actions - delete update view buttons/popup
 const UserTable = ({ users, pageNumber, loading, error , onPageChange, total}) => {
 
@@ -28,11 +30,14 @@ const UserTable = ({ users, pageNumber, loading, error , onPageChange, total}) =
 
     return users.map((user) => (
     
-      <TableRow onClick={console.log} sx={{cursor: 'pointer'}} hover tabIndex={-1} key={user._id}>
+      <TableRow  hover tabIndex={-1} key={user._id}>
      
-       {COLUMNS.map((column) => (
-          <TableCell key={user._id + column}>{user[column]}</TableCell>
-        ))}
+       {COLUMNS.map((column) => {
+        if(column !== 'actions'){
+          return <TableCell key={user._id + column}>{user[column]}</TableCell>
+        }
+        return <TableCell align='right' key={user._id + column}><Stack sx={{cursor: 'pointer'}} direction='row' spacing={2}><EditIcon fontSize='s'/><ArrowForwardIosIcon sx={{cursor: 'pointer'}} fontSize='s'/></Stack></TableCell>
+       })}
       
       </TableRow>
    
