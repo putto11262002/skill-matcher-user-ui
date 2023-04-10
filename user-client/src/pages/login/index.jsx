@@ -89,7 +89,7 @@ const LoginPage = () => {
               </Grid>
               <Grid display='flex' justifyContent='center' xs={12} item>
                 <Button type='submit' variant='contained' sx={{ mt: 3, mb: 2 }}>
-                  Sign In
+                Log in 
                 </Button>
               </Grid>
               <Grid container justifyContent='center'>
@@ -99,7 +99,7 @@ const LoginPage = () => {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href='#' variant='body2'>
+                  <Link href='/sign-up' variant='body2'>
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
