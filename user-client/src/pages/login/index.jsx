@@ -17,6 +17,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+
 const LoginPage = () => {
   const dispatch = useDispatch();
 
@@ -44,7 +45,7 @@ const LoginPage = () => {
           sx={{ boxShadow: { sm: 2, xs: 0 }, borderRadius: 2 }}
         >
           <Typography variant='2' textAlign='center' component='h2'>
-            Admin Panel
+            Log in 
           </Typography>
           <Toolbar />
           <Box component='form' onSubmit={handleLogin}>
