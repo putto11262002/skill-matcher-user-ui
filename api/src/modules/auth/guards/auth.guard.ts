@@ -16,9 +16,7 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    if (this.configService.get('auth.disable')) {
-      return true;
-    }
+   
 
     const req: Request = context.switchToHttp().getRequest();
     const token =
@@ -31,7 +29,7 @@ export class AuthGuard implements CanActivate {
 
     const { payload, user } = await this.authService.verifyAccessToken(token);
 
-    req['user'] = payload;
+    req['user'] = user;
 
     return true;
   }

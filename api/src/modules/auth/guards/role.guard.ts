@@ -20,9 +20,7 @@ export class RoleGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    if (this.configService.get('auth.disable')) {
-      return true;
-    }
+
     const requiredRoles = this.reflector.getAllAndOverride<string[]>(
       ROLES_KEY,
       [context.getHandler(), context.getClass()],
@@ -42,7 +40,7 @@ export class RoleGuard implements CanActivate {
     if (requiredRoles && !requiredRoles.includes(user.role)) {
       throw new ForbiddenException();
     }
-    req['user'] = payload;
+    req['user'] = user;
 
     return true;
   }
