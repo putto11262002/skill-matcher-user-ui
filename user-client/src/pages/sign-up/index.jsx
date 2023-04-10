@@ -95,8 +95,4 @@ const SignUpPage = () => {
     );
 };
 
-SignUpPage.getLayout = (page) => {
-    return <>{page}</>;
-};
-
 export default SignUpPage;
