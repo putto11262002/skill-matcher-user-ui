@@ -8,6 +8,7 @@ import {
     Typography,
     Button,
 } from '@mui/material';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -80,6 +81,11 @@ const SignUpPage = () => {
                                 <Button type='submit' variant='contained' disabled={loading}>
                                     Sign Up
                                 </Button>
+                            </Grid>
+                            <Grid>
+                            <Link href='/login' passHref>
+                                <Button variant="Sign in button">Already have an account</Button>
+                            </Link>
                             </Grid>
                         </Grid>
                     </Box>
