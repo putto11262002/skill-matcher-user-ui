@@ -188,7 +188,7 @@ describe('User skill controlle ', () => {
       expect(res.body).toHaveProperty('message', 'Incorrect password');
     });
 
-    it('Should return 404 if user does not exist', async () => {
+    it('Should return 401 if user does not exist', async () => {
       const res1 = await request(app.getHttpServer())
         .post('/auth/sign-in')
         .send({ usernameOrEmail: 'incorrect', password: activeUser.password })
