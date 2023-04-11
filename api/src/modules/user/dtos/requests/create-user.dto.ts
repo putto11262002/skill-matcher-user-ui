@@ -25,37 +25,37 @@ export class CreateProfileDto {
   @ApiProperty()
   @IsOptional()
   @IsString()
-  phoneNumber: string;
+  phoneNumber?: string;
 
   @ApiProperty()
   @IsOptional()
   @IsString()
-  contactEmail: string;
+  contactEmail?: string;
 
   @ApiProperty()
   @IsOptional()
   @IsString()
-  instagram: string;
+  instagram?: string;
 
   @ApiProperty()
   @IsOptional()
   @IsString()
-  snapchat: string;
+  snapchat?: string;
 
   @ApiProperty()
   @IsOptional()
   @IsString()
-  facebook: string;
+  facebook?: string;
 
   @ApiProperty()
   @IsOptional()
   @IsString()
-  whatsapp: string;
+  whatsapp?: string;
 
   @ApiProperty()
   @IsOptional()
   @IsString()
-  aboutMe: string;
+  aboutMe?: string;
 
   constructor(
     firstName: string,

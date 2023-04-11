@@ -61,7 +61,7 @@ export class UserDto {
   status: string;
 
   @ApiProperty()
-  Profile: ProfileDto;
+  profile: ProfileDto;
 
   constructor(user: UserDocument | User) {
     this._id = user._id;
@@ -69,7 +69,7 @@ export class UserDto {
     this.email = user.email;
     this.status = user.status;
     this.role = user.role;
-    this.Profile = new ProfileDto(user.profile);
+    this.profile = user.profile ?  new ProfileDto(user.profile) : null;
   }
 
   // TODO - implement
