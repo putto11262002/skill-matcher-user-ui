@@ -47,7 +47,8 @@ export class SkillService {
         if(!exist){
             throw new NotFoundException(`Skill named ${name} does not exist`)
         }
-        await this.skillModel.updateOne({name: name}, omit(skill, NOT_ALLOW_UPDATE_FIELDS))
+        const updatedSkill = await this.skillModel.findOneAndUpdate({name: name}, omit(skill, NOT_ALLOW_UPDATE_FIELDS), {new: true})
+        return updatedSkill;
     }
 
     async addRelatedSkill(name: string, relatedSkillNames: string[]): Promise<void>{

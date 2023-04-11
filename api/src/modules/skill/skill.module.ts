@@ -7,6 +7,7 @@ import { SkillService } from './services/skill.service';
 import { UserSkillService } from './services/user-skill.service';
 import { SkillController } from './controllers/skill.controller';
 import { AdminSkillController } from './controllers/admin-skill.controller';
+import { UserSkillController } from './controllers/user-skill.controller';
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -16,6 +17,6 @@ import { AdminSkillController } from './controllers/admin-skill.controller';
     UserModule,
   ],
   providers: [SkillService, UserSkillService],
-  controllers: [SkillController, AdminSkillController]
+  controllers: [SkillController, AdminSkillController, UserSkillController]
 })
 export class SkillModule {}
