@@ -16,6 +16,7 @@ import { JwtRefreshTokenPayload } from '../dtos/request/jwt-refresh-token-payloa
 import { UserService } from '../../../modules/user/services/user.service';
 import { User } from '../../../modules/user/schemas/user.schema';
 import { SignUpDto } from '../dtos/request/sign-up.dto';
+import { USER_STATUS } from '../../user/constants/user.constat';
 
 
 @Injectable()
@@ -57,6 +58,10 @@ export class AuthService {
 
     if (!isPasswordMatch) {
       throw new HttpException('Incorrect password', HttpStatus.UNAUTHORIZED);
+    }
+
+    if(user.status !== USER_STATUS.ACTIVE){
+      throw new ForbiddenException("Your account is not active")
     }
     const [refreshToken, accessToken] = await Promise.all([
       this.generateRefreshToken({ id: user._id, role: user.role }),
