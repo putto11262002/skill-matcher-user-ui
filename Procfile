@@ -1,1 +1,1 @@
-web: cd api && yarn deploy
+web: cd api && npm run deploy
