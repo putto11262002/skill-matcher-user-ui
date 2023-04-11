@@ -35,14 +35,14 @@ export class UserService {
     ]);
     if (usernameExist) {
       throw new HttpException(
-        'User with this username already exist.',
+        'User with this username already exist',
         HttpStatus.CONFLICT,
       );
     }
 
     if (emailExist) {
       throw new HttpException(
-        'User with this email already exist.',
+        'User with this email already exist',
         HttpStatus.CONFLICT,
       );
     }
@@ -63,7 +63,7 @@ export class UserService {
     const exist = await this.userModel.exists({ _id: id });
     if (!exist) {
       throw new HttpException(
-        'User with this id does not exist.',
+        'User with this id does not exist',
         HttpStatus.NOT_FOUND,
       );
     }
@@ -81,7 +81,7 @@ export class UserService {
     const exist = await this.userModel.exists({ _id: id });
     if (!exist) {
       throw new HttpException(
-        'User with this id does not exist.',
+        'User with this id does not exist',
         HttpStatus.NOT_FOUND,
       );
     }
@@ -91,7 +91,7 @@ export class UserService {
   async deleteByUsername(username: string): Promise<void>{
     const exist = await this.userModel.exists({username});
     if(!exist){
-      throw new NotFoundException('User with this username does not exists')
+      throw new NotFoundException('User with this username does not exist')
     }
   }
 

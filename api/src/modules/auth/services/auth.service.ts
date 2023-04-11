@@ -51,12 +51,12 @@ export class AuthService {
     ]);
     const user = userByUsername || userByEmail;
     if (!user) {
-      throw new HttpException('User does not exist.', 404);
+      throw new UnauthorizedException('Incorrect username or email');
     }
     const isPasswordMatch = await this.verifyPassword(password, user.password);
 
     if (!isPasswordMatch) {
-      throw new HttpException('Incorrect password.', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('Incorrect password', HttpStatus.UNAUTHORIZED);
     }
     const [refreshToken, accessToken] = await Promise.all([
       this.generateRefreshToken({ id: user._id, role: user.role }),
