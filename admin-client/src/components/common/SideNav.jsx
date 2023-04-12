@@ -24,10 +24,10 @@ const Menu = () => {
       <Toolbar />
       {/* <Divider /> */}
 
-      {MAIN_MENU.map(submenu => 
+      {MAIN_MENU.map(subMenu => 
         <>
-        <List>
-          {submenu.menu.map(menu =>  <ListItem disablePadding>
+        <List key={subMenu.subMenu}>
+          {subMenu.menu.map(menu =>  <ListItem key={menu.label} disablePadding>
           <Link href={menu.link}>
             <ListItemButton>
               <ListItemIcon>
