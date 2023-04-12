@@ -14,7 +14,7 @@ export class UserSkillDto {
 
     constructor(userSkill: UserSkill){
         this.userId = userSkill.userId;
-        this.skill =  userSkill.role;
+        this.skill =  userSkill.skill;
         this.role = userSkill.role;
         this.about = userSkill.about;
         this.proficiency = userSkill.proficiency;
