@@ -29,16 +29,14 @@ const LoginPage = () => {
   const handleLogin = ({ usernameOrEmail, password }, e) => {
     e.preventDefault();
     dispatch(signIn({ usernameOrEmail, password }));
-    if(!error){
-      console.log("push")
-    }
   };
 
   useEffect(() => {
     if (!loading && isLoggedIn) {
       router.push('/');
     }
-  }, [loading]);
+  }, [loading, isLoggedIn]);
+
 
   return (
     <Grid container justifyContent='center' alignItems='center' height='100%'>
