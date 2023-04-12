@@ -8,13 +8,9 @@ import {
 
 const Footer = () => {
     return (
-      <AppBar position="static">
-        <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             Footer - insert more 
           </Typography>
-        </Toolbar>
-      </AppBar>
     );
 }
 

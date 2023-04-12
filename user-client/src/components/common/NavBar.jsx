@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { 
   AppBar,
   Toolbar,
@@ -13,13 +14,20 @@ const NavBar = () => {
         <Typography variant="h6" component="div"  textAlign='left' sx={{ flexGrow: 1, color: 'white' }}>
           Skills Matcher 
         </Typography>
-        <Button sx={{ color: 'white' }}> Home  </Button>
-        <Button sx={{ color: 'white' }}> About Us   </Button>
-        <Button sx={{ color: 'white' }}> Contact us   </Button>
+        <Link href="/home" passHref>
+        <Button sx={{ color: 'white', textDecoration: 'none' }}> Home  </Button>
+        </Link>
+        <Link href="/about-us" passHref>
+          <Button sx={{ color: 'white', textDecoration: 'none' }}> About Us </Button>
+        </Link>
+        <Link href="/contact-us" passHref>
+        <Button sx={{ color: 'white', textDecoration: 'none' }}> Contact us   </Button>
+        </Link>
+        
       </Toolbar>
     </AppBar>
   );
 };
 
-
 export default NavBar;
+
