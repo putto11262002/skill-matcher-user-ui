@@ -12,10 +12,12 @@ export class CreateSkillDto {
     @IsString()
     description: string;
 
+    @ApiProperty()
     @IsOptional()
     @IsIn(Object.values(SKILL_STATUS))
     status: string;
 
+    @ApiProperty()
     @IsOptional()
     @IsArray()
     @IsString({each: true})
