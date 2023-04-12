@@ -25,8 +25,8 @@ const Menu = () => {
       {/* <Divider /> */}
 
       {MAIN_MENU.map(subMenu => 
-        <>
-        <List key={subMenu.subMenu}>
+       <div key={subMenu.subMenu}> 
+        <List >
           {subMenu.menu.map(menu =>  <ListItem key={menu.label} disablePadding>
           <Link href={menu.link}>
             <ListItemButton>
@@ -39,7 +39,7 @@ const Menu = () => {
         </ListItem>)}
         </List>
         <Divider/>
-        </>
+        </div>
       )}
    
      
