@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { Roles } from "../../auth/decorators/roles.decorator";
 import { RoleGuard } from "../../auth/guards/role.guard";
@@ -7,6 +7,8 @@ import { SkillService } from "../services/skill.service";
 import { SkillDto } from "../dtos/responses/skill.dto";
 import { UpdateSkillDto } from "../dtos/requests/update.skill.dto";
 import { RelatedSkillsDto } from "../dtos/requests/related-skills.dto";
+import { SearchSkillDto } from "../dtos/requests/search-skill.dto";
+import { Pagination } from "../../../common/dtos/responses/pagination.dto";
 
 @ApiTags("Skill Admin")
 @Roles("admin")
@@ -26,8 +28,9 @@ export class AdminSkillController {
 
     @Get()
     @HttpCode(HttpStatus.OK)
-    async searchSkills(){
-       throw new Error("Not implemented yet")
+    async searchSkills(@Query() query:  SearchSkillDto){
+        const {skills, total} = await this.skillService.searchSkills(query)
+        return new Pagination(skills.map(skill => new SkillDto(skill).toAdminResponse()), query.pageSize, query.pageNumber, total)
     }
 
     @Get(":name")

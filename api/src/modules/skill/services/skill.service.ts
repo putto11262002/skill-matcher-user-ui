@@ -1,12 +1,13 @@
 import {Injectable, Inject, forwardRef, BadRequestException, NotFoundException} from "@nestjs/common"
 import { CreateSkillDto } from "../dtos/requests/create-skill.dto";
 import { Skill } from "../schemas/skill.schema";
-import {Model} from 'mongoose'
+import {FilterQuery, Model} from 'mongoose'
 import {InjectModel} from '@nestjs/mongoose'
 import {difference} from "lodash"
 import { UpdateSkillDto } from "../dtos/requests/update.skill.dto";
 import {omit} from "lodash"
 import { NOT_ALLOW_UPDATE_FIELDS } from "../constants/skill.constant";
+import { SearchSkillDto } from "../dtos/requests/search-skill.dto";
 @Injectable()
 export class SkillService {
     constructor(
@@ -40,7 +41,24 @@ export class SkillService {
     }
 
     // TODO - implement searching algorithm
-    async searchSkills(){}
+    async searchSkills(query: SearchSkillDto){
+        let filter: FilterQuery<Skill> = {};
+        filter.$or = []
+        if(query.q){
+            filter.$text = {$search: query.q}
+        }
+
+        if(filter.$or.length < 1) filter = omit(filter, ['$or']) 
+
+        const [skills, total] = await Promise.all([
+            this.skillModel.find(filter)
+            .skip(query.pageNumber * query.pageSize)
+            .limit(query.pageSize)
+            .sort(query.q ? { score: { $meta: 'textScore' } }: {updatedAt: 1}),
+            this.skillModel.find(filter).countDocuments()
+        ])
+        return {skills, total}
+    }
 
     async updateSkill(name: string, skill: UpdateSkillDto){
         const exist = await this.existByName(name);
@@ -60,7 +78,7 @@ export class SkillService {
         relatedSkillNames = relatedSkillNames.filter(relatedSkillName => relatedSkillName !== skill.name);
         
         const relatedSkills = await this.skillModel.find({name :{$in: relatedSkillNames }})
-        const notFoundSkills = difference(relatedSkills.map(relatedSkill => relatedSkill.name), relatedSkillNames);
+        const notFoundSkills = difference(relatedSkillNames, relatedSkills.map(relatedSkill => relatedSkill.name));
         if(notFoundSkills.length > 0){
             throw new NotFoundException(`Skill(s) named ${notFoundSkills} does not exist`);
         }
