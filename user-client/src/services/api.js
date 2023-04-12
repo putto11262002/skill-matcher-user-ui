@@ -43,7 +43,7 @@ api.interceptors.response.use(
 
           return api(originalConfig);
         } catch (_err) {
-          console.log(err);
+          await  authService.signOut()
           if (_err.message && _err.statusCode) {
             return Promise.reject(_err);
           }
