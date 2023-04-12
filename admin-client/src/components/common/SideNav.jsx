@@ -17,57 +17,32 @@ import Toolbar from '@mui/material/Toolbar';
 import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 import Link from 'next/link';
 const drawerWidth = 240;
-
+import { MAIN_MENU } from '../../constants/menu.constant';
 const Menu = () => {
   return (
     <div>
       <Toolbar />
       {/* <Divider /> */}
-      <List>
-        <ListItem disablePadding>
-          <Link href='/user/add'>
-            <ListItemButton>
-              <ListItemIcon>
-                <AddIcon />
-              </ListItemIcon>
-              <ListItemText>Add User</ListItemText>
-            </ListItemButton>
-          </Link>
-        </ListItem>
 
-        <ListItem disablePadding>
-          <Link href='/user'>
+      {MAIN_MENU.map(submenu => 
+        <>
+        <List>
+          {submenu.menu.map(menu =>  <ListItem disablePadding>
+          <Link href={menu.link}>
             <ListItemButton>
               <ListItemIcon>
-                <ViewHeadlineIcon />
+                {menu.icon}
               </ListItemIcon>
-              <ListItemText>View users</ListItemText>
+              <ListItemText>{menu.label}</ListItemText>
             </ListItemButton>
           </Link>
-        </ListItem>
-      </List>
-      <Divider />
-      <List>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <ViewHeadlineIcon />
-            </ListItemIcon>
-            <ListItemText>View Matches</ListItemText>
-          </ListItemButton>
-        </ListItem>
-      </List>
-      <Divider />
-      <List>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <ViewHeadlineIcon />
-            </ListItemIcon>
-            <ListItemText>View abuse reports</ListItemText>
-          </ListItemButton>
-        </ListItem>
-      </List>
+        </ListItem>)}
+        </List>
+        <Divider/>
+        </>
+      )}
+   
+     
     </div>
   );
 };
