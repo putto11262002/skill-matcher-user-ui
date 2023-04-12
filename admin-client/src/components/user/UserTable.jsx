@@ -36,7 +36,7 @@ const UserTable = ({ users, pageNumber, loading, error , onPageChange, total}) =
         if(column !== 'actions'){
           return <TableCell key={user._id + column}>{user[column]}</TableCell>
         }
-        return <TableCell align='right' key={user._id + column}><Stack sx={{cursor: 'pointer'}} direction='row' spacing={2}><EditIcon fontSize='s'/><ArrowForwardIosIcon sx={{cursor: 'pointer'}} fontSize='s'/></Stack></TableCell>
+        return <TableCell align='right' key={user._id + column}><Stack sx={{cursor: 'pointer'}} direction='row' spacing={2}><Link href={`/user/edit/${user._id}`}><EditIcon fontSize='s'/></Link><ArrowForwardIosIcon sx={{cursor: 'pointer'}} fontSize='s'/></Stack></TableCell>
        })}
       
       </TableRow>

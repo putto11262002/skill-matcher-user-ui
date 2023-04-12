@@ -17,11 +17,31 @@ export class UserService {
   // }
 
   async addUser(payload) {
-    return api.post('admin/user', payload);
+    return api.post('/admin/user', payload);
   }
 
   async searchUsers(query) {
-    return api.get('/user', { params: query });
+    return api.get('/admin/user', { params: query });
+  }
+
+  async addSkill({id, payload}){
+    return api.post(`/admin/user/${id}/skill`, payload)
+  }
+
+  async getUserById(id){
+    return api.get(`/admin/user/${id}`)
+  }
+
+  async getUserSkills(id){
+    return api.get(`/admin/user/${id}/skill`)
+  }
+
+  async updateUserSkill({id, skill, payload}){
+    return api.put(`/admin/user/${id}/skill/${skill}`, payload)
+  }
+
+  async deleteUserSkill({id, skill}){
+    return api.delete(`/admin/user/${id}/skill/${skill}`)
   }
 }
 
