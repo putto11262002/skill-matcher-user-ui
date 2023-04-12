@@ -27,6 +27,7 @@ api.interceptors.response.use(
     const originalConfig = err.config;
     if (err.response) {
       // Access Token was expired
+    
       if (
         err.response.status === 401 &&
         !originalConfig._retry &&
@@ -34,7 +35,7 @@ api.interceptors.response.use(
         originalConfig.url !== '/auth/sign-out'
       ) {
         originalConfig._retry = true;
-
+        
         try {
           const rs = await authService.refresh();
           const { accessToken } = rs.data;
@@ -43,7 +44,7 @@ api.interceptors.response.use(
 
           return api(originalConfig);
         } catch (_err) {
-          console.log(err);
+          await  authService.signOut()
           if (_err.message && _err.statusCode) {
             return Promise.reject(_err);
           }
