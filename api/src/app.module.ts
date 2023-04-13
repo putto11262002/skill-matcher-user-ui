@@ -9,6 +9,8 @@ import mongoConfig from './config/mongo.config';
 import { AuthModule } from './modules/auth/auth.module';
 
 import { UserModule } from './modules/user/user.module';
+import { SkillModule } from './modules/skill/skill.module';
+import { MongoModule } from './common/mongo/mongo.module';
 
 @Module({
   imports: [
@@ -36,6 +38,8 @@ import { UserModule } from './modules/user/user.module';
     }),
     UserModule,
     AuthModule,
+    SkillModule,
+    MongoModule
   ],
   controllers: [AppController],
   providers: [AppService],

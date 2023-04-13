@@ -9,25 +9,25 @@ export class Profile {
   lastName: string;
 
   @Prop()
-  phoneNumber: string;
+  phoneNumber?: string;
 
   @Prop()
-  contactEmail: string;
+  contactEmail?: string;
 
   @Prop()
-  instagram: string;
+  instagram?: string;
 
   @Prop()
-  snapchat: string;
+  snapchat?: string;
 
   @Prop()
-  facebook: string;
+  facebook?: string;
 
   @Prop()
-  whatsapp: string;
+  whatsapp?: string;
 
   @Prop()
-  aboutMe: string;
+  aboutMe?: string;
 }
 
 export const profileSchema = SchemaFactory.createForClass(Profile);

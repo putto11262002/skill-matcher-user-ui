@@ -30,6 +30,15 @@ export class AuthService {
     return res;
   }
 
+  async signUp(name, email, password) {
+    const res = await api.post('/auth/sign-up', { name, email, password });
+    const { accessToken, refreshToken, user } = await res.data;
+    tokenService.setLocalAccessToken(accessToken);
+    tokenService.setLocalRefreshToken(refreshToken);
+    this.setLocalUser(user);
+    return res;
+  }
+
   async signOut() {
     const res = await api.delete('/auth/sign-out');
     tokenService.removeLocalAccessToken();
@@ -37,6 +46,8 @@ export class AuthService {
     this.removeLocalUser();
     return res;
   }
+
+
 }
 
 export default new AuthService();

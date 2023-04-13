@@ -4,13 +4,13 @@ import Footer from './Footer';
 import NavBar from './NavBar';
 
 const Layout = ({ children }) => {
-    return (
-        <>
-            <NavBar />
-            <main>{children}</main>
-            <Footer />
-        </>
-    )
+  return (
+    <>
+      <NavBar />
+      <main style={{ padding: '1rem', fontFamily: 'Montserrat, sans-serif', fontSize: '1.2rem' }}>{children}</main>
+      <Footer />
+    </>
+  )
 }
 
 export default Layout;

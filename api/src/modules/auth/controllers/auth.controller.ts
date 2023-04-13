@@ -8,9 +8,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from 'src/modules/user/dtos/requests/create-user.dto';
-import { UserDto } from 'src/modules/user/dtos/responses/user.dto';
-import { UserService } from 'src/modules/user/services/user.service';
+import { UserDto } from '../../user/dtos/responses/user.dto';
+import { UserService } from '../../user/services/user.service';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import { JwtAccessTokenPayloadDto } from '../dtos/request/jwt-access-token-payload.dto';
 import { LoginDto } from '../dtos/request/login.dto';
@@ -28,26 +27,27 @@ export class AuthController {
   ) {}
   @Post('sign-up')
   @HttpCode(HttpStatus.CREATED)
-  async signUp(@Body() payload: SignUpDto) {
-    await this.authService.signUp(payload);
-    return;
+  async signUp(@Body() payload: SignUpDto): Promise<Partial<UserDto>> {
+    const user = await this.authService.signUp(payload);
+    return new UserDto(user).toSelfResponse()
   }
 
   @Post('sign-in')
   @HttpCode(HttpStatus.OK)
-  async signIn(@Body() payload: LoginDto) {
-    const { refreshToken, accessToken, user} = await this.authService.signIn(
+  async signIn(
+    @Body() payload: LoginDto,
+  ): Promise<{ refreshToken: string; accessToken: string; user: UserDto }> {
+    const { refreshToken, accessToken, user } = await this.authService.signIn(
       payload.usernameOrEmail,
       payload.password,
     );
 
-   
     return { refreshToken, accessToken, user: new UserDto(user) };
   }
 
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
-  async refresh(@Body() payload: RefreshDto) {
+  async refresh(@Body() payload: RefreshDto): Promise<{ accessToken: string }> {
     const accessToken = await this.authService.refresh(payload.refreshToken);
     return { accessToken };
   }
@@ -55,8 +55,9 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Delete('sign-out')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async signOut(@CurrentUser() currentUser: JwtAccessTokenPayloadDto) {
-    return this.authService.signOut(currentUser.id)
-    
+  async signOut(
+    @CurrentUser() currentUser: JwtAccessTokenPayloadDto,
+  ): Promise<void> {
+    this.authService.signOut(currentUser.id);
   }
 }

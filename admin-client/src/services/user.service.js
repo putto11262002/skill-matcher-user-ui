@@ -1,4 +1,4 @@
-import api from "./api";
+import api from './api';
 
 export class UserService {
   // setLocalUser(user) {
@@ -16,8 +16,12 @@ export class UserService {
   //   return window.localStorage.removeItem('user');
   // }
 
-  async addUser(payload){
-    return api.post("admin/user", payload)
+  async addUser(payload) {
+    return api.post('admin/user', payload);
+  }
+
+  async searchUsers(query) {
+    return api.get('/user', { params: query });
   }
 }
 

@@ -6,9 +6,9 @@ export const NOT_ALLOWED_UPDATE = [
   'refreshToken',
 ];
 
-export const NOT_ALLOWED_SELF_UPDATE = []
+export const NOT_ALLOWED_SELF_UPDATE = [];
 
-export const ONLY_ADMIN_SEARCH_FIELDS = []
+export const ONLY_ADMIN_SEARCH_FIELDS = [];
 
 export const USER_STATUS = {
   ACTIVE: 'active',

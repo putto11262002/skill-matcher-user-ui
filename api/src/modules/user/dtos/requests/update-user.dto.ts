@@ -1,6 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsObject, IsOptional, IsString, ValidateNested } from 'class-validator';
+import {
+  IsObject,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 
 class UpdateProfileDto {
   @ApiProperty()
@@ -89,11 +94,7 @@ export class UpdateUserDto {
   @Type(() => UpdateProfileDto)
   profile: UpdateProfileDto;
 
-  constructor(
-    username: string,
-    status: string,
-    profile: UpdateProfileDto,
-  ) {
+  constructor(username: string, status: string, profile: UpdateProfileDto) {
     this.username = username;
     this.profile = profile;
     this.status = status;
