@@ -167,9 +167,10 @@ export class UserService {
       if(existingUser.email === this.configService.get('app.rootUser.email')) throw new Error('Please choose another root user email')
       if(existingUser.username === this.configService.get('app.rootUser.username')) throw new Error('Please choose another root user username')
     }
+    const hashed = await this.authService.hashPassword(this.configService.get('app.rootUser.password'))
     await this.userModel.create({
       username: this.configService.get('app.rootUser.username'),
-      password: this.configService.get('app.rootUser.password'),
+      password: hashed,
       email: this.configService.get('app.rootUser.email'),
       role: USER_ROLE.ROOT,
       status: USER_STATUS.ACTIVE
