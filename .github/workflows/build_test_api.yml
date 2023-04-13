@@ -1,0 +1,36 @@
+name: Build and Test API
+
+on:
+  push:
+    branches: [ master, demo ]
+  pull_request:
+    branches: [ master, demo ]
+
+jobs:
+  build-and-test:
+    strategy:
+     matrix:
+      node-version: [16.x, 18.x]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: action/checkoout@v2
+      - name: Use Node.js ${{matrix.node-version}}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{matrix.node-version}}
+      - name: Install dependencies
+        run: |
+          cd api
+          npm install
+      - name: Build project
+        run: |
+          npm run build
+        env:
+          NODE_ENV: production
+          PORT: ${{ secrets.API_PORT }}
+          MONGO_URI: ${{secrets.MONGO_URI}}
+        
+      
+      
+      
+      
