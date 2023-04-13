@@ -25,7 +25,7 @@ import { UserDto } from '../dtos/responses/user.dto';
 import { UserService } from '../services/user.service';
 
 @ApiTags('Admin')
-@Roles('admin')
+@Roles('admin', 'root')
 @UseGuards(RoleGuard)
 @Controller('admin/user')
 export class AdminUserController {

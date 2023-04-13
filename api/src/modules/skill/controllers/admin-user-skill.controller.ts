@@ -24,7 +24,7 @@ import { NOT_ALLOW_SELF_UPDATE_FIELDS } from '../constants/user-skill.constant';
 import { RoleGuard } from '../../auth/guards/role.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
 
-@Roles('admin')
+@Roles('admin', 'root')
 @UseGuards(RoleGuard)
 @Controller('admin')
 export class AdminUserSkillController {
