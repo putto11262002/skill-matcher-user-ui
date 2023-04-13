@@ -9,7 +9,7 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { USER_ROLE } from '../../constants/user.constat';
+import { USER_ROLE } from '../../constants/user.constant';
 
 export class CreateProfileDto {
   @ApiProperty()
