@@ -1,4 +1,4 @@
-name: Build and Test API
+name: Build and Test (e2e) API
 
 on:
   push:
@@ -24,12 +24,16 @@ jobs:
           npm install
       - name: Build project
         run: |
-         cd api
+          cd api
           npm run build
         env:
           NODE_ENV: production
           PORT: ${{ secrets.API_PORT }}
           MONGO_URI: ${{secrets.MONGO_URI}}
+      - name: Run e2e tests
+        run: |
+          cd api
+          npm run test:e2e
         
       
       
