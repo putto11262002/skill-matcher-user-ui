@@ -11,11 +11,11 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { SkillModule } from './modules/skill/skill.module';
 import { MongoModule } from './common/mongo/mongo.module';
-import { ScheduleModule } from '@nestjs/schedule';
+
 
 @Module({
   imports: [
-    ScheduleModule.forRoot(),
+  
     ConfigModule.forRoot({
       isGlobal: true,
       load: [mongoConfig, appConfig, authConfig],
