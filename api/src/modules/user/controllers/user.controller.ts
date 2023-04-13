@@ -51,7 +51,12 @@ export class UserController {
     );
   }
 
+<<<<<<< HEAD
+
+  // @UseGuards(AuthGuard)
+=======
   @UseGuards(AuthGuard)
+>>>>>>> f23884273ad504b02da5f24b392bcb4d0803e26e
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getUserById(@Param('id') id: string) {
@@ -64,7 +69,12 @@ export class UserController {
     return new UserDto(user).toPublicResponse();
   }
 
+<<<<<<< HEAD
+
+  // @UseGuards(AuthGuard)
+=======
   @UseGuards(AuthGuard)
+>>>>>>> f23884273ad504b02da5f24b392bcb4d0803e26e
   @Get('')
   @HttpCode(HttpStatus.OK)
   async searchUser(@Query() query: SearchUserDto) {
