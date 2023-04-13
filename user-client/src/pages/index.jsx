@@ -13,7 +13,8 @@ export default function Home() {
     <Head>
       <title>Skill matcher</title>
     </Head>
-  
+    <div>
+      thexvxvcvxcvt</div> 
     </>
   )
 }

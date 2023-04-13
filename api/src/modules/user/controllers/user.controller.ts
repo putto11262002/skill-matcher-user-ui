@@ -36,7 +36,7 @@ export class UserController {
   }
 
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getUserById(@Param("id") id: string) {
@@ -50,7 +50,7 @@ export class UserController {
   }
 
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Get('')
   @HttpCode(HttpStatus.OK)
   async searchUser(@Query() query: SearchUserDto) {
