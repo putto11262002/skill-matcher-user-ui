@@ -5,9 +5,14 @@ module.exports = {
     // See https://github.com/seppevs/migrate-mongo/#creating-a-new-migration-script
     // Example:
     // await db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: true}});
-    const salt = await bcrypt.genSalt();
-    const hashed = await bcrypt.hash(process.env.ROOT_USER_PASSWORD, salt)
-    await db.collection("users").insertOne({username: process.env.ROOT_USER_USERNAME, password: hashed, role: "admin", status: "active", createdAt: Date.UTC, updatedAt: Date.UTC})
+    try{
+      const salt = await bcrypt.genSalt();
+      const hashed = await bcrypt.hash(process.env.ROOT_USER_PASSWORD, salt)
+      await db.collection("users").insertOne({username: process.env.ROOT_USER_USERNAME, password: hashed, role: "admin", status: "active", createdAt: Date.UTC, updatedAt: Date.UTC})
+    
+     }catch{
+      console.log("Cannot insert admin user")
+     }
   },
 
   async down(db, client) {
