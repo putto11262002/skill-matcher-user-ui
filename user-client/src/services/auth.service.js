@@ -40,11 +40,16 @@ export class AuthService {
   }
 
   async signOut() {
-    tokenService.removeLocalAccessToken();
-    tokenService.removeLocalRefreshToken();
-    this.removeLocalUser();
-    const res = await api.delete('/auth/sign-out');
-    return res;
+    try{
+      const res = await api.delete('/auth/sign-out');
+      return res;
+      }catch(e){
+        return e
+      }finally{
+        tokenService.removeLocalAccessToken();
+        tokenService.removeLocalRefreshToken();
+        this.removeLocalUser();
+      }
   }
 
 
