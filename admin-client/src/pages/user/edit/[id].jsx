@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import EditUserProfileForm from '../../../components/user/UserProfileForm';
 import UserSkillForm from '../../../components/user/UserSkillForm';
-import { Divider, Toolbar } from '@mui/material';
+import { Divider, Stack, Toolbar } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import userService from '../../../services/user.service';
 import { useRouter } from 'next/router';
 import skillService from '../../../services/skill.service';
 import { useSnackbar } from 'notistack';
 
+// TODO - add error messages
 const EditUserPage = () => {
   const [skills, setSkills] = useState([]);
   const [user, setUser] = useState({});
@@ -27,6 +28,9 @@ const EditUserPage = () => {
       onSuccess: (res) => {
         setUser(res.data);
       },
+      onError: () => {
+        router.push('/user')
+      }
     },
   );
 
@@ -71,6 +75,14 @@ const EditUserPage = () => {
     { enabled: false },
   );
 
+  // Define mutation for updating user profilr
+  const {mutate: handleUpdateUserProfile, isLoading: isLoadingUpdateUserProfile} = useMutation(userService.updateUser, {
+    onSuccess: (res,{payload, id}) => {
+      setUser(payload)
+      enqueueSnackbar('Profile updated', {variant: 'success'})
+    }
+  })
+
   // Fetch user and skills when id is available
   useEffect(() => {
     if (id) {
@@ -87,9 +99,9 @@ const EditUserPage = () => {
   }, [skillSearchTerm]);
 
   return (
-    <>
-      <EditUserProfileForm />
-      <Toolbar />
+    <Stack spacing={6}>
+      <EditUserProfileForm values={user} onSubmit={(user) => handleUpdateUserProfile({id: user._id, payload: user})} isLoadingSubmitting={isLoadingUpdateUserProfile} />
+    
       <UserSkillForm
       skills={skills}
       isLoadingSkills={isLoadingSkills}
@@ -103,7 +115,7 @@ const EditUserPage = () => {
         onUpdateSkill={(formData) => handleUpdateSkill({id: user._id, payload: formData, skill: formData.skill})}
         onDeleteSkill={(skill) => handleDeleteSkill({id: user._id, skill: skill.skill})}
       />
-    </>
+    </Stack>
   );
 };
 
