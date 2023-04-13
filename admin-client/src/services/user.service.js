@@ -20,6 +20,10 @@ export class UserService {
     return api.post('/admin/user', payload);
   }
 
+  async updateUser({id, payload}){
+    return api.put(`/admin/user/${id}`, payload)
+  }
+
   async searchUsers(query) {
     return api.get('/admin/user', { params: query });
   }

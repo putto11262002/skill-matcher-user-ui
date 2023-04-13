@@ -38,7 +38,7 @@ const UserSkillForm = ({
   errorLoadingSkills,
   isLoadingUpdateSkill,
   onUpdateSkill,
-  onDeleteSkill
+  onDeleteSkill,
 }) => {
   const [formDialog, setFormDialog] = useState({ open: false, type: undefined, values: {} });
 
@@ -54,7 +54,6 @@ const UserSkillForm = ({
         skillSuggestions={skillSuggestions}
         isLoadingSaveSkill={formDialog.type === 'add' ? isLoadingAddSkill : isLoadingUpdateSkill}
         onSave={(data) => (formDialog.type === 'add' ? onAddSkill(data) : onUpdateSkill(data))}
-       
       />
       <Stack>
         <Typography variant='2' component='h2' marginBottom={3}>
@@ -83,25 +82,24 @@ const UserSkillForm = ({
               skills.map((skill) => (
                 <TableRow key={skill.skill}>
                   {USER_SKILL_TABLE_COLUMNS.map((column) => {
-                   
                     if (column !== 'actions') {
                       return <TableCell key={skill.skill + column}>{skill[column]}</TableCell>;
                     }
                     return (
                       <TableCell key={skill.skill + column}>
-                        <Button
-                        
-                        sx={{color: theme => theme.palette.text.primary}}
-                          onClick={() => setFormDialog({ type: 'edit', open: true, values: skill })}
-                        >
-                          <EditIcon />
-                        </Button>
-                        <Button
-                        sx={{color: theme => theme.palette.text.primary }}
-                          onClick={() => onDeleteSkill(skill)}
-                        >
-                         <DeleteIcon/>
-                        </Button>
+                        <Stack direction='row' spacing={2}>
+                          {' '}
+                          <div
+                            onClick={() =>
+                              setFormDialog({ type: 'edit', open: true, values: skill })
+                            }
+                          >
+                            <EditIcon fontSize='s' />
+                          </div>
+                          <div onClick={() => onDeleteSkill(skill)}>
+                            <DeleteIcon fontSize='s' />
+                          </div>
+                        </Stack>
                       </TableCell>
                     );
                   })}
@@ -125,7 +123,7 @@ const FormDialog = ({
   onSearchSkill,
   values,
 }) => {
-  const { control, handleSubmit, reset, setValue, resetField } = useForm({ values: values });
+  const { control, handleSubmit, reset } = useForm({ values: values });
   const handleClose = () => {
     // clear search term
     onSearchSkill('');
@@ -149,7 +147,7 @@ const FormDialog = ({
           })}
           component='form'
         >
-          <Grid rowSpacing={3} columnSpacing={3} container>
+          <Grid rowSpacing={3} columnSpacing={3} container paddingY={2}>
             <Grid xs={12} md={6} item>
               <Controller
                 rules={{ required: { value: true, message: 'Please select your skill' } }}
@@ -227,14 +225,14 @@ const FormDialog = ({
               <Typography>Advanced</Typography>
             </Grid>
             <Grid xs={12} item>
-             <Stack direction='row' spacing={3}>
-             <Button disabled={isLoadingSaveSkill} type='sumbit' variant='contained'>
-                Save
-              </Button>
-              <Button variant='contained' onClick={handleClose}>
-                Close
-              </Button>
-             </Stack>
+              <Stack direction='row' spacing={3}>
+                <Button disabled={isLoadingSaveSkill} type='sumbit' variant='contained'>
+                  Save
+                </Button>
+                <Button variant='contained' onClick={handleClose}>
+                  Close
+                </Button>
+              </Stack>
             </Grid>
           </Grid>
         </Box>
