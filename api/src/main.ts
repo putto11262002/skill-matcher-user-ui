@@ -3,10 +3,16 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { UserService } from './modules/user/services/user.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
+  const userService = app.get(UserService); 
+
+  // create root user
+
+  await userService.createRootUser();
 
   // config allowed domain
   app.enableCors();
@@ -33,6 +39,8 @@ async function bootstrap() {
   );
 
   await app.listen(configService.get('app.port'));
+
+
   const appUrl = await app.getUrl();
   const mongoConfig = await configService.get('mongo');
   process.env.NODE_ENV === 'development' &&

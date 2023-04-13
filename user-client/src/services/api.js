@@ -29,11 +29,9 @@ api.interceptors.response.use(
       // Access Token was expired
       if (
         err.response.status === 401 &&
-        !originalConfig._retry &&
-        originalConfig.url !== '/auth/sign-in' &&
-        originalConfig.url !== '/auth/sign-out'
+        !["/auth/sign-in", "/auth/sign-out", "/auth/refresh"].includes(originalConfig.url)
       ) {
-        originalConfig._retry = true;
+      
 
         try {
           const rs = await authService.refresh();

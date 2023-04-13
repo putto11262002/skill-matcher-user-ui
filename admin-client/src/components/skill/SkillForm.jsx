@@ -74,7 +74,7 @@ const SkillForm = ({values, handleAddSkill, isLoadingAddSkill, isLoadingSearchSk
         <Grid xs={12} item>
           <Controller
             control={control}
-            name='discription'
+            name='description'
             render={({ field: { value, onChange } }) => (
               <TextField
                 multiline

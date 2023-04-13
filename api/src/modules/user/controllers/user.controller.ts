@@ -21,7 +21,7 @@ import { omit } from 'lodash';
 import {
   NOT_ALLOWED_SELF_UPDATE,
   ONLY_ADMIN_SEARCH_FIELDS,
-} from '../constants/user.constat';
+} from '../constants/user.constant';
 import { CreateUserDto } from '../dtos/requests/create-user.dto';
 import { SearchUserDto } from '../dtos/requests/search-user.dto';
 import { Pagination } from '../../../common/dtos/responses/pagination.dto';
@@ -51,6 +51,7 @@ export class UserController {
     );
   }
 
+
   @UseGuards(AuthGuard)
   @Get(':id')
   @HttpCode(HttpStatus.OK)
@@ -63,6 +64,7 @@ export class UserController {
 
     return new UserDto(user).toPublicResponse();
   }
+
 
   @UseGuards(AuthGuard)
   @Get('')

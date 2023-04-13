@@ -16,9 +16,11 @@ export default function Home() {
   }, []);
   return (
     <>
-      <Head>
-        <title>Skill matcher</title>
-      </Head>
+    <Head>
+      <title>Skill matcher</title>
+    </Head>
+    <div>
+      thexvxvcvxcvt</div> 
     </>
   );
 }

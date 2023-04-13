@@ -11,7 +11,7 @@ import { SearchSkillDto } from "../dtos/requests/search-skill.dto";
 import { Pagination } from "../../../common/dtos/responses/pagination.dto";
 
 @ApiTags("Skill Admin")
-@Roles("admin")
+@Roles("admin", 'root')
 @UseGuards(RoleGuard)
 @Controller("admin/skill")
 export class AdminSkillController {
