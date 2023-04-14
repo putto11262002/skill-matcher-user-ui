@@ -11,22 +11,30 @@ import {
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { useMutation } from 'react-query';
 import { useDispatch, useSelector } from 'react-redux';
 
-const SignUpPage = () => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
 
-    const dispatch = useDispatch();
+const SignUpPage = () => {
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [password, setPassword] = useState('');
+    const router = useRouter();
+  
 
     const { isLoggedIn, loading, error } = useSelector((state) => state.auth);
+    const {error:  signUpError, mutate, isLoading: isLoadingSignUp} = useMutation(signUp, {
+        onSuccess: (res) => {
+            router.push('/login')
+        }
+        
+    })
 
-    const router = useRouter();
 
     const handleSignUp = (e) => {
-        e.preventDefault();
-        dispatch(signUp({ name, email, password }));
+       mutate({username: username, password: password, firstName, lastName, email})
     };
 
     useEffect(() => {
@@ -46,16 +54,25 @@ const SignUpPage = () => {
                         Sign Up
                     </Typography>
                     <Toolbar />
+                    {error && <Typography>error.message</Typography>}
                     <Box onSubmit={handleSignUp} component='form'>
-                        <Grid gap={3} container>
+                        <Grid spacing={3} container>
                             <Grid xs={12} item>
                                 {error && <Alert severity='error'>{error.message}</Alert>}
                             </Grid>
-                            <Grid xs={12} item>
+                            <Grid xs={12} md={6} item>
                                 <TextField
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    label='Name'
+                                    value={firstName}
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                    label='First name'
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid xs={12} md={6} item>
+                                <TextField
+                                    value={lastName}
+                                    onChange={(e) => setLastName(e.target.value)}
+                                    label='First name'
                                     fullWidth
                                 />
                             </Grid>
