@@ -13,6 +13,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
+import authService from '@/services/auth.service';
 
 
 const SignUpPage = () => {
@@ -25,7 +26,7 @@ const SignUpPage = () => {
   
 
     const { isLoggedIn, loading, error } = useSelector((state) => state.auth);
-    const {error:  signUpError, mutate, isLoading: isLoadingSignUp} = useMutation(signUp, {
+    const {error:  signUpError, mutate, isLoading: isLoadingSignUp} = useMutation(authService.signUp, {
         onSuccess: (res) => {
             router.push('/login')
         }
@@ -34,6 +35,7 @@ const SignUpPage = () => {
 
 
     const handleSignUp = (e) => {
+        e.preventDefault()
        mutate({username: email, password, firstName, lastName, email})
     };
 
@@ -72,7 +74,7 @@ const SignUpPage = () => {
                                 <TextField
                                     value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
-                                    label='First name'
+                                    label='Last name'
                                     fullWidth
                                 />
                             </Grid>
@@ -101,7 +103,7 @@ const SignUpPage = () => {
                             </Grid>
                             <Grid>
                             <Link href='/login' passHref>
-                                <Button variant="Sign in button">Already have an account</Button>
+                                <Button disabled={isLoadingSignUp} variant="Sign in button">Already have an account</Button>
                             </Link>
                             </Grid>
                         </Grid>
