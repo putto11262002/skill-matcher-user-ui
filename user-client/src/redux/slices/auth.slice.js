@@ -36,6 +36,7 @@ export const authSlice = createSlice({
         ...state,
         loading: false,
         user: payload.user,
+        isLoggedIn: true
       }))
       .addCase(signIn.rejected, (state, { payload }) => ({
         ...state,

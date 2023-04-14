@@ -14,7 +14,7 @@ import {
   useTheme,
 } from '@mui/material';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 
@@ -30,12 +30,16 @@ const LoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    dispatch(signIn({ email, password }));
+    console.log('ttt')
+    dispatch(signIn({email, password }));
   };
 
-  if (isLoggedIn) {
-    router.push('/');
-  }
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.push('/');
+    }
+
+  }, [isLoggedIn])
 
   return (
     <Grid container justifyContent='center' alignItems='center' height='100%'>
@@ -88,7 +92,7 @@ const LoginPage = () => {
                 />
               </Grid>
               <Grid display='flex' justifyContent='center' xs={12} item>
-                <Button type='submit' variant='contained' sx={{ mt: 3, mb: 2 }}>
+                <Button type='submit' variant='contained' disabled={loading}>
                 Log in 
                 </Button>
               </Grid>
