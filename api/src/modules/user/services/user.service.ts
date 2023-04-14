@@ -16,9 +16,10 @@ import {
   NOT_ALLOWED_UPDATE,
   USER_ROLE,
   USER_STATUS,
-} from '../constants/user.constat';
+} from '../constants/user.constant';
 import { SearchUserDto } from '../dtos/requests/search-user.dto';
 import { AuthService } from '../../../modules/auth/services/auth.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
@@ -26,6 +27,7 @@ export class UserService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
+    private readonly configService: ConfigService
   ) {}
 
   async create(user: CreateUserDto): Promise<User> {
@@ -155,5 +157,23 @@ export class UserService {
       this.userModel.find({}).countDocuments(),
     ]);
     return { users, total };
+  }
+
+  async createRootUser(){
+    // check if there is a user that already has this username
+    const existingUser = await this.userModel.findOne({$or: [{username: this.configService.get('app.rootUser.username')}, {email:  this.configService.get('app.rootUser.email')}]});
+    if(existingUser?.role === USER_ROLE.ROOT) return;
+    if(existingUser){
+      if(existingUser.email === this.configService.get('app.rootUser.email')) throw new Error('Please choose another root user email')
+      if(existingUser.username === this.configService.get('app.rootUser.username')) throw new Error('Please choose another root user username')
+    }
+    const hashed = await this.authService.hashPassword(this.configService.get('app.rootUser.password'))
+    await this.userModel.create({
+      username: this.configService.get('app.rootUser.username'),
+      password: hashed,
+      email: this.configService.get('app.rootUser.email'),
+      role: USER_ROLE.ROOT,
+      status: USER_STATUS.ACTIVE
+    })
   }
 }

@@ -16,7 +16,7 @@ import { JwtRefreshTokenPayload } from '../dtos/request/jwt-refresh-token-payloa
 import { UserService } from '../../../modules/user/services/user.service';
 import { User } from '../../../modules/user/schemas/user.schema';
 import { SignUpDto } from '../dtos/request/sign-up.dto';
-import { USER_STATUS } from '../../user/constants/user.constat';
+import { USER_STATUS } from '../../user/constants/user.constant';
 
 
 @Injectable()

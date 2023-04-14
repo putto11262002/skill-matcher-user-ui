@@ -19,4 +19,5 @@ export const USER_STATUS = {
 export const USER_ROLE = {
   USER: 'user',
   ADMIN: 'admin',
+  ROOT: 'root'
 };

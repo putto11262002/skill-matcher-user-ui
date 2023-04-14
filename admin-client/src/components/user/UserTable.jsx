@@ -8,6 +8,7 @@ import {
   Box,
   TableContainer,
   TablePagination,
+  Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
 import { upperFirst } from 'lodash';
@@ -24,9 +25,7 @@ const UserTable = ({ users, pageNumber, loading, error , onPageChange, total}) =
 
 
   const renderUserRows = () => {
-    if (loading) {
-      return;
-    }
+   
 
     return users.map((user) => (
     
@@ -43,6 +42,14 @@ const UserTable = ({ users, pageNumber, loading, error , onPageChange, total}) =
    
     ));
   };
+
+  if(loading){
+    return <Typography>Loading</Typography>
+  }
+
+  if(error){
+    return <Typography>Error</Typography>
+  }
   return (
     <>
       <Table stickyHeader>

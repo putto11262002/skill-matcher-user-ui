@@ -1,6 +1,7 @@
 export const USER_ROLE = {
   USER: 'user',
   ADMIN: 'admin',
+  ROOT: 'root'
 };
 
 export const USER_STATUS = {

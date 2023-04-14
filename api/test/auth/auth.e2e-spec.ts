@@ -8,29 +8,19 @@ import * as mongoose from 'mongoose';
 import * as request from 'supertest';
 import { User } from '../../src/modules/user/schemas/user.schema';
 import { CreateUserDto } from '../../src/modules/user/dtos/requests/create-user.dto';
-
+import { app } from '../test-setup';
 describe('Auth controller', () => {
-  let app: INestApplication;
+  
   let mongoService: MongoService;
   let userService: UserService;
   let authService: AuthService;
 
-  beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    })
-      .setLogger(new Logger())
-      .compile();
 
-    app = moduleFixture.createNestApplication();
-    await app.init();
+  beforeAll(async () => {
+  
     mongoService = app.get(MongoService);
     userService = app.get(UserService);
     authService = app.get(AuthService);
-  });
-
-  afterAll(async () => {
-    await app.close();
   });
 
   beforeEach(async () => {});
