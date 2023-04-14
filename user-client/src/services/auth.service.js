@@ -30,12 +30,8 @@ export class AuthService {
     return res;
   }
 
-  async signUp(name, email, password) {
-    const res = await api.post('/auth/sign-up', { name, email, password });
-    const { accessToken, refreshToken, user } = await res.data;
-    tokenService.setLocalAccessToken(accessToken);
-    tokenService.setLocalRefreshToken(refreshToken);
-    this.setLocalUser(user);
+  async signUp(user) {
+    const res = await api.post('/auth/sign-up', user);
     return res;
   }
 
