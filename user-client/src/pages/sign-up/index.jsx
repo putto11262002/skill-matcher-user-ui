@@ -34,7 +34,7 @@ const SignUpPage = () => {
 
 
     const handleSignUp = (e) => {
-       mutate({username: username, password: password, firstName, lastName, email})
+       mutate({username: email, password, firstName, lastName, email})
     };
 
     useEffect(() => {
