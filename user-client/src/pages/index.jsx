@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import Head from 'next/head'
+import { Typography } from '@mui/material';
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -16,9 +17,16 @@ export default function Home() {
   }, []);
   return (
     <>
-      <Head>
-        <title>Skill matcher</title>
-      </Head>
+
+    <Head>
+      <title>Skill matcher</title>
+    </Head>
+   <Typography variant='1' component='h1'>H1</Typography>
+
+   <Typography >H1</Typography>
+
+   <Typography  sx={{display: {xs: 'none', md: 'block'}}} variant='6' component='h6'>H6</Typography>
+
     </>
   );
 }
