@@ -51,7 +51,7 @@ export class AdminUserController {
       throw new NotFoundException('User with this id does not exist.');
     }
 
-    return new UserDto(user).toPrivateResponse();
+    return new UserDto(user).toAdminUserResponse();
   }
 
   @Delete(':id')
@@ -65,7 +65,7 @@ export class AdminUserController {
   async searchUser(@Query() query: SearchUserDto) {
     const { users, total } = await this.userService.search(query);
     return new Pagination(
-      users.map((user) => new UserDto(user)),
+      users.map((user) => new UserDto(user).toAdminUserResponse()),
       query.pageSize,
       query.pageNumber,
       total,

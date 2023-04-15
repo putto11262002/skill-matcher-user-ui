@@ -21,6 +21,7 @@ import { omit } from 'lodash';
 import {
   NOT_ALLOWED_SELF_UPDATE,
   ONLY_ADMIN_SEARCH_FIELDS,
+  USER_STATUS,
 } from '../constants/user.constant';
 import { CreateUserDto } from '../dtos/requests/create-user.dto';
 import { SearchUserDto } from '../dtos/requests/search-user.dto';
@@ -71,7 +72,7 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   async searchUser(@Query() query: SearchUserDto) {
     const { users, total } = await this.userService.search(
-      omit(query, ONLY_ADMIN_SEARCH_FIELDS),
+      omit({...query, status: USER_STATUS.ACTIVE}, ONLY_ADMIN_SEARCH_FIELDS),
     );
     return new Pagination(
       users.map((user) => new UserDto(user)),
