@@ -38,6 +38,7 @@ export class AuthService {
 
   async signOut() {
     try{
+      if(!tokenService.getLocalAcessToken() && !tokenService.getLocalRefreshToken() && !this.getLocalUser()) return
     const res = await api.delete('/auth/sign-out');
     return res;
     }catch(e){
