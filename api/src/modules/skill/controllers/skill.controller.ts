@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpException, HttpStatus, Param, Post, UseGuards} from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpException, HttpStatus, Param, Post, Query, UseGuards} from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "../../auth/guards/auth.guard";
 import { SkillService } from "../services/skill.service";
@@ -6,6 +6,8 @@ import { SkillDto } from "../dtos/responses/skill.dto";
 import { CreateSkillDto } from "../dtos/requests/create-skill.dto";
 import { NOT_ALLOW_USER_CREATE_FIELDS, SKILL_STATUS } from "../constants/skill.constant";
 import {omit} from "lodash"
+import { SearchSkillDto } from "../dtos/requests/search-skill.dto";
+import { Pagination } from "../../../common/dtos/responses/pagination.dto";
 
 @ApiTags("Skill")
 @UseGuards(AuthGuard)
@@ -18,8 +20,9 @@ export class SkillController {
 
     @Get()
     @HttpCode(HttpStatus.OK)
-    async searchSkills(){
-        throw new HttpException("Not implemented yet", 404)
+    async searchSkills(@Query() query: SearchSkillDto){
+        const {skills, total} = await this.skillService.searchSkills({...query, status: SKILL_STATUS.APPROVED})
+        return new Pagination(skills, query.pageSize, query.pageNumber, total);
     }
 
     @Get(":name")
