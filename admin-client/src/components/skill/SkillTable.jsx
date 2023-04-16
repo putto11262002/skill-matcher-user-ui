@@ -10,6 +10,8 @@ import {
 import React from 'react';
 import { SKILL_PAGE_SIZE, SKILL_TABLE_COLUMNS } from '../../constants/skill.contant';
 import { truncate, upperFirst } from 'lodash';
+import Loader from '../common/Loader';
+import Error from '../common/Error';
 
 const SkillTable = ({ skills, loading, error, total, onPageChange, pageNumber }) => {
   const renderSkillRows = () => {
@@ -30,11 +32,11 @@ const SkillTable = ({ skills, loading, error, total, onPageChange, pageNumber })
   };
 
   if (loading) {
-    return <Typography>Loading</Typography>;
+    return <Loader/>
   }
 
   if (error) {
-    return <Typography>Error</Typography>;
+    return <Error/>
   }
   return (
     <Table stickyHeader>

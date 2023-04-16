@@ -19,6 +19,8 @@ import Link from 'next/link';
 const COLUMNS = ['username', 'email', 'status', 'role', 'actions'];
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import Loader from '../common/Loader';
+import Error from '../common/Error';
 // TODO add search and filter, add actions - delete update view buttons/popup
 const UserTable = ({ users, pageNumber, loading, error , onPageChange, total}) => {
 
@@ -44,11 +46,11 @@ const UserTable = ({ users, pageNumber, loading, error , onPageChange, total}) =
   };
 
   if(loading){
-    return <Typography>Loading</Typography>
+    return <Loader/>
   }
 
   if(error){
-    return <Typography>Error</Typography>
+    return <Error/>
   }
   return (
     <>
