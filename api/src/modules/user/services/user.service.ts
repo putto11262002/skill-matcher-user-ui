@@ -35,6 +35,9 @@ export class UserService {
       this.userModel.findOne({ username: user.username }),
       this.userModel.findOne({ email: user.email }),
     ]);
+    this.userModel.create({
+      user
+    })
     if (usernameExist) {
       throw new HttpException(
         'User with this username already exist',
@@ -176,4 +179,6 @@ export class UserService {
       status: USER_STATUS.ACTIVE
     })
   }
+
+  async updateAvatar(id: string | ObjectId, avatar: File){}
 }
