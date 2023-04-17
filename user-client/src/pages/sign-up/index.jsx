@@ -8,8 +8,9 @@ import {
     Toolbar,
     Typography,
     Button,
+    Link,
 } from '@mui/material';
-import Link from 'next/link';
+//import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
@@ -55,6 +56,7 @@ const SignUpPage = () => {
                     <Typography variant='2' textAlign='center' component='h2'>
                         Sign Up
                     </Typography>
+                    
                     <Toolbar />
                     {error && <Typography>error.message</Typography>}
                     <Box onSubmit={handleSignUp} component='form'>
@@ -78,6 +80,15 @@ const SignUpPage = () => {
                                     fullWidth
                                 />
                             </Grid>
+                            <Grid xs={12}  item>
+                                <TextField
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    label='Username'
+                                    type='username'
+                                    fullWidth
+                                />
+                            </Grid>
                             <Grid xs={12} item>
                                 <TextField
                                     value={email}
@@ -87,15 +98,7 @@ const SignUpPage = () => {
                                     fullWidth
                                 />
                             </Grid>
-                            <Grid xs={12}  item>
-                                <TextField
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                    label='username'
-                                    type='username'
-                                    fullWidth
-                                />
-                            </Grid>
+
                             <Grid xs={12} item>
                                 <TextField
                                     value={password}
@@ -110,10 +113,9 @@ const SignUpPage = () => {
                                     Sign Up
                                 </Button>
                             </Grid>
-                            <Grid  xs={12} justifyContent='flex-start' item >
-                            <Link href='/login' passHref>
-                                <Button variant="Sign in button">Already have an account</Button>
-                               
+                            <Grid item >
+                            <Link href='/login'  variant='body2'>
+                                {"Already have an account"}
                             </Link>
                             </Grid>
                         </Grid>
