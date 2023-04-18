@@ -5,6 +5,8 @@ import { Provider } from 'react-redux';
 import store from '@/redux/stores';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SnackbarProvider } from 'notistack';
+import { ThemeProvider } from '@emotion/react';
+import { theme } from '../styles/theme';
 const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }) {
@@ -12,7 +14,8 @@ export default function App({ Component, pageProps }) {
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <SnackbarProvider
+       <ThemeProvider theme={theme}>
+       <SnackbarProvider
           anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
           autoHideDuration={3000}
         >
@@ -23,6 +26,7 @@ export default function App({ Component, pageProps }) {
             </>,
           )}
         </SnackbarProvider>
+       </ThemeProvider>
       </QueryClientProvider>
     </Provider>
   );

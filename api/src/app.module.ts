@@ -11,19 +11,18 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { SkillModule } from './modules/skill/skill.module';
 import { MongoModule } from './common/mongo/mongo.module';
-
+import awsConfig from './config/aws.config';
+import { FileModule } from './modules/file/file.module';
+import { _ConfigModule } from './config/config.module';
 
 @Module({
   imports: [
-  
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [mongoConfig, appConfig, authConfig],
-    }),
+    _ConfigModule,
     UserModule,
     AuthModule,
     SkillModule,
-    MongoModule
+    MongoModule,
+    FileModule,
   ],
   controllers: [AppController],
   providers: [AppService],
