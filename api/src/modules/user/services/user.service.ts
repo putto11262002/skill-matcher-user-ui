@@ -83,7 +83,7 @@ export class UserService {
       { _id: id },
       user,
       { new: true },
-    );
+    ).populate('avatar');
     return updatedUser;
   }
 
@@ -106,7 +106,7 @@ export class UserService {
   }
 
   async getById(id: string | ObjectId): Promise<User | null> {
-    const user = await this.userModel.findOne({ _id: id });
+    const user = (await this.userModel.findOne({ _id: id })).populate('avatar');
     if (!user) {
       // throw new HttpException("User with this id does not exist.", HttpStatus.NOT_FOUND);
       return null;
@@ -115,7 +115,7 @@ export class UserService {
   }
 
   async getByEmail(email: string): Promise<User | null> {
-    const user = await this.userModel.findOne({ email });
+    const user = await this.userModel.findOne({ email }).populate('avatar');
     if (!user) {
       // throw new HttpException("User with is email does not exist.", HttpStatus.NOT_FOUND)
       return null;
@@ -124,7 +124,7 @@ export class UserService {
   }
 
   async getByUsername(username: string): Promise<User | null> {
-    const user = await this.userModel.findOne({ username });
+    const user = await this.userModel.findOne({ username }).populate('avatar');
     if (!user) {
       // throw new HttpException("User with this username does not exist.", HttpStatus.NOT_FOUND);
       return null;

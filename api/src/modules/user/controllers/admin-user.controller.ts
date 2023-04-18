@@ -5,12 +5,16 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  MaxFileSizeValidator,
   NotFoundException,
   Param,
+  ParseFilePipe,
   Post,
   Put,
   Query,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 
 import { ApiTags } from '@nestjs/swagger';
@@ -23,6 +27,10 @@ import { SearchUserDto } from '../dtos/requests/search-user.dto';
 import { UpdateUserDto } from '../dtos/requests/update-user.dto';
 import { UserDto } from '../dtos/responses/user.dto';
 import { UserService } from '../services/user.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { USER_AVATAR_MAX_SIZE } from '../constants/user.constant';
+import { ImageValidator } from '../../file/validators/image.validator';
+import { FileDto } from '../../file/dto/file.dto';
 
 @ApiTags('Admin')
 @Roles('admin', 'root')
@@ -70,5 +78,13 @@ export class AdminUserController {
       query.pageNumber,
       total,
     );
+  }
+
+  @Put(':id/avatar')
+  @HttpCode(HttpStatus.OK)
+  @UseInterceptors(FileInterceptor('avatar'))
+  async updateUserAvatar(@UploadedFile(new ParseFilePipe({validators: [new MaxFileSizeValidator({maxSize: USER_AVATAR_MAX_SIZE}), new ImageValidator()]})) avatar : Express.Multer.File, @Param('id') id: string){
+    const file = await this.userService.updateAvatar(id, avatar)
+    return new FileDto(file)
   }
 }

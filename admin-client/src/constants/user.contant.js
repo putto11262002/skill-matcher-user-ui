@@ -18,3 +18,5 @@ export const USER_SKILL_ROLE = {
 }
 
 export const USER_SKILL_TABLE_COLUMNS = ['skill', 'role', 'proficiency', 'actions']
+
+export const USER_DEFAULT_AVATAR = '/images/no-avatar.jpg'
