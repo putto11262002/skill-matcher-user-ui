@@ -7,7 +7,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId } from 'mongoose';
+import { FilterQuery, Model, ObjectId } from 'mongoose';
 import { CreateUserDto } from '../dtos/requests/create-user.dto';
 import { UpdateUserDto } from '../dtos/requests/update-user.dto';
 import { User } from '../schemas/user.schema';
@@ -149,12 +149,28 @@ export class UserService {
   async search(
     query: SearchUserDto,
   ): Promise<{ total: number; users: User[] }> {
+    const filer: FilterQuery<User> = {}
+    if(query.q){
+      filer.$or = [
+        {'profile.firstName': {'$regex': query.q, "$options": "i"}},
+        {'profile.lastName': {'$regex': query.q, "$options": "i"}},
+        {'username': {'$regex': query.q, "$options": "i"}}
+      ]
+    }
+
+    if(query.status){
+      filer.status = query.status;
+    }
+
+    if(query.excludeIds){
+      filer._id = {'$nin': query.excludeIds}
+    }
     const [users, total] = await Promise.all([
       this.userModel
-        .find({})
-        .skip(query.pageNumber * query.pageSize)
-        .limit(query.pageSize),
-      this.userModel.find({}).countDocuments(),
+        .find(filer)
+        .skip((query.pageNumber !== undefined && query.pageSize !== undefined) ? query?.pageNumber * query?.pageSize : undefined)
+        .limit(query?.pageSize),
+      this.userModel.find(filer).countDocuments(),
     ]);
     return { users, total };
   }
