@@ -14,12 +14,17 @@ import { User } from '../schemas/user.schema';
 import { omit } from 'lodash';
 import {
   NOT_ALLOWED_UPDATE,
+  USER_AVATAR_HEIGHT,
+  USER_AVATAR_WIDTH,
   USER_ROLE,
   USER_STATUS,
 } from '../constants/user.constant';
 import { SearchUserDto } from '../dtos/requests/search-user.dto';
 import { AuthService } from '../../../modules/auth/services/auth.service';
 import { ConfigService } from '@nestjs/config';
+import { FileService } from '../../file/services/file.service';
+import { ImageService } from '../../file/services/image.service';
+import { DEFAULT_IMAGE_FORMAT } from '../../file/constants/image.constant';
 
 @Injectable()
 export class UserService {
@@ -27,7 +32,9 @@ export class UserService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly fileService: FileService,
+    private readonly imageService: ImageService,
   ) {}
 
   async create(user: CreateUserDto): Promise<User> {
@@ -35,9 +42,7 @@ export class UserService {
       this.userModel.findOne({ username: user.username }),
       this.userModel.findOne({ email: user.email }),
     ]);
-    this.userModel.create({
-      user
-    })
+
     if (usernameExist) {
       throw new HttpException(
         'User with this username already exist',
@@ -93,10 +98,10 @@ export class UserService {
     await this.userModel.deleteOne({ _id: id });
   }
 
-  async deleteByUsername(username: string): Promise<void>{
-    const exist = await this.userModel.exists({username});
-    if(!exist){
-      throw new NotFoundException('User with this username does not exist')
+  async deleteByUsername(username: string): Promise<void> {
+    const exist = await this.userModel.exists({ username });
+    if (!exist) {
+      throw new NotFoundException('User with this username does not exist');
     }
   }
 
@@ -128,18 +133,18 @@ export class UserService {
   }
 
   async existByUsername(username: string): Promise<boolean> {
-    const id = await this.userModel.exists({username})
+    const id = await this.userModel.exists({ username });
     return id ? true : false;
   }
 
   async existById(id: ObjectId | string): Promise<boolean> {
-    const _id = await this.userModel.exists({_id: id})
+    const _id = await this.userModel.exists({ _id: id });
     return _id ? true : false;
   }
 
-  async existByEmail(email: string): Promise<boolean>{
-    const id = await this.userModel.exists({email})
-    return id ? true : false
+  async existByEmail(email: string): Promise<boolean> {
+    const id = await this.userModel.exists({ email });
+    return id ? true : false;
   }
 
   async updateRefreshToken(
@@ -162,23 +167,60 @@ export class UserService {
     return { users, total };
   }
 
-  async createRootUser(){
+  async createRootUser() {
     // check if there is a user that already has this username
-    const existingUser = await this.userModel.findOne({$or: [{username: this.configService.get('app.rootUser.username')}, {email:  this.configService.get('app.rootUser.email')}]});
-    if(existingUser?.role === USER_ROLE.ROOT) return;
-    if(existingUser){
-      if(existingUser.email === this.configService.get('app.rootUser.email')) throw new Error('Please choose another root user email')
-      if(existingUser.username === this.configService.get('app.rootUser.username')) throw new Error('Please choose another root user username')
+    const existingUser = await this.userModel.findOne({
+      $or: [
+        { username: this.configService.get('app.rootUser.username') },
+        { email: this.configService.get('app.rootUser.email') },
+      ],
+    });
+    if (existingUser?.role === USER_ROLE.ROOT) return;
+    if (existingUser) {
+      if (existingUser.email === this.configService.get('app.rootUser.email'))
+        throw new Error('Please choose another root user email');
+      if (
+        existingUser.username ===
+        this.configService.get('app.rootUser.username')
+      )
+        throw new Error('Please choose another root user username');
     }
-    const hashed = await this.authService.hashPassword(this.configService.get('app.rootUser.password'))
+    const hashed = await this.authService.hashPassword(
+      this.configService.get('app.rootUser.password'),
+    );
     await this.userModel.create({
       username: this.configService.get('app.rootUser.username'),
       password: hashed,
       email: this.configService.get('app.rootUser.email'),
       role: USER_ROLE.ROOT,
-      status: USER_STATUS.ACTIVE
-    })
+      status: USER_STATUS.ACTIVE,
+    });
   }
 
-  async updateAvatar(id: string | ObjectId, avatar: File){}
+  async updateAvatar(id: string | ObjectId, avatar: Express.Multer.File) {
+    const user = await this.userModel.findOne({ _id: id });
+    if (!user) {
+      throw new NotFoundException('User with this id does not exist');
+    }
+
+    const tranformed = await this.imageService.resize(
+      avatar.buffer,
+      USER_AVATAR_HEIGHT,
+      USER_AVATAR_WIDTH,
+    );
+    const createdFile = await this.fileService.uploadFile(
+      tranformed,
+      `image/${DEFAULT_IMAGE_FORMAT}`,
+      'user',
+      user._id,
+      'avatar',
+    );
+
+    // delete existing avatar if it exist
+    if (user.avatar) {
+      await this.fileService.deleteFileById(user?.avatar?._id);
+    }
+    await this.userModel.updateOne({ _id: id }, { avatar: createdFile._id });
+    return createdFile;
+  }
 }
