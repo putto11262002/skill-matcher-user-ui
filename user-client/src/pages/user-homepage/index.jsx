@@ -4,9 +4,7 @@ import {
   Box,
   Avatar,
   Tabs,
-  Tab,
-  TabPanel,
-  TabContext,
+  Tab
 } from '@mui/material';
 import { useSelector } from 'react-redux';
 
@@ -33,20 +31,18 @@ const UserProfile = () => {
       */}
       </Box>
       <Box sx={{ width: '100%', marginTop: '2rem' }}>
-        <Typography variant="h5">  User Profile</Typography>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          textColor="primary"
-          indicatorColor="primary"
-          aria-label="primary tabs example"
-        >
-          <Tab value="one" label="Learning">
-          </Tab>
-          <Tab value="two" label="Tutoring">
-          </Tab>
-        </Tabs>
-      </Box>
+      <Typography variant="h5">User Profile</Typography>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            textColor="primary"
+            indicatorColor="primary"
+            aria-label="primary tabs example"
+          >
+            <Tab value="one" label="Learning" />
+            <Tab value="two" label="Tutoring" />
+          </Tabs>
+        </Box>
     </Box>
   );
 };
