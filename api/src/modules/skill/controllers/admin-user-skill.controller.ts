@@ -53,8 +53,7 @@ export class AdminUserSkillController {
     @Param('name') skillName: string,
     @Param('userId') userId: string,
   ) {
-    const user = await this.userService.getById(userId)
-    await this.userSkillService.removeSkill(skillName, user);
+    await this.userSkillService.removeSkill(skillName, userId);
   }
 
   @Put('user/:userId/skill/:name')
@@ -64,26 +63,24 @@ export class AdminUserSkillController {
     @Param('name') skillName: string,
     @Param('userId') userId: string,
   ) {
-    const user = await this.userService.getById(userId);
+  
     await this.userSkillService.updateUserSkill(
       payload,
       skillName,
-      user,
+      userId,
     );
   }
 
   @Get('user/:userId/skill')
   @HttpCode(HttpStatus.OK)
   async getSelfSkill(@Param('userId') userId: string) {
-    const user = await this.userService.getById(userId)
-    const userSkills = await this.userSkillService.getUserSkills(user);
+    const userSkills = await this.userSkillService.getUserSkills(userId);
     return userSkills.map((userSkill) => new UserSkillDto(userSkill).toAdminResponse());
   }
 
   @Get('user/:userId/skill')
   async getUserSkill(@Param('userId') userId: string) {
-    const user = await this.userService.getById(userId);
-    const userSkills = await this.userSkillService.getUserSkills(user);
+    const userSkills = await this.userSkillService.getUserSkills(userId);
     return userSkills.map((userSkill) => new UserSkillDto(userSkill).toAdminResponse());
   }
 }

@@ -36,25 +36,25 @@ export class UserSkillService {
         return createdUserSkill;
     }
 
-    async removeSkill(skill: string, user: User): Promise<void> {
-        const exist = await this.userSkillModel.exists({userId: user._id, skill});
+    async removeSkill(skill: string, userId: ObjectId | string): Promise<void> {
+        const exist = await this.userSkillModel.exists({userId: userId, skill});
         if(!exist){
             throw new BadRequestException('Cannot remove skill that you do not have')
         }
-        await this.userSkillModel.deleteOne({userId: user._id, skill});
+        await this.userSkillModel.deleteOne({userId: userId, skill});
     }
 
-    async updateUserSkill(userSkill: UpdateUserSkillDto, skill: string,  user: User): Promise<UserSkill>{
-        const exist = await this.userSkillModel.exists({userId: user._id, skill});
+    async updateUserSkill(userSkill: UpdateUserSkillDto, skill: string,  userId: ObjectId | string): Promise<UserSkill>{
+        const exist = await this.userSkillModel.exists({userId: userId, skill});
         if(!exist){
             throw new BadRequestException('Cannot update skill that you do not have')
         }
-       const updatedUserSkill = await this.userSkillModel.findOneAndUpdate({userId: user._id, skill}, omit(userSkill, NOT_ALLOW_UPDATE_FIELDS), {new: true})
+       const updatedUserSkill = await this.userSkillModel.findOneAndUpdate({userId: userId, skill}, omit(userSkill, NOT_ALLOW_UPDATE_FIELDS), {new: true})
        return updatedUserSkill;
     }
 
-    async getUserSkills(user: User){
-        const skills = await this.userSkillModel.find({userId: user._id});
+    async getUserSkills(userId: ObjectId | string){
+        const skills = await this.userSkillModel.find({userId: userId});
         return skills;
     }
 }
