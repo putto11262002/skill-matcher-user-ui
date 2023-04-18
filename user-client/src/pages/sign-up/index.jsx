@@ -1,3 +1,4 @@
+
 import { signUp } from '@/redux/thunks/user.thunk';
 import {
     Alert,
@@ -13,7 +14,6 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
-import authService from '@/services/auth.service';
 
 
 const SignUpPage = () => {
@@ -26,7 +26,7 @@ const SignUpPage = () => {
   
 
     const { isLoggedIn, loading, error } = useSelector((state) => state.auth);
-    const {error:  signUpError, mutate, isLoading: isLoadingSignUp} = useMutation(authService.signUp, {
+    const {error:  signUpError, mutate, isLoading: isLoadingSignUp} = useMutation(signUp, {
         onSuccess: (res) => {
             router.push('/login')
         }
@@ -36,7 +36,7 @@ const SignUpPage = () => {
 
     const handleSignUp = (e) => {
         e.preventDefault()
-       mutate({username: email, password, firstName, lastName, email})
+       mutate({username: username, password: password, firstName, lastName, email})
     };
 
     useEffect(() => {
@@ -47,7 +47,7 @@ const SignUpPage = () => {
 
     return (
         <Grid container justifyContent='center' alignItems='center' height='100%'>
-            <Grid xs={11} sm={6} item>
+            <Grid xs={11} sm={6} md={3.5} item>
                 <Box
                     padding={(theme) => theme.spacing(3)}
                     sx={{ boxShadow: { sm: 2, xs: 0 }, borderRadius: 2 }}
@@ -62,7 +62,7 @@ const SignUpPage = () => {
                             <Grid xs={12} item>
                                 {error && <Alert severity='error'>{error.message}</Alert>}
                             </Grid>
-                            <Grid xs={12} md={6} item>
+                            <Grid xs={11} sm={6} md={3.5} item>
                                 <TextField
                                     value={firstName}
                                     onChange={(e) => setFirstName(e.target.value)}
@@ -70,7 +70,7 @@ const SignUpPage = () => {
                                     fullWidth
                                 />
                             </Grid>
-                            <Grid xs={12} md={6} item>
+                            <Grid xs={11} sm={6} md={3.5} item>
                                 <TextField
                                     value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
@@ -78,7 +78,7 @@ const SignUpPage = () => {
                                     fullWidth
                                 />
                             </Grid>
-                            <Grid xs={12} item>
+                            <Grid xs={11} sm={6} md={3.5}item>
                                 <TextField
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
@@ -87,7 +87,16 @@ const SignUpPage = () => {
                                     fullWidth
                                 />
                             </Grid>
-                            <Grid xs={12} item>
+                            <Grid xs={11} sm={6} md={3.5} item>
+                                <TextField
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    label='username'
+                                    type='username'
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid xs={11} sm={6} md={3.5} item>
                                 <TextField
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
@@ -96,14 +105,14 @@ const SignUpPage = () => {
                                     fullWidth
                                 />
                             </Grid>
-                            <Grid display='flex' justifyContent='center' xs={12} item>
+                            <Grid display='flex' justifyContent='center' xs={11} sm={6} md={3.5} item>
                                 <Button type='submit' variant='contained' disabled={loading}>
                                     Sign Up
                                 </Button>
                             </Grid>
                             <Grid>
                             <Link href='/login' passHref>
-                                <Button disabled={isLoadingSignUp} variant="Sign in button">Already have an account</Button>
+                                <Button variant="Sign in button">Already have an account</Button>
                             </Link>
                             </Grid>
                         </Grid>
