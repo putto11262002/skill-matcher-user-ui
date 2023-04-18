@@ -13,13 +13,16 @@ export class FileService {
 
   async uploadFile(
     file: Buffer,
+    contentType: string,
     resourceType: string,
     resourceId: string | ObjectId,
-    fileName: string
+    fileName: string,
+   
   ) {
     const { url, key } = await this.s3Service.upload(
       file,
       `${resourceType}/${resourceId}/${fileName}-${new Date().toISOString()}`,
+      contentType
     );
     const createdFile = await this.fileModel.create({
       url,

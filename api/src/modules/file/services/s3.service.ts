@@ -18,11 +18,13 @@ export class S3Service {
   async upload(
     dataBuffer: Buffer,
     key: string,
+    contentType: string
   ): Promise<{ url: string; key: string }> {
     const command = new PutObjectCommand({
       Bucket: this.configService.get('aws.s3.publicBucketName'),
       Key: key,
       Body: dataBuffer,
+      ContentType: contentType
     });
 
     await this.s3Client.send(command);
