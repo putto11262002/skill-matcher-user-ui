@@ -14,7 +14,7 @@ import { AuthGuard } from '../../auth/guards/auth.guard';
 import { CreateUserSkillDto } from '../dtos/requests/create-user-skill.dot';
 import { UserSkillService } from '../services/user-skill.service';
 import { UserSkillDto } from '../dtos/responses/user-skill.dto';
-import { CurrentUser } from '../../auth/decorators/current-user.decorator';
+import { CurrentJwt } from '../../auth/decorators/current-jwt.decorator';
 import { JwtAccessTokenPayloadDto } from '../../auth/dtos/request/jwt-access-token-payload.dto';
 import { UserService } from '../../user/services/user.service';
 import { User } from '../../user/schemas/user.schema';

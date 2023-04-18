@@ -41,6 +41,7 @@ export class RoleGuard implements CanActivate {
       throw new ForbiddenException();
     }
     req['user'] = user;
+    req['jwt-payload'] = payload
 
     return true;
   }

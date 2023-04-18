@@ -11,7 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CurrentUser } from '../../auth/decorators/current-user.decorator';
+import { CurrentJwt } from '../../auth/decorators/current-jwt.decorator';
 import { JwtAccessTokenPayloadDto } from '../../auth/dtos/request/jwt-access-token-payload.dto'; 
 import { AuthGuard } from '../../auth/guards/auth.guard';
 import { UpdateUserDto } from '../dtos/requests/update-user.dto';
@@ -34,7 +34,7 @@ export class UserController {
   @UseGuards(AuthGuard)
   @Get('self')
   @HttpCode(HttpStatus.OK)
-  async getSelf(@CurrentUser() currentUser: JwtAccessTokenPayloadDto) {
+  async getSelf(@CurrentJwt() currentUser: JwtAccessTokenPayloadDto) {
     const user = await this.userService.getById(currentUser.id);
     return new UserDto(user).toSelfResponse();
   }
@@ -43,12 +43,12 @@ export class UserController {
   @Put('self')
   @HttpCode(HttpStatus.NO_CONTENT)
   async updateSelf(
-    @CurrentUser() currentUser: JwtAccessTokenPayloadDto,
+    @CurrentJwt() currentUser: JwtAccessTokenPayloadDto,
     @Body() payload: UpdateUserDto,
   ) {
     await this.userService.updateById(
       currentUser.id,
-      omit(payload, NOT_ALLOWED_SELF_UPDATE),
+      omit(payload, NOT_ALLOWED_SELF_UPDATE) as UpdateUserDto,
     );
   }
 
@@ -70,9 +70,9 @@ export class UserController {
   @UseGuards(AuthGuard)
   @Get('')
   @HttpCode(HttpStatus.OK)
-  async searchUser(@Query() query: SearchUserDto) {
+  async searchUser(@Query() query: SearchUserDto, @CurrentJwt() currentUser: JwtAccessTokenPayloadDto) {
     const { users, total } = await this.userService.search(
-      omit({...query, status: USER_STATUS.ACTIVE}, ONLY_ADMIN_SEARCH_FIELDS),
+      omit({...query, status: USER_STATUS.ACTIVE, excludeIds: [currentUser.id]}, ONLY_ADMIN_SEARCH_FIELDS) as SearchUserDto,
     );
     return new Pagination(
       users.map((user) => new UserDto(user)),
