@@ -1,4 +1,5 @@
 import {
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -12,6 +13,8 @@ import { SKILL_PAGE_SIZE, SKILL_TABLE_COLUMNS } from '../../constants/skill.cont
 import { truncate, upperFirst } from 'lodash';
 import Loader from '../common/Loader';
 import Error from '../common/Error';
+import Link from 'next/link';
+import EditIcon from '@mui/icons-material/Edit';
 
 const SkillTable = ({ skills, loading, error, total, onPageChange, pageNumber }) => {
   const renderSkillRows = () => {
@@ -23,7 +26,7 @@ const SkillTable = ({ skills, loading, error, total, onPageChange, pageNumber })
           }
           return (
             <TableCell align='right' key={skill.name + column}>
-              Actions
+              <Stack direction='row' spacing={2}><Link href={`/skill/edit/${skill.name}`}><EditIcon fontSize='s'/></Link></Stack>
             </TableCell>
           );
         })}
