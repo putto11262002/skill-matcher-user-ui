@@ -1,40 +1,54 @@
+import React from 'react';
+import {
+  Typography,
+  Box,
+  Avatar,
+  Tabs,
+  Tab,
+  TabPanel,
+  TabContext,
+} from '@mui/material';
+import { useSelector } from 'react-redux';
 
-import { Box, Button, AppBar, Toolbar, Typography } from '@mui/material';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 
-const userHomePage = () => {
-  const router = useRouter();
+const UserProfile = () => {
+  const { user } = useSelector((state) => state.auth);
+  const [value, setValue] = React.useState('one');
 
-  const handleNavigation = (route) => {
-    router.push(route);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
   };
 
   return (
-    <Box>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            My App
-          </Typography>
-          <Button color="inherit" onClick={() => handleNavigation('/account')}>
-            Account
-          </Button>
-          <Button color="inherit" onClick={() => handleNavigation('/matches')}>
-            Matches
-          </Button>
-          <Button color="inherit" onClick={() => handleNavigation('/settings')}>
-            Settings
-          </Button>
-        </Toolbar>
-      </AppBar>
-      <Box p={2}>
-        <Typography variant="h4" component="h1" align="center">
-          Welcome to My App!
-        </Typography>
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <Box>
+        <Avatar
+          src="/images/1.png"
+          sx={{ width: 100, height: 100 }}
+        />
+        {/*
+      <Typography variant="h6">Name: {user.firstName} {user.lastName}</Typography>
+      <Typography variant="h6">Email: {user.email}</Typography>
+      <Typography variant="h6">Username: {user.username}</Typography>
+      */}
+      </Box>
+      <Box sx={{ width: '100%', marginTop: '2rem' }}>
+        <Typography variant="h5">  User Profile</Typography>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          textColor="primary"
+          indicatorColor="primary"
+          aria-label="primary tabs example"
+        >
+          <Tab value="one" label="Learning">
+          </Tab>
+          <Tab value="two" label="Tutoring">
+          </Tab>
+        </Tabs>
       </Box>
     </Box>
   );
 };
 
-export default userHomePage;
+export default UserProfile;
