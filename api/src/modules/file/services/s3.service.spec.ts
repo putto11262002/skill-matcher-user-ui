@@ -32,6 +32,7 @@ describe('S3Service', () => {
       const result = await s3Service.upload(
         Buffer.from('test-body'),
         'test-key',
+        'contentType'
       );
 
       expect(generateUrlSpy).toHaveBeenCalledWith('test-key');
@@ -41,6 +42,7 @@ describe('S3Service', () => {
             Bucket: 'test-bucket',
             Key: 'test-key',
             Body: Buffer.from('test-body'),
+            ContentType: 'contentType'
           }),
         }),
       );

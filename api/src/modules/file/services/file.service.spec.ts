@@ -1,7 +1,6 @@
 import { getModelToken } from '@nestjs/mongoose';
 import { TestingModule, Test } from '@nestjs/testing';
 import { Model, Types } from 'mongoose';
-import { ObjectId } from 'mongodb';
 import { FileService } from './file.service';
 import { S3Service } from './s3.service';
 import { File } from '../schemas/file.schema';
@@ -43,6 +42,7 @@ describe('FileService', () => {
       const resourceType = 'exampleResource';
       const resourceId = 'resourceId';
       const fileName = 'testFileName';
+      const contentType = 'contentType'
 
       const s3Result = {
         url: 'https://example.com',
@@ -61,21 +61,25 @@ describe('FileService', () => {
 
       const res = await fileService.uploadFile(
         file,
+        contentType,
         resourceType,
         resourceId,
         fileName,
+       
       );
       expect(res).toBe(createdFile);
 
       expect(s3Service.upload).toHaveBeenCalledWith(
         file,
         expect.stringContaining(`${resourceType}/${resourceId}/${fileName}-`),
+        contentType
       );
       expect(fileModel.create).toHaveBeenCalledWith({
         url: s3Result.url,
         key: s3Result.key,
         resourceType,
         resourceId,
+      
       });
     });
   });
