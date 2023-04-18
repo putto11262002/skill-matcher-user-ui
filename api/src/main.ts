@@ -5,18 +5,19 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { UserService } from './modules/user/services/user.service';
 
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
   const userService = app.get(UserService); 
 
   // create root user
-
   await userService.createRootUser();
 
   // config allowed domain
   app.enableCors();
 
+  // OpenAPI document
   if (process.env.NODE_ENV === 'development') {
     const config = new DocumentBuilder()
       .setTitle('Skill Matcher')
@@ -30,7 +31,8 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api-docs', app, document);
   }
-
+  
+  // apply validation pipe globally
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -41,13 +43,16 @@ async function bootstrap() {
   await app.listen(configService.get('app.port'));
 
 
-  const appUrl = await app.getUrl();
+  // display mongoose config
   const mongoConfig = await configService.get('mongo');
   process.env.NODE_ENV === 'development' &&
     Logger.log(
       `Using the following mongo config\n${JSON.stringify(mongoConfig)}`,
       'mongo',
     );
+
+    // display url and port
+    const appUrl = await app.getUrl();
   Logger.log(
     `Server running on ${appUrl} in ${
       process.env.NODE_ENV || 'development'
