@@ -85,10 +85,16 @@ export class UserDto {
   }
 
   // TOD - implement
-  toPrivateResponse(): Partial<UserDto> {
+  toMatchedUserResponse(): Partial<UserDto> {
     return {
       ...this,
     };
+  }
+
+  toAdminUserResponse(): Partial<UserDto> {
+    return {
+      ...this
+    }
   }
 
   toSelfResponse(): Partial<UserDto> {

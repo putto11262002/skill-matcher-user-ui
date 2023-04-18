@@ -13,6 +13,7 @@ const TopBar = ({ handleDrawerToggle }) => {
         // width: { sm: `calc(100%)` },
         // ml: { sm: `${drawerWidth}px` },
         zIndex: (theme) => theme.zIndex.drawer + 1,
+        background: theme => theme.palette.background.paper
       }}
     >
       <Toolbar>
@@ -25,7 +26,7 @@ const TopBar = ({ handleDrawerToggle }) => {
         >
           <MenuIcon />
         </IconButton>
-        <Typography variant='h6' noWrap component='div'>
+        <Typography variant='h6' noWrap component='div' color={theme => theme.palette.primary.main}>
           Skill Matcher Admin
         </Typography>
       </Toolbar>
