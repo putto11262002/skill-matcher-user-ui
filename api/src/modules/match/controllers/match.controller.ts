@@ -22,13 +22,17 @@ export class MatchController {
         return new MatchDto(createdMatch);
     }
 
-    @Put('user/self/match/accept')
-    @HttpCode(HttpStatus.NO_CONTENT)
-    async acceptMatch(){
+    // @Put('user/self/match/accept')
+    // @HttpCode(HttpStatus.NO_CONTENT)
+    // async acceptMatch(){
 
-    }
+    // }
 
-    @Delete('user/self/match')
+    // @Delete('user/self/match/reject')
+    // @HttpCode(HttpStatus.NO_CONTENT)
+    // async rejectMatch(){
+
+    // }
 
 
     
