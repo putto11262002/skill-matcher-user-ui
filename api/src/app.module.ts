@@ -11,6 +11,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { SkillModule } from './modules/skill/skill.module';
 import { MongoModule } from './common/mongo/mongo.module';
+import { MatchModule } from './modules/match/match.module';
 
 
 @Module({
@@ -23,7 +24,8 @@ import { MongoModule } from './common/mongo/mongo.module';
     UserModule,
     AuthModule,
     SkillModule,
-    MongoModule
+    MongoModule,
+    MatchModule
   ],
   controllers: [AppController],
   providers: [AppService],
