@@ -17,7 +17,7 @@ import skillService from '../../../services/skill.service';
 import { useMutation, useQueries, useQuery } from '@tanstack/react-query';
 import { useSnackbar } from 'notistack';
 import authService from '../../../services/auth.service';
-import SkillForm from '../../../components/skill/SkillForm';
+import AddSkillForm from '../../../components/skill/AddSkillForm';
 
 // TODO - implement infinite scrolling for search related skills
 // TODO - implement request cancalling for search
@@ -40,7 +40,7 @@ const AddSkillPage = () => {
     isLoading: isLoadingSearchSkill,
     data,
   } = useQuery(
-    ['skills', relatedSkillsSearch],
+    ['skill','related',relatedSkillsSearch],
     () => skillService.searchSkill({ q: relatedSkillsSearch }),
     { enabled: false, onError: (err) => enqueueSnackbar(err.message, { variant: 'error' }) },
   );
@@ -57,7 +57,12 @@ const AddSkillPage = () => {
   }, [relatedSkillsSearch]);
 
   return (
-   <SkillForm values={{}} relatedSkillsSuggestions={data?.data?.data} onSearchRelatedSkills={(searchTerm) => setRelatedSkillsSearch(searchTerm)}  handleAddSkill={handleAddSkill} isLoadingAddSkill={isLoadingAddSkill} isLoadingSearchSkill={isLoadingSearchSkill} />
+    <Stack spacing={3}>
+      <Typography component='h2' variant='2'>Add Skill</Typography>
+      <AddSkillForm values={{}} relatedSkillsSuggestions={data?.data?.data} onSearchRelatedSkills={(searchTerm) => setRelatedSkillsSearch(searchTerm)}  onSaveSkill={handleAddSkill} isLoadingSaveSkill={isLoadingAddSkill} isLoadingSearchSkill={isLoadingSearchSkill} />
+
+    </Stack>
+   
   );
 };
 

@@ -1,14 +1,20 @@
 import {
   Body,
   Controller,
+  FileTypeValidator,
   Get,
   HttpCode,
   HttpStatus,
+  MaxFileSizeValidator,
   NotFoundException,
   Param,
+  ParseFilePipe,
+  Post,
   Put,
   Query,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
@@ -21,10 +27,15 @@ import { omit } from 'lodash';
 import {
   NOT_ALLOWED_SELF_UPDATE,
   ONLY_ADMIN_SEARCH_FIELDS,
+  USER_AVATAR_MAX_SIZE,
+  USER_STATUS,
 } from '../constants/user.constant';
 import { CreateUserDto } from '../dtos/requests/create-user.dto';
 import { SearchUserDto } from '../dtos/requests/search-user.dto';
 import { Pagination } from '../../../common/dtos/responses/pagination.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { FileDto } from '../../file/dto/file.dto';
+import { ImageValidator } from '../../file/validators/image.validator';
 @ApiTags('User')
 @Controller('user')
 export class UserController {
@@ -71,7 +82,7 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   async searchUser(@Query() query: SearchUserDto) {
     const { users, total } = await this.userService.search(
-      omit(query, ONLY_ADMIN_SEARCH_FIELDS),
+      omit({...query, status: USER_STATUS.ACTIVE}, ONLY_ADMIN_SEARCH_FIELDS),
     );
     return new Pagination(
       users.map((user) => new UserDto(user)),
@@ -79,5 +90,14 @@ export class UserController {
       query.pageNumber,
       total,
     );
+  }
+
+  @UseGuards(AuthGuard)
+  @Put('self/avatar')
+  @UseInterceptors(FileInterceptor('avatar'))
+  @HttpCode(HttpStatus.OK)
+  async updateUserAvatar(@UploadedFile(new ParseFilePipe({validators: [new MaxFileSizeValidator({maxSize: USER_AVATAR_MAX_SIZE}), new ImageValidator()]})) avatar: Express.Multer.File, @CurrentUser() currentUser: JwtAccessTokenPayloadDto){
+    const file = await this.userService.updateAvatar(currentUser.id, avatar);
+    return new FileDto(file);
   }
 }

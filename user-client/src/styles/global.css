@@ -13,6 +13,7 @@ body {
     display: grid;
     grid-template-rows: min-content auto min-content;
 }
+
 .profile-creation-container {
   background-color: #89d0e7;
   color: #020202;
@@ -69,5 +70,11 @@ button {
   .profile-creation-container {
     width: 90%;
   }
+}
+
+
+
+a {
+    text-decoration: none;
 }
 

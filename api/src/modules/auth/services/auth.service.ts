@@ -16,7 +16,7 @@ import { JwtRefreshTokenPayload } from '../dtos/request/jwt-refresh-token-payloa
 import { UserService } from '../../../modules/user/services/user.service';
 import { User } from '../../../modules/user/schemas/user.schema';
 import { SignUpDto } from '../dtos/request/sign-up.dto';
-import { USER_STATUS } from '../../user/constants/user.constant';
+import { USER_ROLE, USER_STATUS } from '../../user/constants/user.constant';
 
 
 @Injectable()
@@ -36,6 +36,8 @@ export class AuthService {
       email: user.email,
       password: user.password,
       profile: { firstName: user.firstName, lastName: user.lastName },
+      status: USER_STATUS.ACTIVE,
+      role: USER_ROLE.USER
     } as any);
 
     // send verification email

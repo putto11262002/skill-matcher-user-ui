@@ -224,6 +224,16 @@ const FormDialog = ({
               />
               <Typography>Advanced</Typography>
             </Grid>
+
+            <Grid xs={12} item>
+              <Controller
+                control={control}
+                name='about'
+                render={({ field: { value, onChange } }) => (
+                  <TextField fullWidth label="About" onChange={onChange} value={value} multiline minRows={2} maxRows={4} />
+                )}
+              ></Controller>
+            </Grid>
             <Grid xs={12} item>
               <Stack direction='row' spacing={3}>
                 <Button disabled={isLoadingSaveSkill} type='sumbit' variant='contained'>

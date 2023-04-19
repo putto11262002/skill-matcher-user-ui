@@ -31,7 +31,8 @@ export class UserSkillService {
             userId: user._id,
             skill: skill.name,
             proficiency: userSkill.proficiency,
-            role: userSkill.role
+            role: userSkill.role,
+            about: userSkill.about
         })
         return createdUserSkill;
     }
