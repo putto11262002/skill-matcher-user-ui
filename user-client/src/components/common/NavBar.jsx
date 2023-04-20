@@ -27,8 +27,8 @@ const NavBar = () => {
           <Button sx={{ color: 'white', textDecoration: 'none' }}> Contact us   </Button>
         </Link>
         {isLoggedIn ? (
-          <Link href="/dashboard" passHref>
-            <Button sx={{ color: 'white', textDecoration: 'none' }}> Dashboard </Button>
+          <Link href="/user-homepage" passHref>
+            <Button sx={{ color: 'white', textDecoration: 'none' }}> Profile </Button>
           </Link>
         ) : (
           <>
