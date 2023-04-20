@@ -4,7 +4,8 @@ import {
   Box,
   Avatar,
   Tabs,
-  Tab
+  Tab,
+  Container,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
@@ -59,7 +60,7 @@ export default function BasicTabs() {
       {/*<Typography variant="h6" mt={2}>Name: {user.firstName} {user.lastName}</Typography>
       <Typography variant="h6">Email: {user.email}</Typography>
       <Typography variant="h6">Username: {user.username}</Typography>*/}
-      <Box sx={{width: '100%', mt: 4 }}>
+      <Container sx={{width: '100%', mt: 4 }}>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
         <Typography variant="h5">Welcome [user]</Typography>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
@@ -76,7 +77,7 @@ export default function BasicTabs() {
         </TabPanel>
         </Box>
 
-      </Box>
+      </Container>
     </Box>
   );
 }
