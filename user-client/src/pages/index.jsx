@@ -1,17 +1,20 @@
+
 import { Inter } from 'next/font/google'
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import Head from 'next/head'
+import dynamic from 'next/dynamic';
 import { 
   Typography,
-  Link, 
+  Link,
+  Button, 
 } from '@mui/material';
 
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
+const Home = ()  => {
   const router = useRouter();
   const { isLoggedIn } = useSelector((state) => state.auth);
 
@@ -25,16 +28,20 @@ export default function Home() {
         <title>Skill matcher</title>
       </Head>
 
+      {/* Use Button instead of Link for conditional rendering */}
+
       <nav>
         {isLoggedIn ? (
-          <Link href="/user-homepage">Dashboard</Link>
+          <Button>Dashboard</Button>
         ) : (
           <>
-            <Link href="/login">Log in</Link>
-            <Link href="/sign-up">Sign up</Link>
+           <Button>Log in</Button>
+           <Button>Sign up</Button>
           </>
         )}
       </nav>
+
+
 
       <Typography variant='1' component='h1'>H1</Typography>
       <Typography >H1</Typography>
@@ -42,3 +49,9 @@ export default function Home() {
     </>
   );
 }
+
+// Use dynamic export for page what does not require server side rendering
+
+export default dynamic(() => Promise.resolve(Home), {
+  ssr: false
+})
