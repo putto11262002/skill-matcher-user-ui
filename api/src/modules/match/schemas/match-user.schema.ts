@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { ObjectId } from "mongodb";
-import { Types } from "mongoose";
+
+import { Types, ObjectId } from "mongoose";
 
 @Schema({_id: false})
 export class MatchUser {

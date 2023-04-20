@@ -2,8 +2,9 @@ import { ArgumentMetadata, BadRequestException, Injectable, PipeTransform } from
 import { ObjectId } from "mongodb";
 
 @Injectable()
-export class PaerseObjectIdPipe implements PipeTransform<any, ObjectId> {
+export class ParseObjectIdPipe implements PipeTransform<any, ObjectId> {
     transform(value: any, metadata: ArgumentMetadata): ObjectId {
+   
         const valid = ObjectId.isValid(value);
         if(!valid){
             throw new BadRequestException('Invalid ObjectId')

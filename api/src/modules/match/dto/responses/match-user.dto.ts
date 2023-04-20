@@ -1,4 +1,5 @@
-import { ObjectId } from "mongodb";
+
+import { ObjectId } from 'mongoose';
 import {MatchUser} from '../../schemas/match-user.schema'
 export class MatchUserDto {
     userId: ObjectId;

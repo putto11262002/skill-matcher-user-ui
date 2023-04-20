@@ -1,6 +1,7 @@
-import { ObjectId } from "mongodb";
+
 import { MatchUserDto } from "./match-user.dto";
 import { Match } from "../../schemas/match.schema";
+import { ObjectId } from "mongoose";
 
 export class MatchDto {
     _id: ObjectId;

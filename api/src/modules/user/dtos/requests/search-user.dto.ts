@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { SearchDto } from '../../../../common/dtos/requests/search.dto';
 import { IsArray, IsIn, IsOptional, IsString } from 'class-validator';
 import { USER_STATUS } from '../../constants/user.constant';
-import { ObjectId } from 'mongodb';
+import { ObjectId } from 'mongoose';
 
 export class SearchUserDto extends SearchDto {
   @ApiProperty()

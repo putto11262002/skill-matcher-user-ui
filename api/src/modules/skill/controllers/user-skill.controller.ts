@@ -21,7 +21,7 @@ import { User } from '../../user/schemas/user.schema';
 import { UpdateUserSkillDto } from '../dtos/requests/update-user-skill.dto';
 import { omit } from 'lodash';
 import { NOT_ALLOW_SELF_UPDATE_FIELDS } from '../constants/user-skill.constant';
-import { CurrentCurrent } from '../../auth/decorators/current-user.decorator';
+import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 
 @UseGuards(AuthGuard)
 @Controller()
@@ -35,7 +35,7 @@ export class UserSkillController {
   @HttpCode(HttpStatus.CREATED)
   async addSelfSkill(
     @Body() payload: CreateUserSkillDto,
-    @CurrentCurrent() currentUser: User,
+    @CurrentUser() currentUser: User,
   ) {
     const userSkill = await this.userSkillService.addSkill(
       payload,
