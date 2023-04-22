@@ -24,9 +24,9 @@ export const signOut = createAsyncThunk('auth/sign-out', async ({}, { rejectWith
 
 export const signUp = createAsyncThunk(
   'auth/sign-up',
-  async ({ username, email, password, firstName, lastName }, { rejectWithValue }) => {
+  async ({ name, email, password }, { rejectWithValue }) => {
     try {
-      const res = await authService.signUp(username, email, password, firstName, lastName);
+      const res = await authService.signUp(name, email, password);
       return res.data;
     } catch (err) {
       return rejectWithValue(err);

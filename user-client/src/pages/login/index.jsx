@@ -1,4 +1,4 @@
-import { signIn, signOut } from '@/redux/thunks/user.thunk';
+import { signIn } from '@/redux/thunks/user.thunk';
 import {
   Alert,
   Box,

@@ -1,4 +1,3 @@
-
 import { signUp } from '@/redux/thunks/user.thunk';
 import {
     Alert,
@@ -8,13 +7,13 @@ import {
     Toolbar,
     Typography,
     Button,
-    Link,
 } from '@mui/material';
-//import Link from 'next/link';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
+import authService from '@/services/auth.service';
 
 
 const SignUpPage = () => {
@@ -23,21 +22,30 @@ const SignUpPage = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [message, setMessage] = useState('');
     const router = useRouter();
-  
+
 
     const { isLoggedIn, loading, error } = useSelector((state) => state.auth);
-    const {error:  signUpError, mutate, isLoading: isLoadingSignUp} = useMutation(signUp, {
+    const { error: signUpError, mutate, isLoading: isLoadingSignUp } = useMutation(authService.signUp, {
         onSuccess: (res) => {
-            router.push('/login')
+            setMessage('Sign up successful!');
+            router.push('/login');
+        },
+        onError: (error) => {
+            setMessage(error.message);
         }
-        
     })
 
 
     const handleSignUp = (e) => {
         e.preventDefault()
-       mutate({username: username, password: password, firstName, lastName, email})
+        if (password === confirmPassword) {
+            mutate({ username: email, password, firstName, lastName, email })
+        } else {
+            setMessage('Passwords do not match');
+        }
     };
 
     useEffect(() => {
@@ -48,7 +56,7 @@ const SignUpPage = () => {
 
     return (
         <Grid container justifyContent='center' alignItems='center' height='100%'>
-            <Grid xs={12} sm={8} md={4} item>
+            <Grid xs={11} sm={6} item>
                 <Box
                     padding={(theme) => theme.spacing(3)}
                     sx={{ boxShadow: { sm: 2, xs: 0 }, borderRadius: 2 }}
@@ -56,7 +64,6 @@ const SignUpPage = () => {
                     <Typography variant='2' textAlign='center' component='h2'>
                         Sign Up
                     </Typography>
-                    
                     <Toolbar />
                     {error && <Typography>error.message</Typography>}
                     <Box onSubmit={handleSignUp} component='form'>
@@ -64,29 +71,35 @@ const SignUpPage = () => {
                             <Grid xs={12} item>
                                 {error && <Alert severity='error'>{error.message}</Alert>}
                             </Grid>
-                            <Grid xs={12} sm={6} item>
+                            <Grid xs={12} md={6} item>
                                 <TextField
                                     value={firstName}
                                     onChange={(e) => setFirstName(e.target.value)}
                                     label='First name'
                                     fullWidth
+                                    required
+                                    inputProps={{ minLength: 3 }}
                                 />
                             </Grid>
-                            <Grid xs={12} sm={6} item>
+                            <Grid xs={12} md={6} item>
                                 <TextField
                                     value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
                                     label='Last name'
                                     fullWidth
+                                    required
+                                    inputProps={{ minLength: 3 }}
                                 />
                             </Grid>
-                            <Grid xs={12}  item>
+                            <Grid xs={12} item>
                                 <TextField
                                     value={username}
                                     onChange={(e) => setUsername(e.target.value)}
                                     label='Username'
                                     type='username'
                                     fullWidth
+                                    required
+                                    inputProps={{ minLength:3}}
                                 />
                             </Grid>
                             <Grid xs={12} item>
@@ -96,9 +109,9 @@ const SignUpPage = () => {
                                     label='Email'
                                     type='email'
                                     fullWidth
+                                    required
                                 />
                             </Grid>
-
                             <Grid xs={12} item>
                                 <TextField
                                     value={password}
@@ -106,6 +119,17 @@ const SignUpPage = () => {
                                     label='Password'
                                     type='password'
                                     fullWidth
+                                    required
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    label="Confirm Password"
+                                    type="password"
+                                    fullWidth
+                                    required
                                 />
                             </Grid>
                             <Grid display='flex' justifyContent='center' xs={12} item>
@@ -113,10 +137,10 @@ const SignUpPage = () => {
                                     Sign Up
                                 </Button>
                             </Grid>
-                            <Grid item >
-                            <Link href='/login'  variant='body2'>
-                                {"Already have an account"}
-                            </Link>
+                            <Grid>
+                                <Link href='/login' passHref>
+                                    <Button disabled={isLoadingSignUp} variant="Sign in button">Already have an account</Button>
+                                </Link>
                             </Grid>
                         </Grid>
                     </Box>
