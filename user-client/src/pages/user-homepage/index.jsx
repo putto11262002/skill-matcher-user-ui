@@ -67,12 +67,12 @@ export default function BasicTabs() {
           <Tab label="Tutoring" {...a11yProps(1)} />
         </Tabs>
         <TabPanel value={value} index={0} handleChange={handleChange}>
-          Learning Content - fetch user's skill data 
+          Learning Content - fetch user&apos;s skill data 
           
           
         </TabPanel>
         <TabPanel value={value} index={1} handleChange={handleChange}>
-          Tutoring Content  - fetch user's tutor data 
+          Tutoring Content  - fetch user&apos;s tutor data 
         </TabPanel>
         </Box>
 

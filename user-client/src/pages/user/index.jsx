@@ -9,7 +9,7 @@ const UserPage = () => {
     const {data, isError, isLoading} = useQuery(['users'], userService.searchUsers)
   return (
     <div>
-        {isLoading ? <p>Loading</p> :  data.data.data.map(user => <Button onClick={() => setShowDialog(true)} variant='contained'>{user.username}</Button>)}
+        {isLoading ? <p>Loading</p> :  data.data.data.map(user => <Button key={user._id} onClick={() => setShowDialog(true)} variant='contained'>{user.username}</Button>)}
         {showDialog &&  <Dialog onClose={() => setShowDialog(false)} open={showDialog}>
       <DialogTitle>Set backup account</DialogTitle></Dialog>}
     </div>

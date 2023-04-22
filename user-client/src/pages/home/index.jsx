@@ -15,7 +15,7 @@ const HomePage = () => {
           </Typography>
           <Typography variant="h4" component="h2" align="center" gutterBottom>
           Discover new skills and connect with like-minded individuals on our cutting-edge app. 
-          Whether you're looking to learn a new skill or share your expertise with others, 
+          Whether you&apos;re looking to learn a new skill or share your expertise with others, 
           our platform provides the perfect one-stop solution. Join our community today and 
           start unlocking your full potential!
           </Typography>
