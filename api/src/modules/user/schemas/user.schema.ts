@@ -27,16 +27,16 @@ export class User {
   status: string;
 
   @Prop({ type: profileSchema })
-  profile: Profile;
+  profile?: Profile;
 
   @Prop()
-  refreshToken: string;
+  refreshToken?: string;
 
   @Prop({ default: Date.now() })
-  createdAt: Date;
+  createdAt?: Date;
 
   @Prop({ default: Date.now() })
-  updatedAt: Date;
+  updatedAt?: Date;
 }
 
 export type UserDocument = HydratedDocument<User>;
