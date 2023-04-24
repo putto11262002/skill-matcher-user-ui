@@ -10,7 +10,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { UserDto } from '../../user/dtos/responses/user.dto';
 import { UserService } from '../../user/services/user.service';
-import { CurrentUser } from '../decorators/current-user.decorator';
+import { CurrentJwt } from '../decorators/current-jwt.decorator';
 import { JwtAccessTokenPayloadDto } from '../dtos/request/jwt-access-token-payload.dto';
 import { LoginDto } from '../dtos/request/login.dto';
 import { RefreshDto } from '../dtos/request/refresh.dto';
@@ -56,7 +56,7 @@ export class AuthController {
   @Delete('sign-out')
   @HttpCode(HttpStatus.NO_CONTENT)
   async signOut(
-    @CurrentUser() currentUser: JwtAccessTokenPayloadDto,
+    @CurrentJwt() currentUser: JwtAccessTokenPayloadDto,
   ): Promise<void> {
     this.authService.signOut(currentUser.id);
   }

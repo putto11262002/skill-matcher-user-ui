@@ -5,7 +5,7 @@ import { File } from '../../file/schemas/file.schema';
 
 @Schema({ timestamps: true })
 export class User {
-  _id: ObjectId;
+  _id: Types.ObjectId;
   @Prop({ required: true, index: true, unique: true, trim: true })
   username: string;
 
@@ -28,19 +28,19 @@ export class User {
   status: string;
 
   @Prop({ type: profileSchema })
-  profile: Profile;
+  profile?: Profile;
 
   @Prop({type: Types.ObjectId, ref: 'File'})
   avatar: File
 
   @Prop()
-  refreshToken: string;
+  refreshToken?: string;
 
   @Prop({ default: Date.now() })
-  createdAt: Date;
+  createdAt?: Date;
 
   @Prop({ default: Date.now() })
-  updatedAt: Date;
+  updatedAt?: Date;
 }
 
 export type UserDocument = HydratedDocument<User>;

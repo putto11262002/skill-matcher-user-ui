@@ -14,7 +14,7 @@ import { AuthGuard } from '../../auth/guards/auth.guard';
 import { CreateUserSkillDto } from '../dtos/requests/create-user-skill.dot';
 import { UserSkillService } from '../services/user-skill.service';
 import { UserSkillDto } from '../dtos/responses/user-skill.dto';
-import { CurrentUser } from '../../auth/decorators/current-user.decorator';
+import { CurrentJwt } from '../../auth/decorators/current-jwt.decorator';
 import { JwtAccessTokenPayloadDto } from '../../auth/dtos/request/jwt-access-token-payload.dto';
 import { UserService } from '../../user/services/user.service';
 import { User } from '../../user/schemas/user.schema';
@@ -23,6 +23,8 @@ import { omit } from 'lodash';
 import { NOT_ALLOW_SELF_UPDATE_FIELDS } from '../constants/user-skill.constant';
 import { RoleGuard } from '../../auth/guards/role.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
+import { ParseObjectIdPipe } from '../../../common/pipes/pase-object-id.pipe';
+import { Types } from 'mongoose';
 
 @Roles('admin', 'root')
 @UseGuards(RoleGuard)
@@ -37,7 +39,7 @@ export class AdminUserSkillController {
   @HttpCode(HttpStatus.CREATED)
   async addSelfSkill(
     @Body() payload: CreateUserSkillDto,
-    @Param('userId') userId: string,
+    @Param('userId', ParseObjectIdPipe) userId: Types.ObjectId,
   ) {
     const user = await this.userService.getById(userId);
     const userSkill = await this.userSkillService.addSkill(
@@ -51,10 +53,9 @@ export class AdminUserSkillController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async removeSkill(
     @Param('name') skillName: string,
-    @Param('userId') userId: string,
+    @Param('userId', ParseObjectIdPipe) userId: Types.ObjectId,
   ) {
-    const user = await this.userService.getById(userId)
-    await this.userSkillService.removeSkill(skillName, user);
+    await this.userSkillService.removeSkill(skillName, userId);
   }
 
   @Put('user/:userId/skill/:name')
@@ -62,28 +63,26 @@ export class AdminUserSkillController {
   async updateSkill(
     @Body() payload: UpdateUserSkillDto,
     @Param('name') skillName: string,
-    @Param('userId') userId: string,
+    @Param('userId', ParseObjectIdPipe) userId: Types.ObjectId,
   ) {
-    const user = await this.userService.getById(userId);
+  
     await this.userSkillService.updateUserSkill(
       payload,
       skillName,
-      user,
+      userId,
     );
   }
 
   @Get('user/:userId/skill')
   @HttpCode(HttpStatus.OK)
-  async getSelfSkill(@Param('userId') userId: string) {
-    const user = await this.userService.getById(userId)
-    const userSkills = await this.userSkillService.getUserSkills(user);
+  async getSelfSkill(@Param('userId', ParseObjectIdPipe) userId: Types.ObjectId) {
+    const userSkills = await this.userSkillService.getUserSkills(userId);
     return userSkills.map((userSkill) => new UserSkillDto(userSkill).toAdminResponse());
   }
 
   @Get('user/:userId/skill')
-  async getUserSkill(@Param('userId') userId: string) {
-    const user = await this.userService.getById(userId);
-    const userSkills = await this.userSkillService.getUserSkills(user);
+  async getUserSkill(@Param('userId', ParseObjectIdPipe) userId: Types.ObjectId) {
+    const userSkills = await this.userSkillService.getUserSkills(userId);
     return userSkills.map((userSkill) => new UserSkillDto(userSkill).toAdminResponse());
   }
 }

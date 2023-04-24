@@ -55,7 +55,7 @@ export class SkillService {
             .skip(query.pageNumber * query.pageSize)
             .limit(query.pageSize)
             .sort(query.q ? { score: { $meta: 'textScore' } }: {updatedAt: 1}),
-            this.skillModel.find(filter).countDocuments()
+            this.skillModel.countDocuments(filter)
         ])
         return {skills, total}
     }

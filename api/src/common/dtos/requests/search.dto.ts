@@ -4,14 +4,14 @@ import { IsNumber, IsNumberString, IsOptional } from 'class-validator';
 export class SearchDto {
   @ApiProperty()
   @IsOptional()
-  pageNumber: number;
+  pageNumber?: number;
  
   @ApiProperty()
   @IsOptional()
-  pageSize: number;
+  pageSize?: number;
  
   constructor(pageNumber?: number, pageSize?: number) {
-    this.pageNumber = pageNumber || 0;
-    this.pageSize = pageSize || 12;
+    this.pageNumber =pageNumber;
+    this.pageSize = pageSize;
   }
 }

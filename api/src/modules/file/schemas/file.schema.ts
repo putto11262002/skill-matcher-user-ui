@@ -3,7 +3,7 @@ import { ObjectId, Types } from "mongoose";
 
 @Schema({timestamps: true})
 export class File {
-    _id: ObjectId;
+    _id: Types.ObjectId;
     @Prop({required: true})
     url: string;
 
@@ -14,7 +14,7 @@ export class File {
     resourceType: string;
 
     @Prop({required: true, type: Types.ObjectId})
-    resourceId: ObjectId;
+    resourceId: Types.ObjectId;
 
     createdAt: Date;
     updatedAt: Date;

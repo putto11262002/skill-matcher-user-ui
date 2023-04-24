@@ -11,9 +11,9 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { SkillModule } from './modules/skill/skill.module';
 import { MongoModule } from './common/mongo/mongo.module';
-import awsConfig from './config/aws.config';
-import { FileModule } from './modules/file/file.module';
+import { MatchModule } from './modules/match/match.module';
 import { _ConfigModule } from './config/config.module';
+
 
 @Module({
   imports: [
@@ -22,7 +22,7 @@ import { _ConfigModule } from './config/config.module';
     AuthModule,
     SkillModule,
     MongoModule,
-    FileModule,
+    MatchModule
   ],
   controllers: [AppController],
   providers: [AppService],

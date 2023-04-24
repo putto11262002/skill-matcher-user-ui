@@ -7,7 +7,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ObjectId } from 'mongoose';
+import { ObjectId, Types } from 'mongoose';
 import * as bcrypt from 'bcryptjs';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -77,7 +77,7 @@ export class AuthService {
     return { refreshToken, accessToken, user };
   }
 
-  async signOut(id: ObjectId | string): Promise<void> {
+  async signOut(id: Types.ObjectId): Promise<void> {
     await this.userService.updateRefreshToken(id, null);
   }
 

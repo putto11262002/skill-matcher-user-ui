@@ -4,11 +4,11 @@ import { ApiTags } from '@nestjs/swagger';
 @ApiTags('admin', 'root')
 @Controller('admin/user/privacy-setting')
 export class AdminUserPrivacySettingController {
-  @Get(':id')
-  @HttpCode(HttpStatus.OK)
-  async getUserPrivacySetting() {}
+  // @Get(':id')
+  // @HttpCode(HttpStatus.OK)
+  // async getUserPrivacySetting() {}
 
-  @Put(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async updateUserPrivacySetting() {}
+  // @Put(':id')
+  // @HttpCode(HttpStatus.NO_CONTENT)
+  // async updateUserPrivacySetting() {}
 }

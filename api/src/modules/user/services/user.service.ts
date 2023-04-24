@@ -7,7 +7,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId } from 'mongoose';
+import { FilterQuery, Model, ObjectId, Types } from 'mongoose';
 import { CreateUserDto } from '../dtos/requests/create-user.dto';
 import { UpdateUserDto } from '../dtos/requests/update-user.dto';
 import { User } from '../schemas/user.schema';
@@ -69,7 +69,7 @@ export class UserService {
     return createdUser;
   }
 
-  async updateById(id: string | ObjectId, user: UpdateUserDto): Promise<User> {
+  async updateById(id: Types.ObjectId, user: UpdateUserDto): Promise<User> {
     const exist = await this.userModel.exists({ _id: id });
     if (!exist) {
       throw new HttpException(
@@ -87,7 +87,7 @@ export class UserService {
     return updatedUser;
   }
 
-  async deleteById(id: string | ObjectId): Promise<void> {
+  async deleteById(id: Types.ObjectId): Promise<void> {
     const exist = await this.userModel.exists({ _id: id });
     if (!exist) {
       throw new HttpException(
@@ -105,8 +105,8 @@ export class UserService {
     }
   }
 
-  async getById(id: string | ObjectId): Promise<User | null> {
-    const user = (await this.userModel.findOne({ _id: id })).populate('avatar');
+  async getById(id: Types.ObjectId): Promise<User | null> {
+    const user = await this.userModel.findOne({ _id: id });
     if (!user) {
       // throw new HttpException("User with this id does not exist.", HttpStatus.NOT_FOUND);
       return null;
@@ -137,8 +137,8 @@ export class UserService {
     return id ? true : false;
   }
 
-  async existById(id: ObjectId | string): Promise<boolean> {
-    const _id = await this.userModel.exists({ _id: id });
+  async existById(id: Types.ObjectId): Promise<boolean> {
+    const _id = await this.userModel.exists({_id: id})
     return _id ? true : false;
   }
 
@@ -148,7 +148,7 @@ export class UserService {
   }
 
   async updateRefreshToken(
-    id: ObjectId | string,
+    id: Types.ObjectId,
     refreshToken: string,
   ): Promise<void> {
     await this.userModel.updateOne({ _id: id }, { refreshToken });
@@ -157,12 +157,28 @@ export class UserService {
   async search(
     query: SearchUserDto,
   ): Promise<{ total: number; users: User[] }> {
+    const filer: FilterQuery<User> = {}
+    if(query.q){
+      filer.$or = [
+        {'profile.firstName': {'$regex': query.q, "$options": "i"}},
+        {'profile.lastName': {'$regex': query.q, "$options": "i"}},
+        {'username': {'$regex': query.q, "$options": "i"}}
+      ]
+    }
+
+    if(query.status){
+      filer.status = query.status;
+    }
+
+    if(query.excludeIds){
+      filer._id = {'$nin': query.excludeIds}
+    }
     const [users, total] = await Promise.all([
       this.userModel
-        .find({})
-        .skip(query.pageNumber * query.pageSize)
-        .limit(query.pageSize),
-      this.userModel.find({}).countDocuments(),
+        .find(filer)
+        .skip((query.pageNumber !== undefined && query.pageSize !== undefined) ? query?.pageNumber * query?.pageSize : undefined)
+        .limit(query?.pageSize),
+      this.userModel.find(filer).countDocuments(),
     ]);
     return { users, total };
   }
@@ -197,7 +213,7 @@ export class UserService {
     });
   }
 
-  async updateAvatar(id: string | ObjectId, avatar: Express.Multer.File) {
+  async updateAvatar(id: Types.ObjectId, avatar: Express.Multer.File) {
     const user = await this.userModel.findOne({ _id: id });
     if (!user) {
       throw new NotFoundException('User with this id does not exist');
