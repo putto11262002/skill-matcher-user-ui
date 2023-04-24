@@ -22,21 +22,30 @@ const SignUpPage = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [message, setMessage] = useState('');
     const router = useRouter();
-  
+
 
     const { isLoggedIn, loading, error } = useSelector((state) => state.auth);
-    const {error:  signUpError, mutate, isLoading: isLoadingSignUp} = useMutation(authService.signUp, {
+    const { error: signUpError, mutate, isLoading: isLoadingSignUp } = useMutation(authService.signUp, {
         onSuccess: (res) => {
-            router.push('/login')
+            setMessage('Sign up successful!');
+            router.push('/login');
+        },
+        onError: (error) => {
+            setMessage(error.message);
         }
-        
     })
 
 
     const handleSignUp = (e) => {
         e.preventDefault()
-       mutate({username: email, password, firstName, lastName, email})
+        if (password === confirmPassword) {
+            mutate({ username: email, password, firstName, lastName, email })
+        } else {
+            setMessage('Passwords do not match');
+        }
     };
 
     useEffect(() => {
@@ -68,6 +77,8 @@ const SignUpPage = () => {
                                     onChange={(e) => setFirstName(e.target.value)}
                                     label='First name'
                                     fullWidth
+                                    required
+                                    inputProps={{ minLength: 3 }}
                                 />
                             </Grid>
                             <Grid xs={12} md={6} item>
@@ -76,6 +87,19 @@ const SignUpPage = () => {
                                     onChange={(e) => setLastName(e.target.value)}
                                     label='Last name'
                                     fullWidth
+                                    required
+                                    inputProps={{ minLength: 3 }}
+                                />
+                            </Grid>
+                            <Grid xs={12} item>
+                                <TextField
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    label='Username'
+                                    type='username'
+                                    fullWidth
+                                    required
+                                    inputProps={{ minLength:3}}
                                 />
                             </Grid>
                             <Grid xs={12} item>
@@ -85,6 +109,7 @@ const SignUpPage = () => {
                                     label='Email'
                                     type='email'
                                     fullWidth
+                                    required
                                 />
                             </Grid>
                             <Grid xs={12} item>
@@ -94,6 +119,17 @@ const SignUpPage = () => {
                                     label='Password'
                                     type='password'
                                     fullWidth
+                                    required
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    label="Confirm Password"
+                                    type="password"
+                                    fullWidth
+                                    required
                                 />
                             </Grid>
                             <Grid display='flex' justifyContent='center' xs={12} item>
@@ -102,9 +138,9 @@ const SignUpPage = () => {
                                 </Button>
                             </Grid>
                             <Grid>
-                            <Link href='/login' passHref>
-                                <Button disabled={isLoadingSignUp} variant="Sign in button">Already have an account</Button>
-                            </Link>
+                                <Link href='/login' passHref>
+                                    <Button disabled={isLoadingSignUp} variant="Sign in button">Already have an account</Button>
+                                </Link>
                             </Grid>
                         </Grid>
                     </Box>

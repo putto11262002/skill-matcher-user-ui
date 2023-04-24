@@ -1,4 +1,5 @@
 import {
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -10,6 +11,10 @@ import {
 import React from 'react';
 import { SKILL_PAGE_SIZE, SKILL_TABLE_COLUMNS } from '../../constants/skill.contant';
 import { truncate, upperFirst } from 'lodash';
+import Loader from '../common/Loader';
+import Error from '../common/Error';
+import Link from 'next/link';
+import EditIcon from '@mui/icons-material/Edit';
 
 const SkillTable = ({ skills, loading, error, total, onPageChange, pageNumber }) => {
   const renderSkillRows = () => {
@@ -21,7 +26,7 @@ const SkillTable = ({ skills, loading, error, total, onPageChange, pageNumber })
           }
           return (
             <TableCell align='right' key={skill.name + column}>
-              Actions
+              <Stack direction='row' spacing={2}><Link href={`/skill/edit/${skill.name}`}><EditIcon fontSize='s'/></Link></Stack>
             </TableCell>
           );
         })}
@@ -30,11 +35,11 @@ const SkillTable = ({ skills, loading, error, total, onPageChange, pageNumber })
   };
 
   if (loading) {
-    return <Typography>Loading</Typography>;
+    return <Loader/>
   }
 
   if (error) {
-    return <Typography>Error</Typography>;
+    return <Error/>
   }
   return (
     <Table stickyHeader>

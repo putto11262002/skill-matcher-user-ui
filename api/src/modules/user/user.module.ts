@@ -9,11 +9,13 @@ import { User, userSchema } from './schemas/user.schema';
 
 import { UserPrivacySettingService } from './services/user-privacy-setting.service';
 import { UserService } from './services/user.service';
+import { FileModule } from '../file/file.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: userSchema }]),
     forwardRef(() => AuthModule),
+    FileModule
   ],
   controllers: [
     UserController,

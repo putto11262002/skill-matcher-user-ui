@@ -7,6 +7,7 @@ import userService from '../../../services/user.service';
 import { useRouter } from 'next/router';
 import skillService from '../../../services/skill.service';
 import { useSnackbar } from 'notistack';
+import UserAvatarForm from '../../../components/user/UserAvatarForm';
 
 // TODO - add error messages
 const EditUserPage = () => {
@@ -83,6 +84,8 @@ const EditUserPage = () => {
     }
   })
 
+  const {mutate: handleUploadAvatar, isLoading: isLoadingUpdateAvatar, error: updateAvatarError} = useMutation(userService.updateUserAvatar, {onSuccess: () => enqueueSnackbar('Image uploaded', {variant:'success'})})
+
   // Fetch user and skills when id is available
   useEffect(() => {
     if (id) {
@@ -101,7 +104,7 @@ const EditUserPage = () => {
   return (
     <Stack spacing={6}>
       <EditUserProfileForm values={user} onSubmit={(user) => handleUpdateUserProfile({id: user._id, payload: user})} isLoadingSubmitting={isLoadingUpdateUserProfile} />
-    
+    <UserAvatarForm avatar={user?.avatar} onUpload={(file) => handleUploadAvatar({id: user._id, file})} loading={isLoadingUpdateAvatar} error={updateAvatarError}/>
       <UserSkillForm
       skills={skills}
       isLoadingSkills={isLoadingSkills}

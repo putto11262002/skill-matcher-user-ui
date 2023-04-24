@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, ObjectId, Types } from 'mongoose';
 import { Profile, profileSchema } from './profile.schema';
+import { File } from '../../file/schemas/file.schema';
 
 @Schema({ timestamps: true })
 export class User {
@@ -28,6 +29,9 @@ export class User {
 
   @Prop({ type: profileSchema })
   profile?: Profile;
+
+  @Prop({type: Types.ObjectId, ref: 'File'})
+  avatar: File
 
   @Prop()
   refreshToken?: string;

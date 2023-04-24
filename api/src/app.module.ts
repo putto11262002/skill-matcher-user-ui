@@ -12,15 +12,12 @@ import { UserModule } from './modules/user/user.module';
 import { SkillModule } from './modules/skill/skill.module';
 import { MongoModule } from './common/mongo/mongo.module';
 import { MatchModule } from './modules/match/match.module';
+import { _ConfigModule } from './config/config.module';
 
 
 @Module({
   imports: [
-  
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [mongoConfig, appConfig, authConfig],
-    }),
+    _ConfigModule,
     UserModule,
     AuthModule,
     SkillModule,

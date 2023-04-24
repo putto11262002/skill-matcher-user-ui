@@ -2,3 +2,4 @@
 .DS_Store
 # Intellij config file
 .idea
+node_modules

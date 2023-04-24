@@ -47,6 +47,13 @@ export class UserService {
   async deleteUserSkill({id, skill}){
     return api.delete(`/admin/user/${id}/skill/${skill}`)
   }
+
+  async updateUserAvatar({id, file}){
+    const formData = new FormData()
+    formData.append('avatar', file)
+    return api.putForm(`/admin/user/${id}/avatar`, formData)
+  }
 }
+
 
 export default new UserService();

@@ -13,18 +13,16 @@ import {
   import { SKILL_STATUS } from '../../constants/skill.contant';
 import { useForm, Controller } from 'react-hook-form';
 import { upperFirst } from 'lodash';
-const SkillForm = ({values, handleAddSkill, isLoadingAddSkill, isLoadingSearchSkill, onSearchRelatedSkills, relatedSkillsSuggestions}) => {
+const AddSkillForm = ({type='add',  values,  onSaveSkill, isLoadingSaveSkill, isLoadingSearchSkill, onSearchRelatedSkills, relatedSkillsSuggestions}) => {
 
     const { control, handleSubmit, watch, reset } = useForm({values: values})
   return (
     <Stack spacing={3}>
-    <Typography variant='2' component='h2'>
-      Add Skill
-    </Typography>
+  
     <Box onSubmit={handleSubmit((data, e) => {
         e.preventDefault()
         reset()
-        handleAddSkill(data)
+        onSaveSkill(data)
         
     })} component='form'>
       <Grid rowSpacing={3} columnSpacing={3} container>
@@ -35,6 +33,7 @@ const SkillForm = ({values, handleAddSkill, isLoadingAddSkill, isLoadingSearchSk
             name='name'
             render={({ field: { value, onChange }, fieldState: { error } }) => (
               <TextField
+              disabled={type === 'edit'}
                 error={error ? true : false}
                 helperText={error?.message}
                 onChange={onChange}
@@ -116,7 +115,7 @@ const SkillForm = ({values, handleAddSkill, isLoadingAddSkill, isLoadingSearchSk
           />
         </Grid>
         <Grid item xs={12}>
-          <Button disabled={isLoadingAddSkill} variant='contained' type='submit'>
+          <Button disabled={isLoadingSaveSkill} variant='contained' type='submit'>
             Save
           </Button>
         </Grid>
@@ -126,4 +125,4 @@ const SkillForm = ({values, handleAddSkill, isLoadingAddSkill, isLoadingSearchSk
   )
 }
 
-export default SkillForm
+export default AddSkillForm

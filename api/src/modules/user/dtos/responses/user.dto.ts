@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { ObjectId } from 'mongoose';
 import { Profile } from '../../schemas/profile.schema';
 import { User, UserDocument } from '../../schemas/user.schema';
+import { FileDto } from '../../../file/dto/file.dto';
 
 class ProfileDto {
   @ApiProperty()
@@ -63,6 +64,9 @@ export class UserDto {
   @ApiProperty()
   profile: ProfileDto;
 
+  @ApiProperty()
+  avatar: FileDto;
+
   constructor(user: UserDocument | User) {
     this._id = user._id.toHexString();
     this.username = user.username;
@@ -70,6 +74,7 @@ export class UserDto {
     this.status = user.status;
     this.role = user.role;
     this.profile = user.profile ?  new ProfileDto(user.profile) : null;
+    this.avatar = user.avatar ? new FileDto(user.avatar) : null
   }
 
   // TODO - implement

@@ -40,7 +40,7 @@ const LoginPage = () => {
 
   return (
     <Grid container justifyContent='center' alignItems='center' height='100%'>
-      <Grid xs={11} sm={6} item>
+      <Grid xs={11} sm={6} md={5} lg={4} item>
         <Box
           padding={(theme) => theme.spacing(3)}
           sx={{ boxShadow: { sm: 2, xs: 0 }, borderRadius: 2 }}
