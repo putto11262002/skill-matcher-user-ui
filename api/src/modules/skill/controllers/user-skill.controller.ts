@@ -22,6 +22,8 @@ import { UpdateUserSkillDto } from '../dtos/requests/update-user-skill.dto';
 import { omit } from 'lodash';
 import { NOT_ALLOW_SELF_UPDATE_FIELDS } from '../constants/user-skill.constant';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
+import { ParseObjectIdPipe } from '../../../common/pipes/pase-object-id.pipe';
+import { Types } from 'mongoose';
 
 @UseGuards(AuthGuard)
 @Controller()
@@ -75,7 +77,7 @@ export class UserSkillController {
   }
 
   @Get('user/:userId/skill')
-  async getUserSkill(@Param('userId') userId: string) {
+  async getUserSkill(@Param('userId', ParseObjectIdPipe) userId: Types.ObjectId) {
  
     const userSkills = await this.userSkillService.getUserSkills(userId);
     return userSkills.map((userSkill) => new UserSkillDto(userSkill).toPublicResponse());

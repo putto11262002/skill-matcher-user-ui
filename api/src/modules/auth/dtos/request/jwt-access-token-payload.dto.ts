@@ -1,7 +1,7 @@
-import { ObjectId } from 'mongoose';
+import { ObjectId, Types } from 'mongoose';
 
 export class JwtAccessTokenPayloadDto {
-  id: string | ObjectId;
+  id: Types.ObjectId;
   role: string;
   username: string;
 }

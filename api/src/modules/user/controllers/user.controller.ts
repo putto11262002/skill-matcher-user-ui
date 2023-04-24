@@ -26,6 +26,8 @@ import {
 import { CreateUserDto } from '../dtos/requests/create-user.dto';
 import { SearchUserDto } from '../dtos/requests/search-user.dto';
 import { Pagination } from '../../../common/dtos/responses/pagination.dto';
+import { ParseObjectIdPipe } from '../../../common/pipes/pase-object-id.pipe';
+import { Types } from 'mongoose';
 @ApiTags('User')
 @Controller('user')
 export class UserController {
@@ -56,7 +58,7 @@ export class UserController {
   @UseGuards(AuthGuard)
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  async getUserById(@Param('id') id: string) {
+  async getUserById(@Param('id', ParseObjectIdPipe) id: Types.ObjectId) {
     const user = await this.userService.getById(id);
     if (!user) {
       throw new NotFoundException('User with this id does not exist.');

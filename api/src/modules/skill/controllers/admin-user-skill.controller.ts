@@ -23,6 +23,8 @@ import { omit } from 'lodash';
 import { NOT_ALLOW_SELF_UPDATE_FIELDS } from '../constants/user-skill.constant';
 import { RoleGuard } from '../../auth/guards/role.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
+import { ParseObjectIdPipe } from '../../../common/pipes/pase-object-id.pipe';
+import { Types } from 'mongoose';
 
 @Roles('admin', 'root')
 @UseGuards(RoleGuard)
@@ -37,7 +39,7 @@ export class AdminUserSkillController {
   @HttpCode(HttpStatus.CREATED)
   async addSelfSkill(
     @Body() payload: CreateUserSkillDto,
-    @Param('userId') userId: string,
+    @Param('userId', ParseObjectIdPipe) userId: Types.ObjectId,
   ) {
     const user = await this.userService.getById(userId);
     const userSkill = await this.userSkillService.addSkill(
@@ -51,7 +53,7 @@ export class AdminUserSkillController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async removeSkill(
     @Param('name') skillName: string,
-    @Param('userId') userId: string,
+    @Param('userId', ParseObjectIdPipe) userId: Types.ObjectId,
   ) {
     await this.userSkillService.removeSkill(skillName, userId);
   }
@@ -61,7 +63,7 @@ export class AdminUserSkillController {
   async updateSkill(
     @Body() payload: UpdateUserSkillDto,
     @Param('name') skillName: string,
-    @Param('userId') userId: string,
+    @Param('userId', ParseObjectIdPipe) userId: Types.ObjectId,
   ) {
   
     await this.userSkillService.updateUserSkill(
@@ -73,13 +75,13 @@ export class AdminUserSkillController {
 
   @Get('user/:userId/skill')
   @HttpCode(HttpStatus.OK)
-  async getSelfSkill(@Param('userId') userId: string) {
+  async getSelfSkill(@Param('userId', ParseObjectIdPipe) userId: Types.ObjectId) {
     const userSkills = await this.userSkillService.getUserSkills(userId);
     return userSkills.map((userSkill) => new UserSkillDto(userSkill).toAdminResponse());
   }
 
   @Get('user/:userId/skill')
-  async getUserSkill(@Param('userId') userId: string) {
+  async getUserSkill(@Param('userId', ParseObjectIdPipe) userId: Types.ObjectId) {
     const userSkills = await this.userSkillService.getUserSkills(userId);
     return userSkills.map((userSkill) => new UserSkillDto(userSkill).toAdminResponse());
   }

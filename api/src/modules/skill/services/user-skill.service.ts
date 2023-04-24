@@ -1,5 +1,5 @@
 import {BadRequestException, Inject, Injectable, forwardRef} from "@nestjs/common"
-import { Model, ObjectId } from "mongoose";
+import { Model, ObjectId, Types } from "mongoose";
 import { UserService } from "../../user/services/user.service";
 import { SkillService } from "./skill.service";
 import { InjectModel } from "@nestjs/mongoose";
@@ -36,7 +36,7 @@ export class UserSkillService {
         return createdUserSkill;
     }
 
-    async removeSkill(skill: string, userId: ObjectId | string): Promise<void> {
+    async removeSkill(skill: string, userId: Types.ObjectId): Promise<void> {
         const exist = await this.userSkillModel.exists({userId: userId, skill});
         if(!exist){
             throw new BadRequestException('Cannot remove skill that you do not have')
@@ -44,7 +44,7 @@ export class UserSkillService {
         await this.userSkillModel.deleteOne({userId: userId, skill});
     }
 
-    async updateUserSkill(userSkill: UpdateUserSkillDto, skill: string,  userId: ObjectId | string): Promise<UserSkill>{
+    async updateUserSkill(userSkill: UpdateUserSkillDto, skill: string,  userId: Types.ObjectId): Promise<UserSkill>{
         const exist = await this.userSkillModel.exists({userId: userId, skill});
         if(!exist){
             throw new BadRequestException('Cannot update skill that you do not have')
@@ -53,7 +53,7 @@ export class UserSkillService {
        return updatedUserSkill;
     }
 
-    async getUserSkills(userId: ObjectId | string){
+    async getUserSkills(userId: Types.ObjectId){
         const skills = await this.userSkillModel.find({userId: userId});
         return skills;
     }

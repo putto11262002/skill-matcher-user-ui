@@ -46,7 +46,7 @@ class ProfileDto {
 
 export class UserDto {
   @ApiProperty()
-  _id: string | ObjectId;
+  _id: string ;
 
   @ApiProperty()
   username: string;
@@ -64,7 +64,7 @@ export class UserDto {
   profile: ProfileDto;
 
   constructor(user: UserDocument | User) {
-    this._id = user._id;
+    this._id = user._id.toHexString();
     this.username = user.username;
     this.email = user.email;
     this.status = user.status;

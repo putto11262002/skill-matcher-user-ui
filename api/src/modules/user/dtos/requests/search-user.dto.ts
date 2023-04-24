@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { SearchDto } from '../../../../common/dtos/requests/search.dto';
 import { IsArray, IsIn, IsOptional, IsString } from 'class-validator';
 import { USER_STATUS } from '../../constants/user.constant';
-import { ObjectId } from 'mongoose';
+import { ObjectId, Types } from 'mongoose';
 
 export class SearchUserDto extends SearchDto {
   @ApiProperty()
@@ -19,14 +19,14 @@ export class SearchUserDto extends SearchDto {
   @IsOptional()
   @IsArray()
   @IsString({each: true})
-  excludeIds?: Array<string | ObjectId>;
+  excludeIds?: Array<Types.ObjectId>;
 
   constructor(
     pageNumber: number,
     pageSize: number,
     status: string,
     q: string,
-    excludeIds: Array<string | ObjectId>,
+    excludeIds: Array<Types.ObjectId>,
   ) {
     super(pageNumber, pageSize);
     this.status = status;

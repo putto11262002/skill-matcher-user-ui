@@ -1,6 +1,6 @@
-import { ObjectId } from 'mongoose';
+import { ObjectId, Types } from 'mongoose';
 
 export class JwtRefreshTokenPayload {
-  id: string | ObjectId;
+  id: Types.ObjectId;
   role: string;
 }

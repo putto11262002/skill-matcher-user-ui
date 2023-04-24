@@ -11,7 +11,7 @@ import { FilterQuery, Model } from 'mongoose';
 import { UserService } from '../../user/services/user.service';
 import { User } from '../../user/schemas/user.schema';
 import { MATCH_STATUS, MATCH_USER_STATUS } from '../constants/match.constant';
-import { ObjectId } from 'mongoose';
+import { Types } from 'mongoose';
 import { SearchMatchQueryDto } from '../dto/requests/search-match-query.dto';
 
 @Injectable()
@@ -86,14 +86,15 @@ export class MatchService {
     return createMatch;
   }
 
-  async getMatchById(id: ObjectId) {
-    const match = await this.matchModel.findOne({ _id: id });
+  async getMatch(id: Types.ObjectId, userId: Types.ObjectId) {
+    const match = await this.matchModel.findOne({ _id: id, 'users.userId': userId});
     if (!match) {
       throw new NotFoundException('Match not found');
     }
+    return match
   }
 
-  async getMatchByUsers(userId1: ObjectId, userId2: ObjectId) {
+  async getMatchByUsers(userId1: Types.ObjectId, userId2: Types.ObjectId) {
     const match = await this.matchModel.findOne({
       $and: [
         {
@@ -118,7 +119,7 @@ export class MatchService {
     return match;
   }
 
-  async getMatchByUser(userId: ObjectId) {
+  async getMatchByUser(userId: Types.ObjectId) {
     const filter = {
       users: {
         $elemMatch: {
@@ -134,7 +135,7 @@ export class MatchService {
     return { matches, total };
   }
 
-  async deleteMatch(id: ObjectId, userId: ObjectId) {
+  async deleteMatch(id: Types.ObjectId, userId: Types.ObjectId) {
     const _id = await this.matchModel.exists({
       _id: id,
       users: { $elemMatch: { userId } },
@@ -145,7 +146,7 @@ export class MatchService {
     await this.matchModel.deleteOne({ _id });
   }
 
-  async acceptMatch(id: ObjectId, userId: ObjectId) {
+  async acceptMatch(id: Types.ObjectId, userId: Types.ObjectId) {
     const match = await this.matchModel.findOne({
       _id: id,
       users: { $elemMatch: { userId } },
@@ -153,8 +154,9 @@ export class MatchService {
     if (!match) {
       throw new NotFoundException('Match does not exist');
     }
+    
     match.users = match.users.map((user) =>
-      user.userId === userId
+      user.userId.equals(userId)
         ? { ...user, status: MATCH_USER_STATUS.ACCEPTED }
         : user,
     );
@@ -165,7 +167,7 @@ export class MatchService {
     await this.matchModel.updateOne({ _id: id }, match);
   }
 
-  async declineMatch(id: ObjectId, userId: ObjectId) {
+  async declineMatch(id: Types.ObjectId, userId: Types.ObjectId) {
     const match = await this.matchModel.findOne({
       _id: id,
       users: { $elemMatch: { userId } },
@@ -179,7 +181,7 @@ export class MatchService {
     await this.matchModel.deleteOne({ _id: id });
   }
 
-  async searchMatchByUser(userId: ObjectId, query: SearchMatchQueryDto) {
+  async searchMatchByUser(userId: Types.ObjectId, query: SearchMatchQueryDto) {
     const filter: FilterQuery<Match> = {};
 
     const { users } = await this.userService.search({
@@ -249,7 +251,7 @@ export class MatchService {
     };
   }
 
-  async matchExists(userId1: ObjectId, userId2: ObjectId): Promise<boolean> {
+  async matchExists(userId1: Types.ObjectId, userId2: Types.ObjectId): Promise<boolean> {
     const id = await this.matchModel.exists({
       $and: [
         {

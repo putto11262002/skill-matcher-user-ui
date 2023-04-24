@@ -7,7 +7,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model, ObjectId } from 'mongoose';
+import { FilterQuery, Model, ObjectId, Types } from 'mongoose';
 import { CreateUserDto } from '../dtos/requests/create-user.dto';
 import { UpdateUserDto } from '../dtos/requests/update-user.dto';
 import { User } from '../schemas/user.schema';
@@ -61,7 +61,7 @@ export class UserService {
     return createdUser;
   }
 
-  async updateById(id: string | ObjectId, user: UpdateUserDto): Promise<User> {
+  async updateById(id: Types.ObjectId, user: UpdateUserDto): Promise<User> {
     const exist = await this.userModel.exists({ _id: id });
     if (!exist) {
       throw new HttpException(
@@ -79,7 +79,7 @@ export class UserService {
     return updatedUser;
   }
 
-  async deleteById(id: string | ObjectId): Promise<void> {
+  async deleteById(id: Types.ObjectId): Promise<void> {
     const exist = await this.userModel.exists({ _id: id });
     if (!exist) {
       throw new HttpException(
@@ -97,7 +97,7 @@ export class UserService {
     }
   }
 
-  async getById(id: string | ObjectId): Promise<User | null> {
+  async getById(id: Types.ObjectId): Promise<User | null> {
     const user = await this.userModel.findOne({ _id: id });
     if (!user) {
       // throw new HttpException("User with this id does not exist.", HttpStatus.NOT_FOUND);
@@ -129,7 +129,7 @@ export class UserService {
     return id ? true : false;
   }
 
-  async existById(id: ObjectId | string): Promise<boolean> {
+  async existById(id: Types.ObjectId): Promise<boolean> {
     const _id = await this.userModel.exists({_id: id})
     return _id ? true : false;
   }
@@ -140,7 +140,7 @@ export class UserService {
   }
 
   async updateRefreshToken(
-    id: ObjectId | string,
+    id: Types.ObjectId,
     refreshToken: string,
   ): Promise<void> {
     await this.userModel.updateOne({ _id: id }, { refreshToken });

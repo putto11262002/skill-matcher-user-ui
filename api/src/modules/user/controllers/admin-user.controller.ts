@@ -23,6 +23,8 @@ import { SearchUserDto } from '../dtos/requests/search-user.dto';
 import { UpdateUserDto } from '../dtos/requests/update-user.dto';
 import { UserDto } from '../dtos/responses/user.dto';
 import { UserService } from '../services/user.service';
+import { ParseObjectIdPipe } from '../../../common/pipes/pase-object-id.pipe';
+import { Types } from 'mongoose';
 
 @ApiTags('Admin')
 @Roles('admin', 'root')
@@ -39,13 +41,13 @@ export class AdminUserController {
 
   @Put(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async updateUser(@Body() payload: UpdateUserDto, @Param('id') id: string) {
+  async updateUser(@Body() payload: UpdateUserDto, @Param('id', ParseObjectIdPipe) id: Types.ObjectId) {
     await this.userService.updateById(id, payload);
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  async getUser(@Param('id') id: string) {
+  async getUser(@Param('id', ParseObjectIdPipe) id: Types.ObjectId) {
     const user = await this.userService.getById(id);
     if (!user) {
       throw new NotFoundException('User with this id does not exist.');
@@ -56,7 +58,7 @@ export class AdminUserController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteUser(@Param('id') id: string) {
+  async deleteUser(@Param('id', ParseObjectIdPipe) id: Types.ObjectId) {
     await this.userService.deleteById(id);
   }
 
