@@ -1,14 +1,14 @@
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { Stack } from '@mui/material';
-import { Avatar } from "@mui/material"
+import { Avatar, Button, Grid } from "@mui/material";
+import { useMediaQuery } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import userService from '../../services/user.service';
 
@@ -100,6 +100,9 @@ function UserInfoTab() {
 
 const UserHomePage = () => {
   const [user, setUser] = useState({});
+  const router = useRouter();
+  const isMobile = useMediaQuery('(max-width:600px)');
+  const isTablet = useMediaQuery('(max-width:960px)');
 
   useEffect(() => {
     async function fetchUser() {
@@ -110,16 +113,48 @@ const UserHomePage = () => {
   }, []);
 
 
-  return <Stack alignItems='center' sx={{ width: '100%' }}>
-    {user && (
-  <Avatar
-    src={user?.avatar?.url || "/images/no-avatar.jpg"}
-    sx={{ width: 130, height: 130, mt: 4 }}
-  />
-)}
-    <Box maxWidth='md'><UserInfoTab /></Box>
-  </Stack>
-}
+  return (
+    <Box sx={{ borderRadius: 4, p: 2 }}>
+      <Typography variant='h4'>Profile</Typography>
+      <Grid container spacing={isMobile ? 2 : 4} alignItems='center' sx={{ mt: 2 }}>
+        <Grid item xs={12} sm={4}>
+          <Box display='flex' justifyContent='center'>
+            {user && (
+              <Avatar
+                src={user?.avatar?.url || '/images/no-avatar.jpg'}
+                sx={{
+                  width: isMobile ? 100 : 130,
+                  height: isMobile ? 100 : 130,
+                  mb: isMobile ? 2 : 0,
+                }}
+              />
+            )}
+          </Box>
+        </Grid>
+        <Grid item xs={12} sm={8}>
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Typography variant='h5' component='h1' sx={{ mb: 1 }}>
+              Welcome, {user?.profile?.firstName} {user?.profile?.lastName}!
+            </Typography>
+            <Typography sx={{ mb: 2 }}>Email: {user?.email}</Typography>
+            <Typography sx={{ mb: 3}}>Username: {user?.username}</Typography>
+            <Typography sx={{ mb: 4 }}>Age: {user?.age}</Typography>
+            <Box sx={{ border: 1, borderColor: 'grey.500', borderRadius: 3, p: 2 }}>
+              <Box maxWidth='md'>
+                <UserInfoTab />
+              </Box>
+            </Box>
+            <Box sx={{ mt: 2 }}>
+              <Button variant='contained' onClick={() => router.push('/edit-details')}>
+                Edit Profile
+              </Button>
+            </Box>
+          </Box>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+};
 
 UserHomePage.requiredAuth = true
 
