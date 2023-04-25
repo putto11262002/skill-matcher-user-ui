@@ -81,6 +81,7 @@ const NavBar = ({  }) => {
 
   const router = useRouter();
 
+
  
   const handleToggleMobileNav = () => {
     setOpenMobileNav(!openMobileNav);
@@ -95,7 +96,7 @@ const NavBar = ({  }) => {
   };
 
   const handleLogout = () => {
-    dispatch(signOut());
+    dispatch(signOut({}));
     handleCloseUserMenu();
   };
 
@@ -210,7 +211,7 @@ const NavBar = ({  }) => {
         </Drawer>
         </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", flexGrow: 0 }}>
+        <Box sx={{  alignItems: "center", flexGrow: 0,  display: { xs: "flex", md: "none" } }}>
                 <Tooltip title={`Settings`}>
                   <IconButton onClick={handleOpenUserMenu}>
                     <Avatar
@@ -267,14 +268,14 @@ const NavBar = ({  }) => {
               }}
               item
             >
-              <Box sx={{ display: "flex", alignItems: "center" }}>
+              {/* <Box sx={{ display: "flex", alignItems: "center", display: { xs: "none", md: "flex" } }}>
                 <IconButton>
                   <Badge badgeContent={17} color="error">
                     <NotificationsIcon />
                   </Badge>
                 </IconButton>
-              </Box>
-              <Box sx={{ display: "flex", alignItems: "center" }}>
+              </Box> */}
+              <Box sx={{  alignItems: "center",  display: { xs: "none", md: "flex" }}}>
                 <Tooltip title={`Settings`}>
                   <IconButton onClick={handleOpenUserMenu}>
                     <Avatar

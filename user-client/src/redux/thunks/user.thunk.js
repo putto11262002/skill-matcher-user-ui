@@ -16,7 +16,7 @@ export const signIn = createAsyncThunk(
 
 export const signOut = createAsyncThunk('auth/sign-out', async ({}, { rejectWithValue }) => {
   try {
-    return authService.signOut();
+    await authService.signOut();
   } catch (err) {
     return rejectWithValue(err);
   }
