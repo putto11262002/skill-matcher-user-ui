@@ -12,6 +12,7 @@ import {
   Toolbar,
   Typography,
   useTheme,
+  Snackbar,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -36,9 +37,9 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      router.push('/');
+      router.push('/user-homepage');
     }
-
+  
   }, [isLoggedIn])
 
   return (
