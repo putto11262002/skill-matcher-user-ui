@@ -193,8 +193,8 @@ const NavBar = ({  }) => {
          
           <List disablePadding>
             {navLinks.map(link => (
-              <>
-              <ListItem  sx={{width: '100%', color: theme => router.pathname === link.path ? theme.palette.primary.main : theme.palette.text.secondary}}  disablePadding key={link.path}>
+           
+              <ListItem   sx={{width: '100%', color: theme => router.pathname === link.path ? theme.palette.primary.main : theme.palette.text.secondary}}  disablePadding key={link.path}>
                <Link style={{display: 'block'}} href={link.path}>
                <ListItemButton sx={{width: '100%'}} >
                   <ListItemIcon >
@@ -205,7 +205,7 @@ const NavBar = ({  }) => {
                </Link>
               </ListItem>
             
-              </>
+              
             ))}
           </List>
         </Drawer>

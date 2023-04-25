@@ -39,8 +39,23 @@ const LandingPage = () => {
           full potential!
         </Typography>
         <Stack marginTop={3} spacing={3} direction="row">
-          <Link href="/sign-up">Sign Up Now</Link>{" "}
-          <Divider orientation="vertical" /> <Link href="/login">Sign In</Link>{" "}
+          <Link style={{ whiteSpace: "nowrap" }} href="/sign-up">
+            <Typography
+              whiteSpace="nowrap"
+              color={(theme) => theme.palette.primary.light}
+            >
+              Sign up
+            </Typography>
+          </Link>{" "}
+          <Divider orientation="vertical" />{" "}
+          <Link style={{ whiteSpace: "nowrap" }} href="/login">
+            <Typography
+              color={(theme) => theme.palette.primary.light}
+              whiteSpace="nowrap"
+            >
+              Sign in
+            </Typography>
+          </Link>{" "}
         </Stack>
       </Container>
     </Slide>
