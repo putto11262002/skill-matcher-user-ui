@@ -2,21 +2,22 @@
 import React, { useCallback } from "react";
 import Link from "next/link";
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import dynamic from "next/dynamic";
 
 const navLinks = [
   { label: "Home", path: "/home", visibility: "both" },
   { label: "About Us", path: "/about-us", visibility: "both" },
   { label: "Contact Us", path: "/contact-us", visibility: "both" },
-  { label: "Dashboard", path: "/bashbaord", visibility: "auth" },
+  { label: "Profile", path: "/user-homepage", visibility: "auth" },
+  { label: "Logout", path: "/logout", visibility: "auth" },
   { label: "Sign In", path: "/login", visibility: "no-auth" },
   { label: "Sign Up", path: "/sign-up", visibility: "no-auth" },
 ];
 
 const NavBar = () => {
   const { isLoggedIn } = useSelector((state) => state.auth);
-
+  
   const renderNav = () => {
     return navLinks.map((link) => {
       let isHidden = true;
