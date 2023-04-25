@@ -7,8 +7,9 @@ import {
     Toolbar,
     Typography,
     Button,
+    Link,
 } from '@mui/material';
-import Link from 'next/link';
+//import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
@@ -56,7 +57,7 @@ const SignUpPage = () => {
 
     return (
         <Grid container justifyContent='center' alignItems='center' height='100%'>
-            <Grid xs={11} sm={6} item>
+            <Grid xs={12} sm={8} md={4} item>
                 <Box
                     padding={(theme) => theme.spacing(3)}
                     sx={{ boxShadow: { sm: 2, xs: 0 }, borderRadius: 2 }}
@@ -138,7 +139,7 @@ const SignUpPage = () => {
                                 </Button>
                             </Grid>
                             <Grid>
-                                <Link href='/login' passHref>
+                            <Link href='/login' passHref>
                                     <Button disabled={isLoadingSignUp} variant="Sign in button">Already have an account</Button>
                                 </Link>
                             </Grid>
