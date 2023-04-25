@@ -10,6 +10,20 @@ import {
 } from '@mui/material';
 import userService from '@/services/user.service';
 
+/* update user schema 
+"username": "string",
+"status": "string",
+"profile": {
+  "firstName": "string",
+  "lastName": "string",
+  "phoneNumber": "string",
+  "contactEmail": "string",
+  "instagram": "string",
+  "snapchat": "string",
+  "facebook": "string",
+  "whatsapp": "string",
+  "aboutMe": "string"
+  */
 const EditDetailsPage = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');

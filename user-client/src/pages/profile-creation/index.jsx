@@ -20,6 +20,21 @@ function valuetext(value) {
     return `${value}%`;
 }
 
+/*  updating user schema
+"username": "string",
+"status": "string",
+"profile": {
+  "firstName": "string",
+  "lastName": "string",
+  "phoneNumber": "string",
+  "contactEmail": "string",
+  "instagram": "string",
+  "snapchat": "string",
+  "facebook": "string",
+  "whatsapp": "string",
+  "aboutMe": "string"
+  */
+
 function ProfileCreation() {
     const [name, setName] = useState('');
     const [last, setLast] = useState('');
