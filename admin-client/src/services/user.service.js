@@ -36,8 +36,8 @@ export class UserService {
     return api.get(`/admin/user/${id}`)
   }
 
-  async getUserSkills(id){
-    return api.get(`/admin/user/${id}/skill`)
+  async getUserSkills({userId, query}){
+    return api.get(`/admin/user/${userId}/skill`, {params: query})
   }
 
   async updateUserSkill({id, skill, payload}){

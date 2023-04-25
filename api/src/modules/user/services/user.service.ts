@@ -173,6 +173,11 @@ export class UserService {
     if(query.excludeIds){
       filer._id = {'$nin': query.excludeIds}
     }
+
+    if(query.roles){
+      filer.role = {$in: [...query.roles]}
+    }
+
     const [users, total] = await Promise.all([
       this.userModel
         .find(filer)

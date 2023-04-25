@@ -1,5 +1,5 @@
 import {BadRequestException, Inject, Injectable, forwardRef} from "@nestjs/common"
-import { Model, ObjectId, Types } from "mongoose";
+import { FilterQuery, Model, ObjectId, Types } from "mongoose";
 import { UserService } from "../../user/services/user.service";
 import { SkillService } from "./skill.service";
 import { InjectModel } from "@nestjs/mongoose";
@@ -10,6 +10,7 @@ import { User } from "../../user/schemas/user.schema";
 import { UpdateUserSkillDto } from "../dtos/requests/update-user-skill.dto";
 import { NOT_ALLOW_UPDATE_FIELDS } from "../constants/user-skill.constant";
 import {omit} from 'lodash'
+import { SearchUserSkillDto } from "../dtos/requests/search-user-skill.dto";
 @Injectable()
 export class UserSkillService {
     constructor(
@@ -54,8 +55,18 @@ export class UserSkillService {
        return updatedUserSkill;
     }
 
-    async getUserSkills(userId: Types.ObjectId){
-        const skills = await this.userSkillModel.find({userId: userId});
-        return skills;
+    async getUserSkills(userId: Types.ObjectId , query: SearchUserSkillDto){
+        const filter: FilterQuery<UserSkill> = {userId}
+        
+
+        if(query.role){
+            filter.role = query.role;
+        }
+        const [userSkills, total] = await Promise.all([
+            this.userSkillModel.find(filter).skip(query.pageNumber * query.pageSize).limit(query.pageSize),
+            this.userSkillModel.countDocuments(filter)
+        ]);
+       
+        return {userSkills, total, pageSize: query.pageSize, pageNumber: query.pageNumber};
     }
 }

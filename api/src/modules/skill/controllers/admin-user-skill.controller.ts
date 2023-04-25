@@ -8,6 +8,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '../../auth/guards/auth.guard';
@@ -25,6 +26,8 @@ import { RoleGuard } from '../../auth/guards/role.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { ParseObjectIdPipe } from '../../../common/pipes/pase-object-id.pipe';
 import { Types } from 'mongoose';
+import { SearchUserSkillDto } from '../dtos/requests/search-user-skill.dto';
+import { Pagination } from '../../../common/dtos/responses/pagination.dto';
 
 @Roles('admin', 'root')
 @UseGuards(RoleGuard)
@@ -75,14 +78,11 @@ export class AdminUserSkillController {
 
   @Get('user/:userId/skill')
   @HttpCode(HttpStatus.OK)
-  async getSelfSkill(@Param('userId', ParseObjectIdPipe) userId: Types.ObjectId) {
-    const userSkills = await this.userSkillService.getUserSkills(userId);
-    return userSkills.map((userSkill) => new UserSkillDto(userSkill).toAdminResponse());
+  async getSelfSkill(@Param('userId', ParseObjectIdPipe) userId: Types.ObjectId, @Query() query: SearchUserSkillDto) {
+  
+    const {userSkills, total, pageNumber, pageSize} = await this.userSkillService.getUserSkills(userId, query);
+    return new Pagination(userSkills.map((userSkill) => new UserSkillDto(userSkill).toAdminResponse()), pageSize, pageNumber, total);
   }
 
-  @Get('user/:userId/skill')
-  async getUserSkill(@Param('userId', ParseObjectIdPipe) userId: Types.ObjectId) {
-    const userSkills = await this.userSkillService.getUserSkills(userId);
-    return userSkills.map((userSkill) => new UserSkillDto(userSkill).toAdminResponse());
-  }
+
 }

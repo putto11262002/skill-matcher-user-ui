@@ -85,7 +85,7 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   async searchUser(@Query() query: SearchUserDto, @CurrentJwt() currentUser: JwtAccessTokenPayloadDto) {
     const { users, total } = await this.userService.search(
-      omit({...query, status: USER_STATUS.ACTIVE, excludeIds: [currentUser.id]}, ONLY_ADMIN_SEARCH_FIELDS) as SearchUserDto,
+      omit({...query, status: USER_STATUS.ACTIVE, excludeIds: [currentUser.id], roles: ['user']}, ONLY_ADMIN_SEARCH_FIELDS) as SearchUserDto,
     );
     return new Pagination(
       users.map((user) => new UserDto(user)),

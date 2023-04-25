@@ -38,8 +38,8 @@ const EditUserPage = () => {
   // Define query for fetching user skills
   const { isLoading: isLoadingSkills, refetch: fetchSkills, error: errorLoadingSkills } = useQuery(
     ['user', id, 'skills'],
-    () => userService.getUserSkills(id),
-    { enabled: false, onSuccess: (res) => setSkills(res.data) },
+    () => userService.getUserSkills({userId: id, query: {}}),
+    { enabled: false, onSuccess: (res) => setSkills(res.data?.data) },
   );
 
   // Define mutation for add user skill

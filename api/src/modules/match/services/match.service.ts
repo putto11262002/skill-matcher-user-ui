@@ -13,6 +13,7 @@ import { User } from '../../user/schemas/user.schema';
 import { MATCH_STATUS, MATCH_USER_STATUS } from '../constants/match.constant';
 import { Types } from 'mongoose';
 import { SearchMatchQueryDto } from '../dto/requests/search-match-query.dto';
+import { SearchUserDto } from '../../user/dtos/requests/search-user.dto';
 
 @Injectable()
 export class MatchService {
@@ -189,7 +190,7 @@ export class MatchService {
       pageNumber: undefined,
       pageSize: undefined,
       excludeIds: [userId],
-    });
+    } as SearchUserDto);
     const userIds = users.map((user) => user._id);
 
     if (query.status) {
