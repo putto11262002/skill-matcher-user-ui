@@ -19,7 +19,9 @@ const Home = ()  => {
   const { isLoggedIn } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (!isLoggedIn) router.push('/login');
+    if (isLoggedIn) router.push('/home');
+    else router.push('/landing')
+    
   }, []);
 
   return (
@@ -28,24 +30,7 @@ const Home = ()  => {
         <title>Skill matcher</title>
       </Head>
 
-      {/* Use Button instead of Link for conditional rendering */}
-
-      <nav>
-        {isLoggedIn ? (
-          <Button>Dashboard</Button>
-        ) : (
-          <>
-           <Button>Log in</Button>
-           <Button>Sign up</Button>
-          </>
-        )}
-      </nav>
-
-
-
-      <Typography variant='1' component='h1'>H1</Typography>
-      <Typography >H1</Typography>
-      <Typography sx={{display: {xs: 'none', md: 'block'}}} variant='6' component='h6'>H6</Typography>
+     
     </>
   );
 }

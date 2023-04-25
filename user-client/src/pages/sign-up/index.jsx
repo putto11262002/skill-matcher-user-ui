@@ -150,4 +150,8 @@ const SignUpPage = () => {
     );
 };
 
+SignUpPage.getLayout = (page) => {
+    return <Box component='main' sx={{height: '100vh', width: '100vw'}}>{page}</Box>
+  }
+
 export default SignUpPage;
