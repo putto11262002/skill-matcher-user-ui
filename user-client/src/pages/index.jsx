@@ -50,7 +50,7 @@ const Home = ()  => {
   );
 }
 
-// Use dynamic export for page what does not require server side rendering
+// Use dynamic export for page what does not require server side rendering (when using const)
 
 export default dynamic(() => Promise.resolve(Home), {
   ssr: false
