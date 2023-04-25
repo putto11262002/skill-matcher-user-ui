@@ -1,22 +1,27 @@
+
 import { Inter } from 'next/font/google'
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import Head from 'next/head'
+import dynamic from 'next/dynamic';
 import { 
   Typography,
-  Link, 
+  Link,
+  Button, 
 } from '@mui/material';
 
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
+const Home = ()  => {
   const router = useRouter();
   const { isLoggedIn } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (!isLoggedIn) router.push('/login');
+    if (isLoggedIn) router.push('/home');
+    else router.push('/landing')
+    
   }, []);
 
   return (
@@ -25,20 +30,13 @@ export default function Home() {
         <title>Skill matcher</title>
       </Head>
 
-      <nav>
-        {isLoggedIn ? (
-          <Link href="/user-homepage">Dashboard</Link>
-        ) : (
-          <>
-            <Link href="/login">Log in</Link>
-            <Link href="/sign-up">Sign up</Link>
-          </>
-        )}
-      </nav>
-
-      <Typography variant='1' component='h1'>H1</Typography>
-      <Typography >H1</Typography>
-      <Typography sx={{display: {xs: 'none', md: 'block'}}} variant='6' component='h6'>H6</Typography>
+     
     </>
   );
 }
+
+// Use dynamic export for page what does not require server side rendering (when using const)
+
+export default dynamic(() => Promise.resolve(Home), {
+  ssr: false
+})

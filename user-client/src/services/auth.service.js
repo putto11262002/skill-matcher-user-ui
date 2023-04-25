@@ -40,7 +40,7 @@ export class AuthService {
       const res = await api.delete('/auth/sign-out');
       return res;
       }catch(e){
-        return e
+        throw e
       }finally{
         tokenService.removeLocalAccessToken();
         tokenService.removeLocalRefreshToken();

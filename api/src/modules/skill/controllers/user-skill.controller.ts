@@ -8,19 +8,25 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '../../auth/guards/auth.guard';
 import { CreateUserSkillDto } from '../dtos/requests/create-user-skill.dot';
 import { UserSkillService } from '../services/user-skill.service';
 import { UserSkillDto } from '../dtos/responses/user-skill.dto';
-import { CurrentUser } from '../../auth/decorators/current-user.decorator';
+import { CurrentJwt } from '../../auth/decorators/current-jwt.decorator';
 import { JwtAccessTokenPayloadDto } from '../../auth/dtos/request/jwt-access-token-payload.dto';
 import { UserService } from '../../user/services/user.service';
 import { User } from '../../user/schemas/user.schema';
 import { UpdateUserSkillDto } from '../dtos/requests/update-user-skill.dto';
 import { omit } from 'lodash';
 import { NOT_ALLOW_SELF_UPDATE_FIELDS } from '../constants/user-skill.constant';
+import { CurrentUser } from '../../auth/decorators/current-user.decorator';
+import { ParseObjectIdPipe } from '../../../common/pipes/pase-object-id.pipe';
+import { Types } from 'mongoose';
+import { SearchUserSkillDto } from '../dtos/requests/search-user-skill.dto';
+import { Pagination } from '../../../common/dtos/responses/pagination.dto';
 
 @UseGuards(AuthGuard)
 @Controller()
@@ -47,9 +53,9 @@ export class UserSkillController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async removeSkill(
     @Param('name') skillName: string,
-    @CurrentUser() currentUser: User,
+    @CurrentJwt() currentUser: JwtAccessTokenPayloadDto,
   ) {
-    await this.userSkillService.removeSkill(skillName, currentUser);
+    await this.userSkillService.removeSkill(skillName, currentUser.id);
   }
 
   @Put('user/self/skill/:name')
@@ -57,26 +63,26 @@ export class UserSkillController {
   async updateSkill(
     @Body() payload: UpdateUserSkillDto,
     @Param('name') skillName: string,
-    @CurrentUser() currentUser: User,
+    @CurrentJwt() currentUser: JwtAccessTokenPayloadDto,
   ) {
     await this.userSkillService.updateUserSkill(
-      omit(payload, NOT_ALLOW_SELF_UPDATE_FIELDS),
+      omit(payload, NOT_ALLOW_SELF_UPDATE_FIELDS) as any,
       skillName,
-      currentUser,
+      currentUser.id,
     );
   }
 
   @Get('user/self/skill')
   @HttpCode(HttpStatus.OK)
-  async getSelfSkill(@CurrentUser() currentUser: User) {
-    const userSkills = await this.userSkillService.getUserSkills(currentUser);
-    return userSkills.map((userSkill) => new UserSkillDto(userSkill).toSelfResponse());
+  async getSelfSkill(@CurrentJwt() currentUser: JwtAccessTokenPayloadDto, @Query() query: SearchUserSkillDto) {
+    const {userSkills, total, pageNumber, pageSize} = await this.userSkillService.getUserSkills(currentUser.id, query);
+    return new Pagination(userSkills.map((userSkill) => new UserSkillDto(userSkill).toSelfResponse()), pageSize, pageNumber, total);
   }
 
   @Get('user/:userId/skill')
-  async getUserSkill(@Param('userId') userId: string) {
-    const user = await this.userService.getById(userId);
-    const userSkills = await this.userSkillService.getUserSkills(user);
-    return userSkills.map((userSkill) => new UserSkillDto(userSkill).toPublicResponse());
+  async getUserSkill(@Param('userId', ParseObjectIdPipe) userId: Types.ObjectId, @Query() query: SearchUserSkillDto) {
+ 
+    const {userSkills, total, pageNumber, pageSize} = await this.userSkillService.getUserSkills(userId, query);
+    return new Pagination(userSkills.map((userSkill) => new UserSkillDto(userSkill).toPublicResponse()), pageSize, pageNumber, total)
   }
 }

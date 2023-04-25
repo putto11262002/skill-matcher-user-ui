@@ -1,11 +1,11 @@
-import mongoose from "mongoose"
+import mongoose, { Types } from "mongoose"
 import {Schema, Prop, SchemaFactory} from "@nestjs/mongoose"
 @Schema({timestamps: true})
 export class UserSkill {
-    _id: mongoose.ObjectId
+    _id: Types.ObjectId
 
     @Prop({required: true, index: true, type: mongoose.Schema.Types.ObjectId})
-    userId: mongoose.ObjectId;
+    userId: Types.ObjectId;
 
     @Prop({required: true, index: true})
     skill: string;

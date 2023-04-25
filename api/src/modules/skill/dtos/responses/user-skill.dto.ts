@@ -2,7 +2,7 @@ import { ObjectId } from "mongoose";
 import { UserSkill } from "../../schemas/user-skill.schema";
 
 export class UserSkillDto {
-    userId: ObjectId | string;
+    userId: string;
 
     skill: string;
 
@@ -13,7 +13,7 @@ export class UserSkillDto {
     proficiency: number;
 
     constructor(userSkill: UserSkill){
-        this.userId = userSkill.userId;
+        this.userId = userSkill.userId.toHexString();
         this.skill =  userSkill.skill;
         this.role = userSkill.role;
         this.about = userSkill.about;

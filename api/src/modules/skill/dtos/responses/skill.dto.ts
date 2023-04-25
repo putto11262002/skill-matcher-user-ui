@@ -19,7 +19,7 @@ export class SkillDto {
         this.description = skill.description;
         this.status = skill.status;
         this.relatedSkills = skill.relatedSkills;
-        skill._id
+  
     }
 
     toAdminResponse(): Partial<SkillDto>{

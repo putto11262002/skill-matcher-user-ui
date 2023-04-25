@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument, ObjectId } from 'mongoose';
+import mongoose, { HydratedDocument, ObjectId, Types } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class PrivacySetting {
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
-  userId: ObjectId;
+  userId: Types.ObjectId;
 }
 
 export type PrivacySettingDocument = HydratedDocument<PrivacySetting>;

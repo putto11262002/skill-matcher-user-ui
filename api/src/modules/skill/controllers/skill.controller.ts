@@ -8,6 +8,7 @@ import { NOT_ALLOW_USER_CREATE_FIELDS, SKILL_STATUS } from "../constants/skill.c
 import {omit} from "lodash"
 import { SearchSkillDto } from "../dtos/requests/search-skill.dto";
 import { Pagination } from "../../../common/dtos/responses/pagination.dto";
+import { UpdateSkillDto } from "../dtos/requests/update.skill.dto";
 
 @ApiTags("Skill")
 @UseGuards(AuthGuard)
@@ -35,7 +36,7 @@ export class SkillController {
     @Post()
     @HttpCode(HttpStatus.CREATED)
     async submitSkillRequest(@Body() payload: CreateSkillDto){
-        await this.skillService.addSkill(omit({...payload, status: SKILL_STATUS.PENDING}, NOT_ALLOW_USER_CREATE_FIELDS))
+        await this.skillService.addSkill(omit({...payload, status: SKILL_STATUS.PENDING}, NOT_ALLOW_USER_CREATE_FIELDS) as CreateSkillDto)
     }
 
 }

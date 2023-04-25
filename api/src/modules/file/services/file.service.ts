@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { S3Service } from './s3.service';
-import { Model, ObjectId } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { File } from '../schemas/file.schema';
 
@@ -15,7 +15,7 @@ export class FileService {
     file: Buffer,
     contentType: string,
     resourceType: string,
-    resourceId: string | ObjectId,
+    resourceId: Types.ObjectId,
     fileName: string,
    
   ) {
@@ -33,7 +33,7 @@ export class FileService {
     return createdFile;
   }
 
-  async getFileById(id: string | ObjectId) {
+  async getFileById(id: Types.ObjectId) {
     const file = await this.fileModel.findOne({ _id: id });
     if (!file) {
       throw new NotFoundException('File with this id does not exist');
@@ -49,7 +49,7 @@ export class FileService {
     return file;
   }
 
-  async deleteFileById(id: string | ObjectId) {
+  async deleteFileById(id: Types.ObjectId) {
     const file = await this.fileModel.findOne({ _id: id });
     if (!file) {
       throw new NotFoundException('File with this id does not exist');

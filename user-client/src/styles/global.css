@@ -76,5 +76,8 @@ button {
 
 a {
     text-decoration: none;
+    color:  var(--mui-palette-text-main);
+    width: 100%;
+   
 }
 
