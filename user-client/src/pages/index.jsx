@@ -18,14 +18,8 @@ const inter = Inter({ subsets: ['latin'] })
 const Home = () => {
   const router = useRouter();
   const { isLoggedIn } = useSelector((state) => state.auth);
+  const [user, setUser] = useState({});
 
-  // Use useQuery to fetch the user data
-  const { isLoading, data: user } = useQuery('userData', userService.getSelf, {
-    enabled: isLoggedIn, // Only fetch the data when the user is logged in
-  });
-
-  // Use useMutation to update the user data
-  const [updateUser] = useMutation(userService.updateSelf);
 
   useEffect(() => {
     if (isLoggedIn) router.push('/home');
