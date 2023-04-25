@@ -5,7 +5,7 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+//import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {
     Alert,
     Box,
@@ -113,7 +113,7 @@ function ProfileCreation() {
                     
                     <Toolbar />
                     <Grid gap={1}  container>
-                    <AccountCircleIcon sx={{ fontSize: 70 }} />
+                    
                         <Grid xs={12} item>
                         </Grid>
                        
