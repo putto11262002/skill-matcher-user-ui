@@ -114,31 +114,32 @@ const UserHomePage = () => {
 
 
   return (
-    <Box sx={{ borderRadius: 4, p: 2 }}>
-      <Typography variant='h4'>Profile</Typography>
-      <Grid container spacing={isMobile ? 2 : 4} alignItems='center' sx={{ mt: 2 }}>
-        <Grid item xs={12} sm={4}>
-          <Box display='flex' justifyContent='center'>
-            {user && (
-              <Avatar
-                src={user?.avatar?.url || '/images/no-avatar.jpg'}
-                sx={{
-                  width: isMobile ? 100 : 130,
-                  height: isMobile ? 100 : 130,
-                  mb: isMobile ? 2 : 0,
-                }}
-              />
-            )}
-          </Box>
-        </Grid>
-        <Grid item xs={12} sm={8}>
+    <Box sx={{ borderRadius: 4, p: 2, maxWidth: 1400 }}>
+      <Typography variant='h5'>Profile</Typography>
+      <Grid container spacing={isMobile ? 2 : 5} alignItems='center' sx={{ mt: 2, position: 'relative' }}>
+        <Box display='flex' justifyContent='centre' sx={{ top: 5, left: 0, right: 0 }} >
+          {user && (
+            <Avatar
+              src={user?.avatar?.url || '/images/no-avatar.jpg'}
+              sx={{
+                width: isMobile ? 100 : 130,
+                height: isMobile ? 100 : 130,
+                mr: isMobile ? 2 : 3,
+                mb: isMobile ? 2 : 0,
+              }}
+            />
+          )}
+        </Box>
+        <Grid justifyContent='centre' item xs={12} sm={4} md={8}>
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography variant='h5' component='h1' sx={{ mb: 1 }}>
+            <Typography variant='h6' component='h1' sx={{ mb: 1 }}>
               Welcome, {user?.profile?.firstName} {user?.profile?.lastName}!
             </Typography>
             <Typography sx={{ mb: 2 }}>Email: {user?.email}</Typography>
-            <Typography sx={{ mb: 3}}>Username: {user?.username}</Typography>
-            <Typography sx={{ mb: 4 }}>Age: {user?.age}</Typography>
+            <Typography sx={{ mb: 3 }}>Username: {user?.username}</Typography>
+            <Typography sx={{ mb: 4 }}>Twitter: {user?.facebook}</Typography>
+            <Typography sx={{ mb: 5 }}>Facebook: {user?.instagram}</Typography>
+            <Typography sx={{ mb: 6 }}>Instagram: {user?.instagram}</Typography>
             <Box sx={{ border: 1, borderColor: 'grey.500', borderRadius: 3, p: 2 }}>
               <Box maxWidth='md'>
                 <UserInfoTab />
