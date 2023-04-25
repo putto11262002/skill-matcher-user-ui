@@ -106,7 +106,7 @@ export class UserService {
   }
 
   async getById(id: Types.ObjectId): Promise<User | null> {
-    const user = await this.userModel.findOne({ _id: id });
+    const user = await this.userModel.findOne({ _id: id }).populate('avatar');
     if (!user) {
       // throw new HttpException("User with this id does not exist.", HttpStatus.NOT_FOUND);
       return null;
@@ -181,6 +181,7 @@ export class UserService {
     const [users, total] = await Promise.all([
       this.userModel
         .find(filer)
+        .populate('avatar')
         .skip((query.pageNumber !== undefined && query.pageSize !== undefined) ? query?.pageNumber * query?.pageSize : undefined)
         .limit(query?.pageSize),
       this.userModel.find(filer).countDocuments(),
