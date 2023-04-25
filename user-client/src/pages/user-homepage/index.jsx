@@ -155,7 +155,7 @@ function UserInfoTab() {
 
 const UserHomePage = () => {
   return <Stack alignItems='center' sx={{width: '100%'}}>
-   <Avatar src="/images/1.png" sx={{ width: 130, height: 130, mt: 4 }} />
+   <Avatar src="/images/no-avatar.png" sx={{ width: 130, height: 130, mt: 4 }} />
    <Box maxWidth='md'><UserInfoTab/></Box>
   </Stack>
 }

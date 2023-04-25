@@ -43,8 +43,8 @@ export class UserService {
     }
 
     // get other user's skill
-    async getUserSkill(id){
-        return api.get(`/user/${id}/skill`)
+    async getUserSkills({userId, query}){
+        return api.get(`/user/${userId}/skill`, {params: query})
     }
 }
 
