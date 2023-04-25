@@ -121,6 +121,8 @@ const UserHomePage = () => {
   </Stack>
 }
 
+UserHomePage.requiredAuth = true
+
 export default dynamic(() => Promise.resolve(UserHomePage), {
   ssr: false
 })
