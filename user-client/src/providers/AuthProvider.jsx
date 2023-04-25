@@ -14,7 +14,7 @@ const AuthProvider = ({children}) => {
     if (requiredAuth && !isLoggedIn) router.push("/landing");
   }, [])
 
-  if(typeof window !== undefined && requiredAuth ){
+  if(requiredAuth && !isLoggedIn ){
     return <Box sx={{width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}><Loader/></Box>
   }
   
