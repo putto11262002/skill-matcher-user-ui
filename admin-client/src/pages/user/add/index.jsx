@@ -18,8 +18,10 @@ import { Controller, useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import userService from '@/services/user.service';
 import { useSnackbar } from 'notistack';
+import useAuth from '@/hooks/useAuth';
 
 const AddUserPage = () => {
+  useAuth()
   const theme = useTheme();
   const {
     control,

@@ -5,8 +5,10 @@ import skillService from '../../../services/skill.service';
 import { Stack, Typography } from '@mui/material';
 import AddSkillForm from '../../../components/skill/AddSkillForm';
 import Loader from '../../../components/common/Loader';
+import useAuth from '@/hooks/useAuth';
 
 const EditSkill = () => {
+  useAuth()
   const [relatedSkillSearchTerm, setRelatedSkillsSearchTerm] = useState('');
   const router = useRouter();
   const { name } = router.query;
