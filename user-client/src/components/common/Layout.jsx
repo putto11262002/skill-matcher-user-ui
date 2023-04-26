@@ -12,7 +12,7 @@ const Layout = ({ children }) => {
         sx={{ width: "100vw", heigh: "auto", minHeight: "100vh" }}
       >
         <Toolbar />
-        <Container height="100%" sx={{ paddingY: 5 }} maxWidth="lg">
+        <Container  height="100%" sx={{ paddingY: 5 }} >
           {children}
         </Container>
       </Box>

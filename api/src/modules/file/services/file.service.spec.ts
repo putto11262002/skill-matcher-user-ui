@@ -40,7 +40,7 @@ describe('FileService', () => {
     it('Should upload a file and create a file model', async () => {
       const file = Buffer.from('testFile');
       const resourceType = 'exampleResource';
-      const resourceId = 'resourceId';
+      const resourceId = new Types.ObjectId();
       const fileName = 'testFileName';
       const contentType = 'contentType'
 
@@ -94,21 +94,21 @@ describe('FileService', () => {
         key: 'testKey',
       };
       jest.spyOn(fileModel, 'findOne').mockResolvedValue(file);
-      const returnedFile = await fileService.getFileById(file._id.toString());
+      const returnedFile = await fileService.getFileById(file._id);
       expect(returnedFile).toBe(file);
       expect(fileModel.findOne).toHaveBeenCalledWith({
-        _id: file._id.toString(),
+        _id: file._id,
       });
     });
 
     it('Should throw a not found exception when file does not exist', async () => {
       const fileId = new Types.ObjectId();
       jest.spyOn(fileModel, 'findOne').mockResolvedValue(null);
-      expect(fileService.getFileById(fileId.toString())).rejects.toThrowError(
+      expect(fileService.getFileById(fileId)).rejects.toThrowError(
         new NotFoundException('File with this id does not exist'),
       );
       expect(fileModel.findOne).toHaveBeenCalledWith({
-        _id: fileId.toString(),
+        _id: fileId,
       });
     });
   });
@@ -124,11 +124,11 @@ describe('FileService', () => {
         resourceId: new Types.ObjectId(),
       };
       jest.spyOn(fileModel, 'findOne').mockResolvedValue(file);
-      await fileService.deleteFileById(fileId.toString());
+      await fileService.deleteFileById(fileId);
 
       expect(s3Service.delete).toHaveBeenCalledWith(file.key);
       expect(fileModel.findOne).toHaveBeenCalledWith({
-        _id: fileId.toString(),
+        _id: fileId,
       });
     });
 
@@ -136,12 +136,12 @@ describe('FileService', () => {
       const fileId = new Types.ObjectId();
       jest.spyOn(fileModel, 'findOne').mockResolvedValue(null);
       expect(
-        fileService.deleteFileById(fileId.toString()),
+        fileService.deleteFileById(fileId),
       ).rejects.toThrowError(
         new NotFoundException('File with this id does not exist'),
       );
       expect(fileModel.findOne).toHaveBeenCalledWith({
-        _id: fileId.toString(),
+        _id: fileId,
       });
     });
   });
