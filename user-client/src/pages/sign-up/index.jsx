@@ -23,20 +23,27 @@ const SignUpPage = () => {
     const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [message, setMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const router = useRouter();
 
+    const [alertOpen, setAlertOpen] = useState(false); // to control the visibility of the alert
 
+    const handleAlertClose = () => {
+        setAlertOpen(false);
+    }
     const { isLoggedIn, loading, error } = useSelector((state) => state.auth);
     const { error: signUpError, mutate, isLoading: isLoadingSignUp } = useMutation(authService.signUp, {
         onSuccess: (res) => {
-            setMessage('Sign up successful!');
+            setSuccessMessage('Sign up successful!');
+            setAlertOpen(true);
             router.push('/login');
         },
         onError: (error) => {
-            setMessage(error.message);
+            setErrorMessage(error.message);
+            setAlertOpen(true);
         }
-    })
+    });
 
 
     const handleSignUp = (e) => {
@@ -44,7 +51,8 @@ const SignUpPage = () => {
         if (password === confirmPassword) {
             mutate({ username: email, password, firstName, lastName, email })
         } else {
-            setMessage('Passwords do not match');
+            setErrorMessage('Passwords do not match');
+            setAlertOpen(true);
         }
     };
 
@@ -70,7 +78,6 @@ const SignUpPage = () => {
                         Sign Up
                     </Typography>
                     <Toolbar />
-                    {error && <Typography>error.message</Typography>}
                     <Box onSubmit={handleSignUp} component='form'>
                         <Grid spacing={3} container>
                             <Grid xs={12} item>
@@ -138,10 +145,23 @@ const SignUpPage = () => {
                                 />
                             </Grid>
                             <Grid display='flex' justifyContent='center' xs={12} item>
+                                {successMessage && (
+                                    <div style={{ color: 'green' }}>
+                                        <Alert severity="success">Login successful!</Alert>
+                                    </div>
+                                )}
+                                {errorMessage && (
+                                    <div style={{ color: 'red' }}>
+                                        <Alert severity="error">{errorMessage}</Alert>
+                                    </div>
+                                )}
+                            </Grid>
+                            <Grid display='flex' justifyContent='center' xs={12} item>
                                 <Button type='submit' variant='contained' disabled={loading}>
                                     Sign Up
                                 </Button>
                             </Grid>
+
                             <Grid marginTop={4} container justifyContent="center">
                                 <Grid>
                                     <Link
@@ -164,7 +184,7 @@ const SignUpPage = () => {
 };
 
 SignUpPage.getLayout = (page) => {
-    return <Box component='main' sx={{height: '100vh', width: '100vw'}}>{page}</Box>
-  }
+    return <Box component='main' sx={{ height: '100vh', width: '100vw' }}>{page}</Box>
+}
 
 export default SignUpPage;
