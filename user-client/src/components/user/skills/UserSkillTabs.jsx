@@ -55,14 +55,14 @@ const UserSkillDialog = ({ open, onClose, userSkill }) => {
         </IconButton>
       </DialogTitle>
       <DialogContent>
-       <Stack spacing={3}>
-       <UserSkill label={ <Typography variant="4" component='h4'>Proficiency</Typography>} value={userSkill}/>
-        <Stack spacing={0.5}>
+        <Stack spacing={3}>
+          <UserSkill label={<Typography variant="4" component='h4'>Proficiency</Typography>} value={userSkill} />
+          <Stack spacing={0.5}>
             <Typography variant="4" component='h4'>About</Typography>
-          {!userSkill?.about &&   <Typography>{userSkill?.about}</Typography>}
+            {!userSkill?.about && <Typography>{userSkill?.about}</Typography>}
+          </Stack>
         </Stack>
-       </Stack>
-        
+
       </DialogContent>
     </Dialog>
   );
@@ -102,8 +102,12 @@ const UserSkillTabs = ({
           aria-label="basic tabs example"
           component='div'
         >
-          <Tab disableTouchRipple label="Learner" {...a11yProps(0)} />
-          <Tab disableTouchRipple label="Tutor" {...a11yProps(1)} />
+          <Tooltip title="Skills they are learning">
+            <Tab disableTouchRipple label="Learner" {...a11yProps(0)} />
+          </Tooltip>
+          <Tooltip title="Skills they are tutoring">
+            <Tab disableTouchRipple label="Tutor" {...a11yProps(1)} />
+          </Tooltip>
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -111,7 +115,7 @@ const UserSkillTabs = ({
           {isLoadingTutorSkills ? (
             <Typography>sdfsd</Typography>
           ) : errorTutorSkills ? (
-         <Typography>SDfs</Typography>
+            <Typography>SDfs</Typography>
           ) : (
             tutorSkills?.map((skill) => (
               <UserSkill
