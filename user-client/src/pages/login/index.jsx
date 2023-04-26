@@ -84,8 +84,11 @@ const LoginPage = () => {
         <Typography variant="3" textAlign="center" component="h3">
           Log in
         </Typography>
-        {error && <Alert severity="error">{error}</Alert>}
-          {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+        {errorMessage && (
+          <div style={{ color: 'red' }}>
+            <Alert severity="error">{errorMessage}</Alert>
+          </div>
+        )}
         {isLoggedIn && (
           <Grid xs={12} item>
             <Alert severity="success">Login successful!</Alert>
