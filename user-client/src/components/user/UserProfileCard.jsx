@@ -1,5 +1,6 @@
 import userService from "@/services/user.service";
 import { Circle, Star } from "@mui/icons-material";
+import dynamic from "next/dynamic";
 import {
   Avatar,
   Box,
@@ -11,6 +12,7 @@ import {
   IconButton,
   ListItemIcon,
   Stack,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import React from "react";
@@ -20,6 +22,7 @@ import Loader from "../common/Loader";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import HandshakeIcon from "@mui/icons-material/Handshake";
 import { truncate } from "lodash";
+import Link from "next/link";
 const UserProfileCard = ({ user }) => {
   const {
     isLoading: isLoadingSkill,
@@ -65,8 +68,7 @@ const UserProfileCard = ({ user }) => {
                   .map((skill) => (
                     <UserSkill
                       key={skill.skill + skill.role}
-                      skill={skill.skill}
-                      proficiency={skill.proficiency}
+                     value={skill}
                     />
                   ))
               )}
@@ -91,8 +93,7 @@ const UserProfileCard = ({ user }) => {
                   .map((skill) => (
                     <UserSkill
                       key={skill.skill + skill.role}
-                      skill={skill.skill}
-                      proficiency={skill.proficiency}
+                    value={skill}
                     />
                   ))
               )}
@@ -120,11 +121,13 @@ const UserProfileCard = ({ user }) => {
             borderRadius: "50%",
           }}
         >
-          <IconButton>
-            <HandshakeIcon
-              sx={{ color: (theme) => theme.palette.common.white }}
-            />
-          </IconButton>
+          <Tooltip title={`Match with ${user.profile.firstName}`}>
+            <IconButton>
+              <HandshakeIcon
+                sx={{ color: (theme) => theme.palette.common.white }}
+              />
+            </IconButton>
+          </Tooltip>
         </Box>
         <Box
           sx={{
@@ -138,15 +141,22 @@ const UserProfileCard = ({ user }) => {
           }}
         >
           {" "}
-          <IconButton>
-            <VisibilityIcon
-              sx={{ color: (theme) => theme.palette.common.white }}
-            />
-          </IconButton>
+          <Tooltip title="View profile">
+            <Link href={`/user/profile/${user._id}`}>
+              <IconButton sx={{width: '100%', height: '100%'}}>
+                <VisibilityIcon
+                  sx={{ color: (theme) => theme.palette.common.white }}
+                />
+              </IconButton>
+            </Link>
+          </Tooltip>
         </Box>
       </CardActions>
     </Card>
   );
 };
 
-export default UserProfileCard;
+export default dynamic(() => Promise.resolve(UserProfileCard), {
+  ssr: false
+})
+

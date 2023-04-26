@@ -13,6 +13,13 @@ export const theme = createTheme({
         }
     },
   components: {
+    MuiIconButton: {
+        styleOverrides: {
+            root: {
+                width: 'auto'
+            }
+        }
+    },
     MuiButton: {
         styleOverrides: {
             // root: {

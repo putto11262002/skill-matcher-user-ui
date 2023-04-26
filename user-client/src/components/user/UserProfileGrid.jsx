@@ -3,8 +3,8 @@ import React from "react";
 import UserProfileCard from "./UserProfileCard";
 import Loader from "../common/Loader";
 import Error from "../common/Error";
-
-const UserProfileGridPage = ({
+import dynamic from "next/dynamic";
+const UserProfileGrid = ({
   loading,
   error,
   users,
@@ -33,4 +33,8 @@ const UserProfileGridPage = ({
   );
 };
 
-export default UserProfileGridPage;
+
+
+export default dynamic(() => Promise.resolve(UserProfileGrid), {
+  ssr: false
+})

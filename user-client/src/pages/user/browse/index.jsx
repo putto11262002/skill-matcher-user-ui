@@ -22,7 +22,7 @@ const BrowseUserPage = () => {
   );
   return (
     <Box  sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-   <Box maxWidth='sm'  >
+   <Box maxWidth={600}  >
    {/* <SkillSlider  skills={['computer science', 'java', 'python', 'machine learning', 'amazon web services', 'google cloud', 'go', 'rust']}/> */}
 
    
