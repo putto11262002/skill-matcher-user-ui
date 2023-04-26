@@ -7,8 +7,8 @@ export class UserService {
     }
 
     // update information of the logged user
-    async updateSelf(){
-        return api.put("/user/self")
+    async updateSelf(payload){
+        return api.put("/user/self", payload)
     }
 
     // search useres
