@@ -9,7 +9,6 @@ import {
     Button,
     Link,
 } from '@mui/material';
-//import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
@@ -58,10 +57,15 @@ const SignUpPage = () => {
     return (
         <Grid container justifyContent='center' alignItems='center' height='100%'>
             <Grid xs={12} sm={8} md={4} item>
-                <Box
-                    padding={(theme) => theme.spacing(3)}
-                    sx={{ boxShadow: { sm: 2, xs: 0 }, borderRadius: 2 }}
-                >
+                <Box padding={(theme) => theme.spacing(3)}>
+                    <Typography
+                        variant="2"
+                        textAlign="center"
+                        component="h2"
+                        color={(theme) => theme.palette.primary.main}
+                    >
+                        Skill Matcher
+                    </Typography>
                     <Typography variant='2' textAlign='center' component='h2'>
                         Sign Up
                     </Typography>
@@ -100,7 +104,7 @@ const SignUpPage = () => {
                                     type='username'
                                     fullWidth
                                     required
-                                    inputProps={{ minLength:3}}
+                                    inputProps={{ minLength: 3 }}
                                 />
                             </Grid>
                             <Grid xs={12} item>
@@ -138,10 +142,18 @@ const SignUpPage = () => {
                                     Sign Up
                                 </Button>
                             </Grid>
-                            <Grid>
-                            <Link href='/login' passHref>
-                                    <Button disabled={isLoadingSignUp} variant="Sign in button">Already have an account</Button>
-                                </Link>
+                            <Grid marginTop={4} container justifyContent="center">
+                                <Grid>
+                                    <Link
+                                        href="/login"
+                                        sx={{
+                                            color: (theme) => theme.palette.text.secondary,
+                                            textDecorationColor: (theme) => theme.palette.text.secondary,
+                                        }}
+                                    >
+                                        {"Already have an account? Log In"}
+                                    </Link>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Box>
