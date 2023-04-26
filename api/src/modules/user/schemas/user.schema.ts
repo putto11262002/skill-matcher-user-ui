@@ -31,7 +31,7 @@ export class User {
   profile?: Profile;
 
   @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'File'})
-  avatar: File
+  avatar?: File
 
   @Prop()
   refreshToken?: string;
