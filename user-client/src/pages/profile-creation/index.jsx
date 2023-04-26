@@ -6,6 +6,15 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { useRouter } from 'next/router';
+import { Avatar } from "@mui/material";
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import PortraitOutlinedIcon from '@mui/icons-material/PortraitOutlined';
+import PortraitIcon from '@mui/icons-material/Portrait';
+import CakeIcon from '@mui/icons-material/Cake';
+import FormatPaintIcon from '@mui/icons-material/FormatPaint';
+import InfoIcon from '@mui/icons-material/Info';
+import IconButton from '@mui/material/IconButton';
+
 
 import { useMutation } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
@@ -44,8 +53,8 @@ function valuetext(value) {
 function ProfileCreation() {
     const [name, setName] = useState('');
     const [last, setLast] = useState('');
-    const [username, setUsername] = useState('');
-    const [age, setAge] = useState('');
+    //const [username, setUsername] = useState('');
+    const [dateOfBirth, setDateOfBirth] = useState('');
     const [gender, setGender] = useState('');
     const [skills, setSkills] = useState([{ name: '', level: 50 }]);
     const [about, setAbout] = useState('');
@@ -53,35 +62,40 @@ function ProfileCreation() {
     const [facebook, setFacebook] = useState('');
     const [instagram, setInstagram] = useState('');
     const [photo, setPhoto] = useState(null);
+    const [nameError, setNameError] = useState('');
+    const [lastError, setLastError] = useState('');
+    const [dateOfBirthError, setDateOfBirthError] = useState('');
+    const [genderError, setGenderError] = useState('');
 
-    const handlePhotoChange = (e) => {
-        const file = e.target.files[0];
-        setPhoto(file);
-      };
 
-      const { mutate, isLoading } = useMutation(() => userService.updateSelf, {
+
+    const { mutate, isLoading } = useMutation(() => userService.updateSelf, {
         onSuccess: () => {
-          enqueueSnackbar('User added', { variant: 'success' });
-          reset();
+            enqueueSnackbar('User added', { variant: 'success' });
+            reset();
         },
         onError: (err) => enqueueSnackbar(err.message, { variant: 'error' }),
-      });
-      
+    });
+
+
     function handleNameChange(event) {
         setName(event.target.value);
+        setNameError('');
     }
 
     function handleLastChange(event) {
         setLast(event.target.value);
+        setLastError('');
+        setDateOfBirthError('');
     }
 
     function handleUsernameChange(event) {
         setName(event.target.value);
     }
 
-    function handleAgeChange(event) {
-        setAge(event.target.value);
-    }
+    const handleDateOfBirthChange = (event) => {
+        setDateOfBirth(event.target.value);
+    };
 
     function handleTwitterChange(event) {
         setTwitter(event.target.value);
@@ -96,6 +110,7 @@ function ProfileCreation() {
 
     function handleGenderChange(event) {
         setGender(event.target.value);
+        setGenderError('');
     }
 
     function handleSkillNameChange(event, index) {
@@ -127,32 +142,56 @@ function ProfileCreation() {
     function handleSubmit(event) {
         event.preventDefault();
     }
+    const generateProfileLink = (username, platform) => {
+        if (!username) return '';
+        switch (platform) {
+            case 'instagram':
+                return `https://www.instagram.com/${username}`;
+            case 'facebook':
+                return `https://www.facebook.com/${username}`;
+            case 'twitter':
+                return `https://www.snapchat.com/${username}`;
+            default:
+                return '';
+        }
+    };
+
 
     return (
         <Grid container justifyContent='center' alignItems='center' height='100%'>
-        <Grid xs={11} sm={6} item>
+            <Grid xs={11} sm={6} item>
                 <Box
                     padding={(theme) => theme.spacing(3)}
                     sx={{ boxShadow: { sm: 2, xs: 0 }, borderRadius: 2 }}
                 >
+
                     <Typography variant='2' textAlign='center' component='h2'>
 
                         Profile Creation
+
                     </Typography>
-                    
+                    <Box marginTop={2} /> {/* Adds vertical space */}
+                    <Box textAlign="center" display="flex" justifyContent="center" alignItems="center">
+                        <AccountCircleOutlinedIcon sx={{ fontSize: 70 }} />
+                    </Box>
+
                     <Toolbar />
-                    <Grid gap={1}  container>
-                    
+                    <Grid gap={1} container>
+
                         <Grid xs={12} item>
 
                         </Grid>
-                       
+
                         <Grid xs={12} item>
                             <TextField
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 label='Name'
                                 fullWidth
+                                required
+                                InputProps={{
+                                    endAdornment: <PortraitIcon />
+                                }}
                             />
                         </Grid>
 
@@ -160,29 +199,32 @@ function ProfileCreation() {
                             <TextField
                                 value={last}
                                 onChange={(e) => setLast(e.target.value)}
-                                label='Last Name'
+                                label='Last Name' aria-describedby="basic-addon2"
                                 type='Last Name'
                                 fullWidth
+                                InputProps={{
+                                    endAdornment: <PortraitIcon />
+                                }}
+                                required
                             />
                         </Grid>
 
-                        <Grid xs={12} item>
-                            <TextField
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                label='Username'
-                                type='text'
-                                fullWidth
-                            />
-                        </Grid>
+
 
                         <Grid xs={12} item>
                             <TextField
-                                value={age} onChange={handleAgeChange}
-                                label='Age'
-                                type='number'
-                                inputProps={{ min: '16' }}// add min attribute
+                                label="Date of Birth"
+                                type="date"
+                                value={dateOfBirth}
+                                onChange={handleDateOfBirthChange}
                                 fullWidth
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                InputProps={{
+                                    endAdornment: <CakeIcon />
+                                }}
+                                required
                             />
                         </Grid>
 
@@ -193,10 +235,12 @@ function ProfileCreation() {
                                     labelId='gender-label'
                                     value={gender}
                                     onChange={(e) => setGender(e.target.value)}
+                                    required
                                 >
                                     <MenuItem value='female'>Female</MenuItem>
                                     <MenuItem value='male'>Male</MenuItem>
                                     <MenuItem value='other'>Other</MenuItem>
+                                    <MenuItem value='other'>Prefer Not to Say</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -210,8 +254,11 @@ function ProfileCreation() {
                                         onChange={(event) => handleSkillNameChange(event, index)}
                                         label={`Skill ${index + 1}`}
                                         fullWidth
+                                        InputProps={{
+                                            endAdornment: <FormatPaintIcon />
+                                        }}
                                     />
-                                    <Box sx={{ width: 570 }}>
+                                    <Box sx={{ width: 520 }}>
                                         <Slider
                                             defaultValue={50}
                                             value={skill.level}
@@ -239,12 +286,15 @@ function ProfileCreation() {
                                 fullWidth
                                 multiline
                                 rows={4}
+                                InputProps={{
+                                    endAdornment: <InfoIcon />
+                                }}
                             />
                         </Grid>
 
                         <Grid xs={12} item>
                             <Typography variant='3' component='h4'>
-                                Social Details
+                                Social Media Details
                             </Typography>
                         </Grid>
 
@@ -255,7 +305,17 @@ function ProfileCreation() {
                                 label='Facebook'
                                 fullWidth
                             />
+                            {facebook && (
+                                <p>
+                                    Profile link:{' '}
+                                    <a href={generateProfileLink(facebook, 'facebook')} target='_blank' rel='noopener noreferrer'>
+                                        {generateProfileLink(facebook, 'facebook')}
+                                    </a>
+                                </p>
+                            )}
                         </Grid>
+    
+
 
                         <Grid item xs={12}>
                             <TextField
@@ -264,18 +324,32 @@ function ProfileCreation() {
                                 label='Instagram'
                                 fullWidth
                             />
+                            {instagram && (
+                                <p>
+                                    Profile link:{' '}
+                                    <a href={generateProfileLink(instagram, 'instagram')} target='_blank' rel='noopener noreferrer'>
+                                        {generateProfileLink(instagram, 'instagram')}
+                                    </a>
+                                </p>
+                            )}
                         </Grid>
-                                
+
                         <Grid item xs={12}>
-                       
                             <TextField
                                 value={twitter}
                                 onChange={(e) => setTwitter(e.target.value)}
-                                label='Snapchat' 
+                                label='Snapchat'
                                 fullWidth
                             />
+                            {twitter && (
+                                <p>
+                                    Profile link:{' '}
+                                    <a href={generateProfileLink(twitter, 'twitter')} target='_blank' rel='noopener noreferrer'>
+                                        {generateProfileLink(twitter, 'twitter')}
+                                    </a>
+                                </p>
+                            )}
                         </Grid>
-
 
                         <Grid display='flex' justifyContent='center' xs={12} item>
                             <Button type='submit' variant='contained' disabled={name}>
@@ -283,14 +357,14 @@ function ProfileCreation() {
                             </Button>
                         </Grid>
                         <Grid>
-                            <Button disabled={isLoading} type='submit' variant='contained'></Button>
+
                         </Grid>
                     </Grid>
                 </Box>
 
             </Grid>
-            </Grid>
+        </Grid>
     );
-};
+}
 
 export default ProfileCreation;

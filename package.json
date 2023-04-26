@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "notistack": "^3.0.1"
+  },
+  "devDependencies": {
+    "@iconify/react": "^4.1.0"
+  }
+}
