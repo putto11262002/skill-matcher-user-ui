@@ -18,7 +18,7 @@ export default function App({ Component, pageProps }) {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <AuthProvider>
+        
             <SnackbarProvider
               anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
               autoHideDuration={3000}
@@ -28,7 +28,7 @@ export default function App({ Component, pageProps }) {
               {getLayout(<Component {...pageProps} />)}
               </LocalizationProvider>
             </SnackbarProvider>
-          </AuthProvider>
+        
         </ThemeProvider>
       </QueryClientProvider>
     </Provider>

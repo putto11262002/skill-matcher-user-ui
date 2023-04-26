@@ -5,8 +5,10 @@ import { useQuery } from "@tanstack/react-query";
 import userService from "@/services/user.service";
 import { USER_PAGE_SIZE } from "@/constants/user.constant";
 import { Box, Stack, Typography } from "@mui/material";
+import useAuth from "@/hooks/useAuth";
 
 const BrowseUserPage = () => {
+  useAuth()
   const [query, setQuery] = useState({});
   const [page, setPage] = useState(0);
   const {

@@ -29,6 +29,7 @@ import {
     Typography,
     Button,
 } from '@mui/material';
+import useAuth from '@/hooks/useAuth';
 
 
 function valuetext(value) {
@@ -51,6 +52,7 @@ function valuetext(value) {
   */
 
 function ProfileCreation() {
+    useAuth()
     const [name, setName] = useState('');
     const [last, setLast] = useState('');
     //const [username, setUsername] = useState('');

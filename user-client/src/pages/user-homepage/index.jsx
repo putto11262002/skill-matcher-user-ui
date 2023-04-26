@@ -11,6 +11,7 @@ import { Avatar, Button, Grid, TextField } from "@mui/material";
 import { useMediaQuery } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import userService from '../../services/user.service';
+import useAuth from '@/hooks/useAuth';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -46,6 +47,7 @@ function a11yProps(index) {
 }
 
 function UserInfoTab() {
+  useAuth()
   const [value, setValue] = React.useState(0);
   const [user, setUser] = useState({});
   const { data: userSkills, isLoading: isLoadingSkills, error: errorLoadingSkills } = useQuery(

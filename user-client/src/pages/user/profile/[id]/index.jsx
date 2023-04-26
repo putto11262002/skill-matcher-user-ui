@@ -17,10 +17,12 @@ import Loader from "@/components/common/Loader";
 import UserSkill from "@/components/user/skills/UserSkill";
 import Link from "next/link";
 import UserSkillTabs from "@/components/user/skills/UserSkillTabs";
+import useAuth from "@/hooks/useAuth";
 
 
 
 const UserHomePage = () => {
+  useAuth()
   const router = useRouter();
   const { id } = router.query;
   const [user, setUser] = useState(undefined);

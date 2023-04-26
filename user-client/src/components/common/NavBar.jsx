@@ -67,7 +67,7 @@ const navLinks = [
   },
   {
     label: "My Profile",
-    path: "/profile-creation",
+    path: "/user/edit-profile",
     visibility: "auth",
     icon: (props) => <PersonIcon {...props} />,
   },

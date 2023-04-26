@@ -1,7 +1,9 @@
 import Head from 'next/head';
 import { Box, Container, Typography, Button, Link } from '@mui/material';
+import useAuth from '@/hooks/useAuth';
 
 const HomePage = () => {
+  useAuth()
 
   return (
     <>
