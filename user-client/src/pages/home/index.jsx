@@ -34,8 +34,25 @@ const HomePage = () => {
           }}>
             Get started on your profile
           </Button>
-          
         </Link>
+
+        <Link href="/user/browse" underline="none">
+          <Button variant="contained" color="primary" sx={{
+            my: 4,
+            background: `linear-gradient(to bottom right, #055fef, #58a6ff)`,
+            padding: 4,
+            borderRadius: 2,
+            boxShadow: 4,
+            textAlign: "center",
+            '&:hover': {
+              background: 'linear-gradient(45deg,#055fef, #58a6ff)',
+              boxShadow: '0px 5px 15px rgba(255, 105, 135, .5)',
+            },
+          }}>
+            Check out your feed
+          </Button>
+        </Link>
+
       </Box>
 
     </>
