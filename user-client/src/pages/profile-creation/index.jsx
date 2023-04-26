@@ -5,7 +5,12 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-//import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { useRouter } from 'next/router';
+
+import { useMutation } from '@tanstack/react-query';
+import { useDispatch, useSelector } from 'react-redux';
+import authService from '@/services/auth.service';
+import userService from '@/services/user.service';
 import {
     Alert,
     Box,
@@ -15,6 +20,7 @@ import {
     Typography,
     Button,
 } from '@mui/material';
+
 
 function valuetext(value) {
     return `${value}%`;
@@ -38,6 +44,13 @@ function ProfileCreation() {
         setPhoto(file);
       };
 
+      const { mutate, isLoading } = useMutation(() => userService.updateSelf, {
+        onSuccess: () => {
+          enqueueSnackbar('User added', { variant: 'success' });
+          reset();
+        },
+        onError: (err) => enqueueSnackbar(err.message, { variant: 'error' }),
+      });
       
     function handleNameChange(event) {
         setName(event.target.value);
@@ -108,6 +121,7 @@ function ProfileCreation() {
                     sx={{ boxShadow: { sm: 2, xs: 0 }, borderRadius: 2 }}
                 >
                     <Typography variant='2' textAlign='center' component='h2'>
+
                         Profile Creation
                     </Typography>
                     
@@ -115,6 +129,7 @@ function ProfileCreation() {
                     <Grid gap={1}  container>
                     
                         <Grid xs={12} item>
+
                         </Grid>
                        
                         <Grid xs={12} item>
@@ -235,12 +250,13 @@ function ProfileCreation() {
                                 fullWidth
                             />
                         </Grid>
-
+                                
                         <Grid item xs={12}>
+                       
                             <TextField
                                 value={twitter}
                                 onChange={(e) => setTwitter(e.target.value)}
-                                label='Snapchat'
+                                label='Snapchat' 
                                 fullWidth
                             />
                         </Grid>
@@ -252,7 +268,7 @@ function ProfileCreation() {
                             </Button>
                         </Grid>
                         <Grid>
-                            <Button variant=""></Button>
+                            <Button disabled={isLoading} type='submit' variant='contained'></Button>
                         </Grid>
                     </Grid>
                 </Box>
