@@ -1,0 +1,76 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  # Build, unit test, e2e test api
+  build-and-test-api:
+    strategy:
+     matrix:
+      node-version: [16.x, 18.x]
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: production
+      PORT: ${{ secrets.API_PORT }}
+      MONGO_URI: ${{secrets.MONGO_URI}}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{matrix.node-version}}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{matrix.node-version}}
+      - name: Install dependencies
+        run: |
+          cd api
+          npm install
+      - name: Build project
+        run: |
+          cd api
+          npm run build
+       
+      - name: Run e2e tests
+        run: |
+          cd api
+          npm run test
+          npm run test:e2e
+  # build user clinet
+  build-user-client:
+    needs: [build-and-test-api]
+    strategy:
+      matrix:
+       node-version: [16.x, 18.x]
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: production
+      NEXT_PUBLIC_API_BASE_URL: ${{secrets.NEXT_PUBLIC_API_BASE_URL}}
+      NEXT_PUBLIC_S3_HOSTNAME: ${{secrets.NEXT_PUBLIC_S3_HOSTNAME}}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{matrix.node-version}}
+        uses: actions/setup-node@v2
+        with: 
+          node-version: ${{matrix.node-version}}
+      - name: Install yarn
+        run: npm install -g yarn
+      - name: Install dependencies
+        run: |
+          cd user-client
+          yarn install
+      - name: Build project
+        run: |
+          cd user-client
+          yarn build
+       
+          
+          
+      
+
+        
+      
+      
+      
+      
