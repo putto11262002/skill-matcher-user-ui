@@ -12,6 +12,7 @@ import {
   Post,
   Put,
   Query,
+  Request,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -58,7 +59,9 @@ export class UserController {
   async updateSelf(
     @CurrentJwt() currentUser: JwtAccessTokenPayloadDto,
     @Body() payload: UpdateUserDto,
+    @Request() req
   ) {
+    console.log(req.body, payload)
     await this.userService.updateById(
       currentUser.id,
       omit(payload, NOT_ALLOWED_SELF_UPDATE) as UpdateUserDto,

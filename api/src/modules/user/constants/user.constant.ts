@@ -22,6 +22,12 @@ export const USER_ROLE = {
   ROOT: 'root'
 };
 
+
+export const USER_GENDER = {
+  MALE: 'male',
+  FEMALE: 'female',
+  OTHER: 'other'
+}
 export const USER_AVATAR_MAX_SIZE = 5242880
 export const USER_AVATAR_HEIGHT = 180
 export const USER_AVATAR_WIDTH = 180

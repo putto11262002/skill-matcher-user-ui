@@ -95,6 +95,11 @@ const NavBar = ({  }) => {
     setAnchorElUser(null);
   };
 
+  const handleEditProfile = () => {
+    handleCloseUserMenu();
+    router.push('/user/edit-profile')
+  }
+
   const handleLogout = () => {
     dispatch(signOut({}));
     handleCloseUserMenu();
@@ -311,7 +316,7 @@ const NavBar = ({  }) => {
                 <MenuItem onClick={handleLogout}>
                   <Typography textAlign="center">Log out</Typography>
                 </MenuItem>
-                <MenuItem onClick={handleCloseUserMenu}>
+                <MenuItem onClick={handleEditProfile}>
                   <Typography textAlign="center">Edit profile</Typography>
                 </MenuItem>
                 <MenuItem onClick={handleCloseUserMenu}>

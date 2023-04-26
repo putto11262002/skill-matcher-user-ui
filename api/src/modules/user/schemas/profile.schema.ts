@@ -9,6 +9,9 @@ export class Profile {
   lastName: string;
 
   @Prop()
+  gender: string;
+
+  @Prop()
   phoneNumber?: string;
 
   @Prop()

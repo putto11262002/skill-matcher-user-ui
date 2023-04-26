@@ -7,8 +7,9 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 import { theme } from '@/styles/theme';
 import AuthProvider from '@/providers/AuthProvider';
 import { SnackbarProvider } from 'notistack';
+import {LocalizationProvider} from "@mui/x-date-pickers"
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs"
 const queryClient = new QueryClient();
-
 export default function App({ Component, pageProps }) {
   const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
 
@@ -22,7 +23,10 @@ export default function App({ Component, pageProps }) {
               anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
               autoHideDuration={3000}
             >
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+           
               {getLayout(<Component {...pageProps} />)}
+              </LocalizationProvider>
             </SnackbarProvider>
           </AuthProvider>
         </ThemeProvider>

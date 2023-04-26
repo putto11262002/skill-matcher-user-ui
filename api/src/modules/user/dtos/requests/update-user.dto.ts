@@ -1,11 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
+  IsIn,
   IsObject,
   IsOptional,
   IsString,
   ValidateNested,
 } from 'class-validator';
+import { USER_GENDER } from '../../constants/user.constant';
 
 class UpdateProfileDto {
   @ApiProperty()
@@ -17,6 +19,12 @@ class UpdateProfileDto {
   @IsOptional()
   @IsString()
   lastName: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsIn(Object.values(USER_GENDER))
+  gender: string;
+
 
   @ApiProperty()
   @IsOptional()
@@ -63,6 +71,7 @@ class UpdateProfileDto {
     whatsapp: string,
     facebook: string,
     aboutMe: string,
+    gender: string
   ) {
     this.firstName = firstName;
     this.lastName = lastName;
@@ -73,6 +82,7 @@ class UpdateProfileDto {
     this.facebook = facebook;
     this.whatsapp = whatsapp;
     this.aboutMe = aboutMe;
+    this.gender = gender
   }
 }
 
@@ -89,14 +99,14 @@ export class UpdateUserDto {
 
   @ApiProperty()
   @IsOptional()
-  @IsObject()
-  @ValidateNested()
   @Type(() => UpdateProfileDto)
+  @ValidateNested()
   profile: UpdateProfileDto;
 
   constructor(username: string, status: string, profile: UpdateProfileDto) {
     this.username = username;
     this.profile = profile;
     this.status = status;
+    this.profile = profile;
   }
 }
