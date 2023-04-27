@@ -18,10 +18,12 @@ import { useMutation, useQueries, useQuery } from '@tanstack/react-query';
 import { useSnackbar } from 'notistack';
 import authService from '../../../services/auth.service';
 import AddSkillForm from '../../../components/skill/AddSkillForm';
+import useAuth from '@/hooks/useAuth';
 
 // TODO - implement infinite scrolling for search related skills
 // TODO - implement request cancalling for search
 const AddSkillPage = () => {
+  useAuth()
   const { enqueueSnackbar } = useSnackbar();
   const [relatedSkillsSearch, setRelatedSkillsSearch] = useState('');
   // const [relatedSkillsSuggestions, setRelatedSkillsSuggestions] = useState([]);

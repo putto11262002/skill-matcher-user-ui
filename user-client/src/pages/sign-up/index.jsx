@@ -9,7 +9,6 @@ import {
     Button,
     Link,
 } from '@mui/material';
-//import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
@@ -24,20 +23,27 @@ const SignUpPage = () => {
     const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [message, setMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const router = useRouter();
 
+    const [alertOpen, setAlertOpen] = useState(false); // to control the visibility of the alert
 
+    const handleAlertClose = () => {
+        setAlertOpen(false);
+    }
     const { isLoggedIn, loading, error } = useSelector((state) => state.auth);
     const { error: signUpError, mutate, isLoading: isLoadingSignUp } = useMutation(authService.signUp, {
         onSuccess: (res) => {
-            setMessage('Sign up successful!');
+            setSuccessMessage('Sign up successful!');
+            setAlertOpen(true);
             router.push('/login');
         },
         onError: (error) => {
-            setMessage(error.message);
+            setErrorMessage(error.message);
+            setAlertOpen(true);
         }
-    })
+    });
 
 
     const handleSignUp = (e) => {
@@ -45,7 +51,8 @@ const SignUpPage = () => {
         if (password === confirmPassword) {
             mutate({ username: email, password, firstName, lastName, email })
         } else {
-            setMessage('Passwords do not match');
+            setErrorMessage('Passwords do not match');
+            setAlertOpen(true);
         }
     };
 
@@ -58,15 +65,19 @@ const SignUpPage = () => {
     return (
         <Grid container justifyContent='center' alignItems='center' height='100%'>
             <Grid xs={12} sm={8} md={4} item>
-                <Box
-                    padding={(theme) => theme.spacing(3)}
-                    sx={{ boxShadow: { sm: 2, xs: 0 }, borderRadius: 2 }}
-                >
+                <Box padding={(theme) => theme.spacing(3)}>
+                    <Typography
+                        variant="2"
+                        textAlign="center"
+                        component="h2"
+                        color={(theme) => theme.palette.primary.main}
+                    >
+                        Skill Matcher
+                    </Typography>
                     <Typography variant='2' textAlign='center' component='h2'>
                         Sign Up
                     </Typography>
                     <Toolbar />
-                    {error && <Typography>error.message</Typography>}
                     <Box onSubmit={handleSignUp} component='form'>
                         <Grid spacing={3} container>
                             <Grid xs={12} item>
@@ -100,7 +111,7 @@ const SignUpPage = () => {
                                     type='username'
                                     fullWidth
                                     required
-                                    inputProps={{ minLength:3}}
+                                    inputProps={{ minLength: 3 }}
                                 />
                             </Grid>
                             <Grid xs={12} item>
@@ -134,14 +145,35 @@ const SignUpPage = () => {
                                 />
                             </Grid>
                             <Grid display='flex' justifyContent='center' xs={12} item>
+                                {successMessage && (
+                                    <div style={{ color: 'green' }}>
+                                        <Alert severity="success">Login successful!</Alert>
+                                    </div>
+                                )}
+                                {errorMessage && (
+                                    <div style={{ color: 'red' }}>
+                                        <Alert severity="error">{errorMessage}</Alert>
+                                    </div>
+                                )}
+                            </Grid>
+                            <Grid display='flex' justifyContent='center' xs={12} item>
                                 <Button type='submit' variant='contained' disabled={loading}>
                                     Sign Up
                                 </Button>
                             </Grid>
-                            <Grid>
-                            <Link href='/login' passHref>
-                                    <Button disabled={isLoadingSignUp} variant="Sign in button">Already have an account</Button>
-                                </Link>
+
+                            <Grid marginTop={4} container justifyContent="center">
+                                <Grid>
+                                    <Link
+                                        href="/login"
+                                        sx={{
+                                            color: (theme) => theme.palette.text.secondary,
+                                            textDecorationColor: (theme) => theme.palette.text.secondary,
+                                        }}
+                                    >
+                                        {"Already have an account? Log In"}
+                                    </Link>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Box>
@@ -152,7 +184,7 @@ const SignUpPage = () => {
 };
 
 SignUpPage.getLayout = (page) => {
-    return <Box component='main' sx={{height: '100vh', width: '100vw'}}>{page}</Box>
-  }
+    return <Box component='main' sx={{ height: '100vh', width: '100vw' }}>{page}</Box>
+}
 
 export default SignUpPage;

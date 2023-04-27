@@ -3,8 +3,10 @@ import SkillTable from '../../components/skill/SkillTable'
 import { useQuery } from '@tanstack/react-query';
 import skillService from '../../services/skill.service';
 import { SKILL_PAGE_SIZE } from '../../constants/skill.contant';
+import useAuth from '@/hooks/useAuth';
 // TODO - add search and filter
 const SkillPage = () => {
+  useAuth()
     const [page, setPage] = useState(0);
 
     const {data, isError, isLoading, error} = useQuery(['skills', page], () => skillService.searchSkill({pageNumber: page, pageSize: SKILL_PAGE_SIZE}))

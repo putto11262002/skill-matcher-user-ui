@@ -67,7 +67,7 @@ const navLinks = [
   },
   {
     label: "My Profile",
-    path: "/user-homepage",
+    path: "/user/edit-profile",
     visibility: "auth",
     icon: (props) => <PersonIcon {...props} />,
   },
@@ -94,6 +94,11 @@ const NavBar = ({  }) => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const handleEditProfile = () => {
+    handleCloseUserMenu();
+    router.push('/user/edit-profile')
+  }
 
   const handleLogout = () => {
     dispatch(signOut({}));
@@ -311,7 +316,7 @@ const NavBar = ({  }) => {
                 <MenuItem onClick={handleLogout}>
                   <Typography textAlign="center">Log out</Typography>
                 </MenuItem>
-                <MenuItem onClick={handleCloseUserMenu}>
+                <MenuItem onClick={handleEditProfile}>
                   <Typography textAlign="center">Edit profile</Typography>
                 </MenuItem>
                 <MenuItem onClick={handleCloseUserMenu}>

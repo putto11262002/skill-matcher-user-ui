@@ -29,6 +29,7 @@ import {
     Typography,
     Button,
 } from '@mui/material';
+import useAuth from '@/hooks/useAuth';
 
 
 function valuetext(value) {
@@ -51,6 +52,7 @@ function valuetext(value) {
   */
 
 function ProfileCreation() {
+    useAuth()
     const [name, setName] = useState('');
     const [last, setLast] = useState('');
     //const [username, setUsername] = useState('');
@@ -165,13 +167,16 @@ function ProfileCreation() {
                     sx={{ boxShadow: { sm: 2, xs: 0 }, borderRadius: 2 }}
                 >
 
-                    <Typography variant='2' textAlign='center' component='h2'>
-
-                        Profile Creation
-
+                    <Typography
+                        variant="2"
+                        textAlign="center"
+                        component="h2"
+                   
+                    >
+                          Profile Creation
                     </Typography>
                     <Box marginTop={2} /> {/* Adds vertical space */}
-                    <Box textAlign="center" display="flex" justifyContent="center" alignItems="center">
+                    <Box textAlign="center" display="flex" justifyContent="center" alignItems="center" color={(theme) => theme.palette.primary.main}>
                         <AccountCircleOutlinedIcon sx={{ fontSize: 70 }} />
                     </Box>
 
@@ -293,7 +298,8 @@ function ProfileCreation() {
                         </Grid>
 
                         <Grid xs={12} item>
-                            <Typography variant='3' component='h4'>
+                        
+                            <Typography variant='3' component='h4'  >
                                 Social Media Details
                             </Typography>
                         </Grid>
@@ -314,7 +320,7 @@ function ProfileCreation() {
                                 </p>
                             )}
                         </Grid>
-    
+
 
 
                         <Grid item xs={12}>

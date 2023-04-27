@@ -9,7 +9,7 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { USER_ROLE } from '../../constants/user.constant';
+import { USER_GENDER, USER_ROLE } from '../../constants/user.constant';
 
 export class CreateProfileDto {
   @ApiProperty()
@@ -21,6 +21,11 @@ export class CreateProfileDto {
   @IsNotEmpty()
   @IsString()
   lastName: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsIn(Object.values(USER_GENDER))
+  gender: string;
 
   @ApiProperty()
   @IsOptional()
@@ -67,6 +72,7 @@ export class CreateProfileDto {
     whatsapp?: string,
     facebook?: string,
     aboutMe?: string,
+    gender?: string
   ) {
     this.firstName = firstName;
     this.lastName = lastName;
@@ -77,6 +83,7 @@ export class CreateProfileDto {
     this.facebook = facebook;
     this.whatsapp = whatsapp;
     this.aboutMe = aboutMe;
+    this.gender = gender;
   }
 }
 

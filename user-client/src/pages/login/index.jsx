@@ -17,6 +17,11 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+export const setError = (error) => ({
+  type: 'auth/set-error',
+  payload: error,
+});
+
 const LoginPage = () => {
   const dispatch = useDispatch();
 
@@ -26,10 +31,25 @@ const LoginPage = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    dispatch(signIn({ email, password }));
+    // check if email and password are provided
+    if (!email || !password) {
+      setErrorMessage("Please enter your email and password");
+      return;
+    }
+    const result = await dispatch(signIn({ email, password }));
+    if (signIn.rejected.match(result)) {
+      const error = result.payload;
+      // dispatch an action to update the error state
+      dispatch(setError(error));
+    } else {
+      // login successful, redirect to home page
+      router.push("/");
+    }
   };
 
   useEffect(() => {
@@ -64,12 +84,18 @@ const LoginPage = () => {
         <Typography variant="3" textAlign="center" component="h3">
           Log in
         </Typography>
-
+        {errorMessage && (
+          <div style={{ color: 'red' }}>
+            <Alert severity="error">{errorMessage}</Alert>
+          </div>
+        )}
+        {isLoggedIn && (
+          <Grid xs={12} item>
+            <Alert severity="success">Login successful!</Alert>
+          </Grid>
+        )}
         <Box component="form" onSubmit={handleLogin}>
           <Grid gap={3} container>
-            <Grid xs={12} item>
-              {error && <Alert severity="error">{error.message}</Alert>}
-            </Grid>
             <Grid xs={12} item>
               <TextField
                 margin="normal"
@@ -108,6 +134,7 @@ const LoginPage = () => {
               <Button type="submit" variant="contained" disabled={loading}>
                 Log in
               </Button>
+
             </Grid>
           </Grid>
         </Box>

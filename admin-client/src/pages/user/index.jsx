@@ -1,10 +1,12 @@
 import UserTable from '@/components/user/UserTable';
 import { USER_PAGE_SIZE } from '@/constants/user.contant';
+import useAuth from '@/hooks/useAuth';
 import userService from '@/services/user.service';
 import { useQuery } from '@tanstack/react-query';
 import {useState} from 'react';
 
 const UserPage = () => {
+  useAuth()
   
 
 

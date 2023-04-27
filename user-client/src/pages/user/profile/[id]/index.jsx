@@ -17,15 +17,26 @@ import Loader from "@/components/common/Loader";
 import UserSkill from "@/components/user/skills/UserSkill";
 import Link from "next/link";
 import UserSkillTabs from "@/components/user/skills/UserSkillTabs";
+import useAuth from "@/hooks/useAuth";
 
 
 
 const UserHomePage = () => {
+  useAuth()
   const router = useRouter();
   const { id } = router.query;
   const [user, setUser] = useState(undefined);
   const [userTutorSkills, setUserTutorSkills] = useState([]);
   const [userLearningSkills, setUserLearningSkills] = useState([]);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [aboutMe, setAboutMe] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
+  const [instagram, setInstagram] = useState('');
+  const [snapchat, setSnapchat] = useState('');
+  const [facebook, setFacebook] = useState('');
+  const [whatsapp, setWhatsapp] = useState('');
 
   // fetching user profile
   const { isLoading: isLoadingUser, error, refetch: fetchUser } = useQuery(
@@ -33,6 +44,28 @@ const UserHomePage = () => {
     () => userService.getUserById(id),
     { onSuccess: (res) => setUser(res.data), enabled: false }
   );
+
+  //fetching user details
+  const { isLoading: isLoadingUserdetails, error: errorUserDetails, refetch: fetchUserDetails } = useQuery(
+    "user",
+    userService.getSelf,
+    {
+      onSuccess: (res) => {
+        setUser(res.data);
+        setFirstName(res.data?.profile?.firstName || '');
+        setLastName(res.data?.profile?.lastName || '');
+        setAboutMe(res.data?.aboutMe || '');
+        setPhoneNumber(res.data?.phoneNumber || '');
+        setEmail(res.data?.email || '');
+        setInstagram(res.data?.instagram || '');
+        setSnapchat(res.data?.snapchat || '');
+        setFacebook(res.data?.facebook || '');
+        setWhatsapp(res.data?.whatsapp || '');
+      },
+      enabled: false
+    }
+  );
+
 
   // fetching user skills (tutor)
   const {
@@ -65,8 +98,8 @@ const UserHomePage = () => {
   );
 
   useEffect(() => {
-    if(id){
-        fetchUser()
+    if (id) {
+      fetchUser()
     }
   }, [id])
 
@@ -77,35 +110,54 @@ const UserHomePage = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (user) {
+      fetchUserTutorSkills();
+      fetchUserLearningSkills();
+      setFirstName(user?.profile?.firstName || '');
+      setLastName(user?.profile?.lastName || '');
+      setAboutMe(user?.aboutMe || '');
+      setPhoneNumber(user?.phoneNumber || '');
+      setEmail(user?.email || '');
+      setInstagram(user?.instagram || '');
+      setSnapchat(user?.snapchat || '');
+      setFacebook(user?.facebook || '');
+      setWhatsapp(user?.whatsapp || '');
+    }
+  }, [user, fetchUserTutorSkills, fetchUserLearningSkills]);
+
   if (isLoadingUser) {
     return <Loader />;
   }
 
   return (
-    <Box
-      sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
+    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       <Box maxWidth={600} width="100%">
         <Stack alignItems="center" sx={{ width: "100%" }} spacing={2}>
           <Box sx={{ width: "100%" }}>
             <Box sx={{ flexGrow: 1, display: "flex" }}>
               <Tooltip title="Go back">
-              
-              <IconButton onClick={router.back} sx={{ width: "auto" }}>
+                <IconButton onClick={router.back} sx={{ width: "auto" }}>
                   <ArrowBackIcon />
                 </IconButton>
-             
               </Tooltip>
             </Box>
           </Box>
-
           <Avatar
             src={user?.avatar?.url || "/images/no-avatar.jpg"}
-            sx={{ width: 130, height: 130,  }}
+            sx={{ width: 130, height: 130, }}
           />
-
-          <Typography component='h3' variant="3">{user?.profile?.firstName} {user?.profile?.lastName}</Typography>
-
+          <Stack alignItems="center" sx={{ width: "100%", textAlign: "left" }} spacing={2}>
+            <Typography sx={{ mb: 2, marginLeft: 0 }}>First name: {firstName}</Typography>
+            <Typography sx={{ mb: 3, marginLeft: 0  }}>Last name: {lastName}</Typography>
+            <Typography sx={{ mb: 4, marginLeft: 0  }}>Email: {email}</Typography>
+            <Typography sx={{ mb: 5, marginLeft: 0  }}>Phone: {phoneNumber}</Typography>
+            <Typography sx={{ mb: 6, marginLeft: 0  }}>About me: {aboutMe}</Typography>
+            <Typography sx={{ mb: 7, marginLeft: 0  }}>Facebook: {facebook}</Typography>
+            <Typography sx={{ mb: 8, marginLeft: 0  }}>Instagram: {instagram}</Typography>
+            <Typography sx={{ mb: 9, marginLeft: 0  }}>Snapchat: {snapchat}</Typography>
+            <Typography sx={{ mb: 10, marginLeft: 0  }}>Whatsapp: {whatsapp}</Typography>
+          </Stack>
           <UserSkillTabs
             tutorSkills={userTutorSkills}
             isLoadingTutorSkills={isLoadingUserTutorSkills}

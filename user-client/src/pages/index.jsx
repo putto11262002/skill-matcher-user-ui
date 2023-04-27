@@ -47,10 +47,10 @@ const Home = () => {
 
       {/* Use Button instead of Link for conditional rendering */}
 
-      <Typography variant='1' component='h1'>H1</Typography>
+      <Typography variant='1' component='h1'></Typography>
       {isLoggedIn && (
         <Typography variant='h6' component='h6'>
-          Welcome, {user.firstName} {user.lastName}!
+         Welcome, {user?.profile?.firstName} {user?.profile?.lastName}!
         </Typography>
       )}
     </>

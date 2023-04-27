@@ -8,9 +8,11 @@ import { useRouter } from 'next/router';
 import skillService from '../../../services/skill.service';
 import { useSnackbar } from 'notistack';
 import UserAvatarForm from '../../../components/user/UserAvatarForm';
+import useAuth from '@/hooks/useAuth';
 
 // TODO - add error messages
 const EditUserPage = () => {
+  useAuth()
   const [skills, setSkills] = useState([]);
   const [user, setUser] = useState({});
   const [skillSearchTerm, setSkillSearchTerm] = useState('');

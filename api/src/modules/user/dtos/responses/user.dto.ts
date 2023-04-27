@@ -10,6 +10,9 @@ class ProfileDto {
 
   @ApiProperty()
   lastName: string;
+  
+  @ApiProperty()
+  gender: string;
 
   @ApiProperty()
   instagram: string;
@@ -42,6 +45,7 @@ class ProfileDto {
     this.snapchat = profile.snapchat;
     this.whatsapp = profile.whatsapp;
     this.aboutMe = profile.aboutMe;
+    this.gender = profile.gender;
   }
 }
 
@@ -66,6 +70,7 @@ export class UserDto {
 
   @ApiProperty()
   avatar: FileDto;
+
 
   constructor(user: UserDocument | User) {
     this._id = user._id.toHexString();
