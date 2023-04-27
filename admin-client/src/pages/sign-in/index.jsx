@@ -45,11 +45,21 @@ const LoginPage = () => {
           padding={(theme) => theme.spacing(3)}
           sx={{ boxShadow: { sm: 2, xs: 0 }, borderRadius: 2 }}
         >
+          
+          <Typography
+            variant="2"
+            textAlign="center"
+            component="h2"
+            color={(theme) => theme.palette.primary.main}
+          >
+            Skill Matcher
+          </Typography>
           <Typography variant='2' textAlign='center' component='h2'>
             Admin Panel
           </Typography>
-          <Toolbar />
+          {/*<Toolbar />*/}
           <Box onSubmit={handleSubmit(handleLogin)} component='form'>
+
             <Grid gap={3} container>
               <Grid xs={12} item>
                 {error && <Alert severity='error'>{error.message}</Alert>}
