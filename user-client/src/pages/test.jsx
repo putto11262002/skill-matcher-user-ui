@@ -1,21 +1,3 @@
-<<<<<<< HEAD
-import { Avatar, Stack, Typography } from '@mui/material'
-import React from 'react'
-
-const test = () => {
-  return (
-    <Stack sx={{ alignItems: 'center'}} spacing={1}>
-        <Avatar/>
-        <Typography>First name last name</Typography>
-        
-    </Stack>
-  )
-}
-
-
-
-export default test
-=======
 import { Book, Home } from "@mui/icons-material";
 import { Avatar, Grid, IconButton, Stack, Tooltip, Typography } from "@mui/material";
 import { red } from "@mui/material/colors";
@@ -49,4 +31,3 @@ const test = () => {
 };
 
 export default test;
->>>>>>> 2161b571ce8fc2e26835eeb19e197e1e1fae2361
