@@ -1,13 +1,16 @@
+import AuthLayout from "@/components/common/layout/AuthLayout";
 import { signIn } from "@/redux/thunks/user.thunk";
 import {
   Alert,
   Box,
   Button,
   Checkbox,
+  Container,
   FormControlLabel,
   Grid,
   Link,
   Paper,
+  Stack,
   TextField,
   Toolbar,
   Typography,
@@ -15,10 +18,11 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 
 export const setError = (error) => ({
-  type: 'auth/set-error',
+  type: "auth/set-error",
   payload: error,
 });
 
@@ -26,6 +30,7 @@ const LoginPage = () => {
   const dispatch = useDispatch();
 
   const { isLoggedIn, loading, error } = useSelector((state) => state.auth);
+  const { control, handleSubmit } = useForm();
 
   const router = useRouter();
 
@@ -33,23 +38,23 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-
-  const handleLogin = async (e) => {
+  const handleLogin = async ({ usernameOrEmail, password }, e) => {
     e.preventDefault();
+    dispatch(signIn({ usernameOrEmail, password }));
     // check if email and password are provided
-    if (!email || !password) {
-      setErrorMessage("Please enter your email and password");
-      return;
-    }
-    const result = await dispatch(signIn({ email, password }));
-    if (signIn.rejected.match(result)) {
-      const error = result.payload;
-      // dispatch an action to update the error state
-      dispatch(setError(error));
-    } else {
-      // login successful, redirect to home page
-      router.push("/");
-    }
+    // if (!email || !password) {
+    //   setErrorMessage("Please enter your email and password");
+    //   return;
+    // }
+    // const result = await dispatch(signIn({ email, password }));
+    // if (signIn.rejected.match(result)) {
+    //   const error = result.payload;
+    //   // dispatch an action to update the error state
+    //   dispatch(setError(error));
+    // } else {
+    //   // login successful, redirect to home page
+    //   router.push("/");
+    // }
   };
 
   useEffect(() => {
@@ -59,122 +64,119 @@ const LoginPage = () => {
   }, [isLoggedIn]);
 
   return (
-    <Box
-      component="div"
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100%",
-      }}
-    >
-      <Box
-        padding={(theme) => theme.spacing(3)}
-        sx={{ borderRadius: 2 }}
-        maxWidth={400}
+    <>
+      <Typography
+        variant="2"
+        textAlign="center"
+        component="h2"
+        color={(theme) => theme.palette.primary.main}
       >
-        <Typography
-          variant="2"
-          textAlign="center"
-          component="h2"
-          color={(theme) => theme.palette.primary.main}
-        >
-          Skill Matcher
-        </Typography>
-        <Typography variant="3" textAlign="center" component="h3">
-          Log in
-        </Typography>
-        {errorMessage && (
-          <div style={{ color: 'red' }}>
-            <Alert severity="error">{errorMessage}</Alert>
-          </div>
-        )}
-        {isLoggedIn && (
+        Skill Matcher
+      </Typography>
+      <Typography variant="3" textAlign="center" component="h3">
+        Log in
+      </Typography>
+      {error && (
+        <Alert sx={{ marginTop: 2 }} severity="error">
+          {error.message}
+        </Alert>
+      )}
+      <Box marginTop={3} component="form" onSubmit={handleSubmit(handleLogin)}>
+        <Grid spacing={3} container>
           <Grid xs={12} item>
-            <Alert severity="success">Login successful!</Alert>
+            <Controller
+              rules={{
+                required: {
+                  value: true,
+                  message: "Please enter your username or email",
+                },
+              }}
+              name="usernameOrEmail"
+              control={control}
+              render={({
+                field: { value, onChange },
+                fieldState: { error },
+              }) => (
+                <TextField
+                  error={Boolean(error)}
+                  helperText={error ? error.message : undefined}
+                  fullWidth
+                  label="Username or Email"
+                  autoFocus
+                  value={value || ""}
+                  onChange={onChange}
+                />
+              )}
+            />
           </Grid>
-        )}
-        <Box component="form" onSubmit={handleLogin}>
-          <Grid gap={3} container>
-            <Grid xs={12} item>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </Grid>
-            <Grid xs={12} item>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Grid>
-            {/* <Grid xs={12} item>
+          <Grid xs={12} item>
+            <Controller
+              rules={{
+                required: {
+                  value: true,
+                  message: "Please enter your password",
+                },
+              }}
+              name="password"
+              control={control}
+              render={({
+                field: { value, onChange },
+                fieldState: { error },
+              }) => (
+                <TextField
+                  error={Boolean(error)}
+                  helperText={error ? error.message : undefined}
+                  fullWidth
+                  label="Password"
+                  type="password"
+                  autoComplete="current-password"
+                  value={value || ""}
+                  onChange={onChange}
+                />
+              )}
+            />
+          </Grid>
+          {/* <Grid xs={12} item>
                 <FormControlLabel
                   control={<Checkbox value='remember' color='primary' />}
                   label='Remember me'
                 />
               </Grid> */}
-            <Grid display="flex" justifyContent="center" xs={12} item>
-              <Button type="submit" variant="contained" disabled={loading}>
-                Log in
-              </Button>
-
-            </Grid>
-          </Grid>
-        </Box>
-
-        <Grid marginTop={4} container justifyContent="center">
-          <Grid item xs={12}>
-            <Link
-              textAlign="center"
-              href="#"
-              sx={{
-                color: (theme) => theme.palette.text.secondary,
-                textDecorationColor: (theme) => theme.palette.text.secondary,
-              }}
-            >
-              Forgot password?
-            </Link>
-          </Grid>
-          <Grid item xs={12}>
-            <Link
-              href="/sign-up"
-              sx={{
-                color: (theme) => theme.palette.text.secondary,
-                textDecorationColor: (theme) => theme.palette.text.secondary,
-              }}
-            >
-              {"Don't have an account? Sign Up"}
-            </Link>
+          <Grid display="flex" justifyContent="center" xs={12} item>
+            <Button type="submit" variant="contained" disabled={loading}>
+              Log in
+            </Button>
           </Grid>
         </Grid>
       </Box>
-    </Box>
+
+      <Stack marginTop={4} spacing={1}>
+        <Link textAlign="center" href="#" sx={{}}>
+          <Typography
+            color={(theme) => theme.palette.text.secondary}
+            variant="subtitle2"
+            component="p"
+            textAlign="left"
+          >
+            Forgot password?
+          </Typography>
+        </Link>
+
+        <Link href="/sign-up" sx={{}}>
+          <Typography
+            color={(theme) => theme.palette.text.secondary}
+            variant="subtitle2"
+            component="p"
+            textAlign="left"
+          >
+            Don't have an account? Sign Up
+          </Typography>
+        </Link>
+      </Stack>
+    </>
   );
 };
 
-LoginPage.getLayout = (page) => {
-  return (
-    <Box component="main" sx={{ height: "100vh", width: "100vw" }}>
-      {page}
-    </Box>
-  );
-};
+LoginPage.getLayout = AuthLayout
 
 export default LoginPage;
