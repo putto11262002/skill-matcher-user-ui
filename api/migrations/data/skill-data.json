@@ -1,0 +1,172 @@
+[
+  {
+    "name": "writing",
+    "description": "the ability to communicate effectively in writing.",
+    "status": "approved",
+    "relatedSkills": [
+      "grammar",
+      "punctuation",
+      "spelling"
+    ]
+  },
+  {
+    "name": "public speaking",
+    "description": "the ability to communicate effectively in front of an audience.",
+    "status": "approved",
+    "relatedSkills": [
+      "body language",
+      "eye contact",
+      "voice projection"
+    ]
+  },
+  {
+    "name": "math",
+    "description": "the ability to solve mathematical problems.",
+    "status": "approved",
+    "relatedSkills": [
+      "algebra",
+      "geometry",
+      "calculus"
+    ]
+  },
+  {
+    "name": "science",
+    "description": "the study of the natural world.",
+    "status": "approved",
+    "relatedSkills": [
+      "chemistry",
+      "physics",
+      "biology"
+    ]
+  },
+  {
+    "name": "history",
+    "description": "the study of the past.",
+    "status": "approved",
+    "relatedSkills": [
+      "geography",
+      "government",
+      "economics"
+    ]
+  },
+  {
+    "name": "art",
+    "description": "the creation of visual art.",
+    "status": "approved",
+    "relatedSkills": [
+      "drawing",
+      "painting",
+      "sculpture"
+    ]
+  },
+  {
+    "name": "music",
+    "description": "the creation of music.",
+    "status": "approved",
+    "relatedSkills": [
+      "singing",
+      "playing an instrument",
+      "composition"
+    ]
+  },
+  {
+    "name": "dance",
+    "description": "the movement of the body to music.",
+    "status": "approved",
+    "relatedSkills": [
+      "choreography",
+      "improvisation",
+      "performance"
+    ]
+  },
+  {
+    "name": "foreign languages",
+    "description": "the ability to communicate in a language other than english.",
+    "status": "approved",
+    "relatedSkills": [
+      "grammar",
+      "vocabulary",
+      "pronunciation"
+    ]
+  },
+  {
+    "name": "critical thinking",
+    "description": "the ability to think clearly and rationally about a problem or issue.",
+    "status": "approved",
+    "relatedSkills": [
+      "problem solving",
+      "decision making",
+      "analysis"
+    ]
+  },
+  {
+    "name": "problem solving",
+    "description": "the ability to identify and solve problems.",
+    "status": "approved",
+    "relatedSkills": [
+      "critical thinking",
+      "decision making",
+      "analysis"
+    ]
+  },
+  {
+    "name": "decision making",
+    "description": "the ability to make decisions in a timely and effective manner.",
+    "status": "approved",
+    "relatedSkills": [
+      "critical thinking",
+      "problem solving",
+      "analysis"
+    ]
+  },
+  {
+    "name": "analysis",
+    "description": "the ability to break down a problem or issue into its component parts and understand how they relate to each other.",
+    "status": "approved",
+    "relatedSkills": [
+      "critical thinking",
+      "problem solving",
+      "decision making"
+    ]
+  },
+  {
+    "name": "leadership",
+    "description": "the ability to motivate and inspire others to achieve a common goal.",
+    "status": "approved",
+    "relatedSkills": [
+      "communication",
+      "teamwork",
+      "problem solving"
+    ]
+  },
+  {
+    "name": "teamwork",
+    "description": "the ability to work effectively with others to achieve a common goal.",
+    "status": "approved",
+    "relatedSkills": [
+      "communication",
+      "leadership",
+      "problem solving"
+    ]
+  },
+  {
+    "name": "communication",
+    "description": "the ability to share information and ideas effectively with others.",
+    "status": "approved",
+    "relatedSkills": [
+      "writing",
+      "public speaking",
+      "listening"
+    ]
+  },
+  {
+    "name": "listening",
+    "description": "the ability to pay attention and understand what others are saying.",
+    "status": "approved",
+    "relatedSkills": [
+      "communication",
+      "teamwork",
+      "problem solving"
+    ]
+  }
+]
