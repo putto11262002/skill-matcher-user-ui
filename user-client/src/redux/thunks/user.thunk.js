@@ -4,12 +4,12 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const signIn = createAsyncThunk(
   'auth/sign-in',
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ usernameOrEmail, password }, { rejectWithValue }) => {
     try {
-      const res = await authService.signIn(email, password)
+      const res = await authService.signIn(usernameOrEmail, password)
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response.data);
+      return rejectWithValue(err);
     }
   },
 );
