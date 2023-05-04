@@ -12,17 +12,9 @@ import userService from "@/services/user.service";
 const SearchUsers = () => {
   useAuth()
   const [searchText, setSearchText] = useState('');
-  const [query, setQuery] = useState('');
+  const [selectedSkills, setSelectedSkills] = useState([]);
 
-  const {
-    isLoading: isLoadingUsers,
-    data: users,
-    error,
-  } = useQuery(['users', query], () =>
-    userService.searchUsers({
-      ...query,
-    })
-  );
+  const availableSkills = ['JavaScript', 'React', 'Node.js', 'Python', 'Django', 'Java', 'Spring Boot'];
 
   const handleSearch = () => {
     // Handle search logic here
@@ -87,6 +79,30 @@ const SearchUsers = () => {
           </Grid>
         </Grid>
       </Box>
+      {/* Filtering Skills */}
+      <Box sx={{
+        boxShadow: '0px 0px 5px 2px rgba(0, 0, 0, 0.1)',
+        borderRadius: '5px',
+        p: 1,
+        mt: 2,
+      }}>
+        <Typography variant="subtitle1" marginTop={1}>Skills:</Typography>
+        {availableSkills.map(skill => (
+          <FormControlLabel
+            key={skill}
+            control={<Checkbox name={skill} />}
+            label={skill}
+            onChange={(event) => {
+              if (event.target.checked) {
+                setSelectedSkills([...selectedSkills, event.target.name]);
+              } else {
+                setSelectedSkills(selectedSkills.filter(skill => skill !== event.target.name));
+              }
+            }}
+          />
+        ))}
+      </Box>
+
       <Button variant="contained" onClick={handleSearch} sx={{
         backgroundColor: '#055fef',
         color: '#ffffff',
@@ -99,6 +115,7 @@ const SearchUsers = () => {
       }}>
         Search
       </Button>
+
       {/* Logic for showing user profile  */}
       {/* 
       {users && users.map((user) => (
