@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 
 import UserProfileGrid from "@/components/user/UserProfileGrid";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import userService from "@/services/user.service";
 import { USER_PAGE_SIZE } from "@/constants/user.constant";
 import { Box, Stack, Typography } from "@mui/material";
 import useAuth from "@/hooks/useAuth";
+import matchService from "../../../services/match.service";
 
 const BrowseUserPage = () => {
   useAuth()
@@ -22,6 +23,12 @@ const BrowseUserPage = () => {
       pageNumber: page,
     })
   );
+
+  const {mutate: matchUser} = useMutation(matchService.match, {onSuccess: (res) => console.log(res)})
+
+  const handleMatch = (user) => {
+    matchUser({userId:  user._id});
+  }
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <Box maxWidth={600}  >
@@ -38,6 +45,7 @@ const BrowseUserPage = () => {
         {/* <SearchUserSection /> */}
         {/* <Typography variant="5" component='h5' marginBottom={2}>Suggested users</Typography> */}
         <UserProfileGrid
+        onMatch={handleMatch}
           users={data?.data?.data}
           loading={isLoadingUsers}
           error={error}

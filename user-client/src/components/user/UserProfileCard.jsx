@@ -23,7 +23,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import HandshakeIcon from "@mui/icons-material/Handshake";
 import { truncate } from "lodash";
 import Link from "next/link";
-const UserProfileCard = ({ user }) => {
+const UserProfileCard = ({ user, onMatch }) => {
   const {
     isLoading: isLoadingSkill,
     data,
@@ -122,7 +122,7 @@ const UserProfileCard = ({ user }) => {
           }}
         >
           <Tooltip title={`Match with ${user.profile.firstName}`}>
-            <IconButton>
+            <IconButton onClick={() => onMatch(user)}>
               <HandshakeIcon
                 sx={{ color: (theme) => theme.palette.common.white }}
               />

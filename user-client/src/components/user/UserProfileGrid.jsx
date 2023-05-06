@@ -12,6 +12,7 @@ const UserProfileGrid = ({
   total,
   page,
   onPageChange,
+  onMatch
 }) => {
   if (loading) return <Loader />;
   if (error) return <Error />;
@@ -20,7 +21,7 @@ const UserProfileGrid = ({
       <Grid rowSpacing={3} columnSpacing={2} container>
         {users.map((user) => (
           <Grid key={user._id} xs={12} item>
-            <UserProfileCard user={user} />
+            <UserProfileCard onMatch={onMatch} user={user} />
           </Grid>
         ))}
       </Grid>
