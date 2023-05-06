@@ -1,5 +1,5 @@
 import {BadRequestException, Inject, Injectable, forwardRef} from "@nestjs/common"
-import { FilterQuery, Model, ObjectId, Types } from "mongoose";
+import mongoose, { FilterQuery, Model, ObjectId, Types } from "mongoose";
 import { UserService } from "../../user/services/user.service";
 import { SkillService } from "./skill.service";
 import { InjectModel } from "@nestjs/mongoose";
@@ -10,7 +10,7 @@ import { User } from "../../user/schemas/user.schema";
 import { UpdateUserSkillDto } from "../dtos/requests/update-user-skill.dto";
 import { NOT_ALLOW_UPDATE_FIELDS } from "../constants/user-skill.constant";
 import {omit} from 'lodash'
-import { SearchUserSkillDto } from "../dtos/requests/search-user-skill.dto";
+import { SearchUserSkillByUserDto } from "../dtos/requests/search-user-skill-by-user.dto";
 @Injectable()
 export class UserSkillService {
     constructor(
@@ -55,7 +55,11 @@ export class UserSkillService {
        return updatedUserSkill;
     }
 
-    async getUserSkills(userId: Types.ObjectId , query: SearchUserSkillDto){
+    async advanceSearch(pipe: mongoose.PipelineStage[]){
+        return this.userSkillModel.aggregate(pipe);
+    }
+
+    async getUserSkills(userId: Types.ObjectId , query?: SearchUserSkillByUserDto){
         const filter: FilterQuery<UserSkill> = {userId}
         
 

@@ -77,12 +77,12 @@ export class MatchController {
     await this.matchService.declineMatch(id, currentUser._id);
   }
 
-  @Get('user/self/match/:id')
-  @HttpCode(HttpStatus.OK)
-  async getMyMatch(@Param('id', ParseObjectIdPipe) id: Types.ObjectId, @CurrentUser() currentUser: User){
-    const match = await this.matchService.getMatch(id, currentUser._id);
-    return new MatchDto(match);
-  }
+  // @Get('user/self/match/:id')
+  // @HttpCode(HttpStatus.OK)
+  // async getMyMatch(@Param('id', ParseObjectIdPipe) id: Types.ObjectId, @CurrentUser() currentUser: User){
+  //   const match = await this.matchService.getMatch(id, currentUser._id);
+  //   return new MatchDto(match);
+  // }
 
   @Delete('user/self/match/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
@@ -96,9 +96,8 @@ export class MatchController {
     @Query() query: SearchMatchQueryDto,
   ) {
     const { matches, total, pageNumber, pageSize } =
-      await this.matchService.searchMatchByUser(
-        currentUser._id,
-        omit({ ...query }, NOT_ALLOW_USER_SEARCH_FIELDS) as any,
+      await this.matchService.searchMatches(
+       {includeIds: [currentUser._id], ...query},
       );
     return new Pagination(matches, pageSize, pageNumber, total);
   }

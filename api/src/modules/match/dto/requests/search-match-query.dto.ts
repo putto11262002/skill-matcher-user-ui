@@ -2,43 +2,30 @@ import { ApiProperty } from "@nestjs/swagger";
 import { SearchDto } from "../../../../common/dtos/requests/search.dto";
 import { IsArray, IsIn, IsOptional, IsString } from "class-validator";
 import { MATCH_STATUS, MATCH_USER_STATUS } from "../../constants/match.constant";
-import { ObjectId } from "mongoose";
+import mongoose, { ObjectId } from "mongoose";
+import { Transform, Type } from "class-transformer";
+import { toMongoObjectId } from "../../../../common/helpers/dto.helper";
 
 
 export class SearchMatchQueryDto extends SearchDto {
-    @ApiProperty()
+    @ApiProperty({})
     @IsOptional()
-    @IsString()
     @IsIn(Object.values(MATCH_STATUS))
     status: string;
 
     @ApiProperty()
     @IsOptional()
-    @IsIn(Object.values(MATCH_USER_STATUS))
-    selfStatus: string;
-
-    @ApiProperty()
-    @IsOptional()
-    @IsIn(Object.values(MATCH_USER_STATUS))
-    otherStatus: string;
-
-    @ApiProperty()
-    @IsOptional()
-    @IsString()
-    q: string;
+    @IsArray()
+    @Type(() => Array<mongoose.Types.ObjectId>)
+    @Transform(({value}) => value.split(',').map(id => toMongoObjectId({value: id, key: undefined})))
+    includeIds: Array<mongoose.Types.ObjectId>;
 
     @ApiProperty()
     @IsOptional()
     @IsArray()
-    @IsString({each: true})
-    otherIds: Array<ObjectId | string>;
+    @Type(() => Array<mongoose.Types.ObjectId>)
+    @Transform(({value}) => value.split(',').map(id => toMongoObjectId({value: id, key: undefined})))
+    excludeIds: Array<mongoose.Types.ObjectId>
 
-    constructor(pageNumber: number, pageSize: number, status: string, selfStatus: string, otherStatus: string, q: string, otherIds: Array<ObjectId | string>){
-        super(pageNumber, pageSize)
-        this.status = status;
-        this.selfStatus = selfStatus;
-        this.otherStatus  = otherStatus
-        this.q = q;
-        this.otherIds = otherIds;
-    }
+    
 }

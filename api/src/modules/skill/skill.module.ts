@@ -18,6 +18,7 @@ import { AdminUserSkillController } from './controllers/admin-user-skill.control
     UserModule,
   ],
   providers: [SkillService, UserSkillService],
-  controllers: [SkillController, AdminSkillController, UserSkillController, AdminUserSkillController]
+  controllers: [SkillController, AdminSkillController, UserSkillController, AdminUserSkillController],
+  exports: [SkillService, UserSkillService]
 })
 export class SkillModule {}

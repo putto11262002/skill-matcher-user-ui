@@ -21,8 +21,4 @@ export class Skill extends Document {
 
 let schema = SchemaFactory.createForClass(Skill)
 
-schema.index(
-    {name: 'text', 'relatedSkills': 'text'},
-    {weights: {name: 3, "relatedSkills": 1}, name: 'textIndex'}
-)
 export const skillSchema = schema;

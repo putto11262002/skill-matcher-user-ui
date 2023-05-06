@@ -26,7 +26,7 @@ import { RoleGuard } from '../../auth/guards/role.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { ParseObjectIdPipe } from '../../../common/pipes/pase-object-id.pipe';
 import { Types } from 'mongoose';
-import { SearchUserSkillDto } from '../dtos/requests/search-user-skill.dto';
+import { SearchUserSkillByUserDto } from '../dtos/requests/search-user-skill-by-user.dto';
 import { Pagination } from '../../../common/dtos/responses/pagination.dto';
 
 @Roles('admin', 'root')
@@ -78,7 +78,7 @@ export class AdminUserSkillController {
 
   @Get('user/:userId/skill')
   @HttpCode(HttpStatus.OK)
-  async getSelfSkill(@Param('userId', ParseObjectIdPipe) userId: Types.ObjectId, @Query() query: SearchUserSkillDto) {
+  async getSelfSkill(@Param('userId', ParseObjectIdPipe) userId: Types.ObjectId, @Query() query: SearchUserSkillByUserDto) {
   
     const {userSkills, total, pageNumber, pageSize} = await this.userSkillService.getUserSkills(userId, query);
     return new Pagination(userSkills.map((userSkill) => new UserSkillDto(userSkill).toAdminResponse()), pageSize, pageNumber, total);

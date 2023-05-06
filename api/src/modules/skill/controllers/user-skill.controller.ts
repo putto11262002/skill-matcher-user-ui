@@ -25,7 +25,7 @@ import { NOT_ALLOW_SELF_UPDATE_FIELDS } from '../constants/user-skill.constant';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { ParseObjectIdPipe } from '../../../common/pipes/pase-object-id.pipe';
 import { Types } from 'mongoose';
-import { SearchUserSkillDto } from '../dtos/requests/search-user-skill.dto';
+import { SearchUserSkillByUserDto } from '../dtos/requests/search-user-skill-by-user.dto';
 import { Pagination } from '../../../common/dtos/responses/pagination.dto';
 
 @UseGuards(AuthGuard)
@@ -74,13 +74,13 @@ export class UserSkillController {
 
   @Get('user/self/skill')
   @HttpCode(HttpStatus.OK)
-  async getSelfSkill(@CurrentJwt() currentUser: JwtAccessTokenPayloadDto, @Query() query: SearchUserSkillDto) {
+  async getSelfSkill(@CurrentJwt() currentUser: JwtAccessTokenPayloadDto, @Query() query: SearchUserSkillByUserDto) {
     const {userSkills, total, pageNumber, pageSize} = await this.userSkillService.getUserSkills(currentUser.id, query);
     return new Pagination(userSkills.map((userSkill) => new UserSkillDto(userSkill).toSelfResponse()), pageSize, pageNumber, total);
   }
 
   @Get('user/:userId/skill')
-  async getUserSkill(@Param('userId', ParseObjectIdPipe) userId: Types.ObjectId, @Query() query: SearchUserSkillDto) {
+  async getUserSkill(@Param('userId', ParseObjectIdPipe) userId: Types.ObjectId, @Query() query: SearchUserSkillByUserDto) {
  
     const {userSkills, total, pageNumber, pageSize} = await this.userSkillService.getUserSkills(userId, query);
     return new Pagination(userSkills.map((userSkill) => new UserSkillDto(userSkill).toPublicResponse()), pageSize, pageNumber, total)
