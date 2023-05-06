@@ -15,7 +15,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import UserSkill from "./skills/UserSkill";
 import Loader from "../common/Loader";
@@ -24,6 +24,8 @@ import HandshakeIcon from "@mui/icons-material/Handshake";
 import { truncate } from "lodash";
 import Link from "next/link";
 const UserProfileCard = ({ user, onMatch }) => {
+
+  const [matched, setMatched] = useState(false);
   const {
     isLoading: isLoadingSkill,
     data,
@@ -110,7 +112,8 @@ const UserProfileCard = ({ user, onMatch }) => {
           gap: 2,
         }}
       >
-        <Box
+       {!matched && <Box
+        
           sx={{
             background: (theme) => theme.palette.primary.main,
             width: "2rem",
@@ -121,14 +124,17 @@ const UserProfileCard = ({ user, onMatch }) => {
             borderRadius: "50%",
           }}
         >
-          <Tooltip title={`Match with ${user.profile.firstName}`}>
-            <IconButton onClick={() => onMatch(user)}>
+          <Tooltip title={  `Match with ${user.profile.firstName}` }>
+            <IconButton  onClick={() => {
+              setMatched(true)
+              onMatch(user)
+            }}>
               <HandshakeIcon
                 sx={{ color: (theme) => theme.palette.common.white }}
               />
             </IconButton>
           </Tooltip>
-        </Box>
+        </Box>}
         <Box
           sx={{
             background: (theme) => theme.palette.grey[400],

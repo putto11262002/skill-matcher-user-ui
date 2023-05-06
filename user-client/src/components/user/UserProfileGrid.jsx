@@ -16,9 +16,10 @@ const UserProfileGrid = ({
 }) => {
   if (loading) return <Loader />;
   if (error) return <Error />;
+  if(users.length < 1) return <Typography sx={{textAlign: 'center'}}>No more users</Typography>
   return (
     <Stack spacing={3} sx={{ justifyContent: "center", alignItems: "center" }}>
-      <Grid rowSpacing={3} columnSpacing={2} container>
+      <Grid rowSpacing={3} container>
         {users.map((user) => (
           <Grid key={user._id} xs={12} item>
             <UserProfileCard onMatch={onMatch} user={user} />
