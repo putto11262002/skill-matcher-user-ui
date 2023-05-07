@@ -35,6 +35,9 @@ class ProfileDto {
   @ApiProperty()
   contactEmail: string;
 
+  @ApiProperty()
+  skills: string[]
+
   constructor(profile: Profile) {
     this.firstName = profile.firstName;
     this.lastName = profile.lastName;
@@ -46,6 +49,7 @@ class ProfileDto {
     this.whatsapp = profile.whatsapp;
     this.aboutMe = profile.aboutMe;
     this.gender = profile.gender;
+    this.skills = profile.skills ? profile.skills : []
   }
 }
 

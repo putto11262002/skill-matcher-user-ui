@@ -4,11 +4,13 @@ import dynamic from "next/dynamic";
 import {
   Avatar,
   Box,
+  Button,
   Card,
   CardActions,
   CardContent,
   CardHeader,
   CardMedia,
+  Grid,
   IconButton,
   ListItemIcon,
   Stack,
@@ -23,16 +25,16 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import HandshakeIcon from "@mui/icons-material/Handshake";
 import { truncate } from "lodash";
 import Link from "next/link";
+import { grey } from "@mui/material/colors";
 const UserProfileCard = ({ user, onMatch }) => {
-
   const [matched, setMatched] = useState(false);
-  const {
-    isLoading: isLoadingSkill,
-    data,
-    error,
-  } = useQuery(["user", user._id, "skills"], () =>
-    userService.getUserSkills({ userId: user._id, query: {} })
-  );
+  // const {
+  //   isLoading: isLoadingSkill,
+  //   data,
+  //   error,
+  // } = useQuery(["user", user._id, "skills"], () =>
+  //   userService.getUserSkills({ userId: user._id, query: {} })
+  // );
 
   return (
     <Card>
@@ -49,8 +51,29 @@ const UserProfileCard = ({ user, onMatch }) => {
               {truncate(user?.profile?.aboutMe, { length: 200 })}
             </Typography>
           )}
-          <Stack spacing={2}>
-            <Stack spacing={0.5}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-start",
+              flexWrap: "wrap",
+              gap: 2,
+            }}
+          >
+            {user?.profile?.skills.map((skill) => (
+              <Box key={skill}>
+                <Button
+                  disableElevation
+                  sx={{
+                    background: grey[100],
+                    ":hover": { background: grey[100] },
+                  }}
+                  variant="info"
+                >
+                  {skill}
+                </Button>
+              </Box>
+            ))}
+            {/* <Stack spacing={0.5}>
               {(!isLoadingSkill || !error) &
               (data?.data?.data?.filter((skill) => skill.role === "learner")
                 .length >
@@ -99,8 +122,8 @@ const UserProfileCard = ({ user, onMatch }) => {
                     />
                   ))
               )}
-            </Stack>
-          </Stack>
+            </Stack> */}
+          </Box>
         </Stack>
       </CardContent>
 
@@ -112,29 +135,32 @@ const UserProfileCard = ({ user, onMatch }) => {
           gap: 2,
         }}
       >
-       {!matched && <Box
-        
-          sx={{
-            background: (theme) => theme.palette.primary.main,
-            width: "2rem",
-            height: "2rem",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: "50%",
-          }}
-        >
-          <Tooltip title={  `Match with ${user.profile.firstName}` }>
-            <IconButton  onClick={() => {
-              setMatched(true)
-              onMatch(user)
-            }}>
-              <HandshakeIcon
-                sx={{ color: (theme) => theme.palette.common.white }}
-              />
-            </IconButton>
-          </Tooltip>
-        </Box>}
+        {!matched && (
+          <Box
+            sx={{
+              background: (theme) => theme.palette.primary.main,
+              width: "2rem",
+              height: "2rem",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: "50%",
+            }}
+          >
+            <Tooltip title={`Match with ${user.profile.firstName}`}>
+              <IconButton
+                onClick={() => {
+                  setMatched(true);
+                  onMatch(user);
+                }}
+              >
+                <HandshakeIcon
+                  sx={{ color: (theme) => theme.palette.common.white }}
+                />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        )}
         <Box
           sx={{
             background: (theme) => theme.palette.grey[400],
@@ -149,7 +175,7 @@ const UserProfileCard = ({ user, onMatch }) => {
           {" "}
           <Tooltip title="View profile">
             <Link href={`/user/profile/${user._id}`}>
-              <IconButton sx={{width: '100%', height: '100%'}}>
+              <IconButton sx={{ width: "100%", height: "100%" }}>
                 <VisibilityIcon
                   sx={{ color: (theme) => theme.palette.common.white }}
                 />
@@ -163,6 +189,5 @@ const UserProfileCard = ({ user, onMatch }) => {
 };
 
 export default dynamic(() => Promise.resolve(UserProfileCard), {
-  ssr: false
-})
-
+  ssr: false,
+});
