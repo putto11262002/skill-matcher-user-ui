@@ -9,10 +9,12 @@ import { MongoModule } from './common/mongo/mongo.module';
 import { MatchModule } from './modules/match/match.module';
 import { _ConfigModule } from './config/config.module';
 import { FeedModule } from './modules/feed/feed.module';
+import { EventModule } from './common/event/event.module';
 
 
 @Module({
   imports: [
+    EventModule,
     _ConfigModule,
     UserModule,
     AuthModule,

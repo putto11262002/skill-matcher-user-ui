@@ -31,6 +31,9 @@ export class Profile {
 
   @Prop()
   aboutMe?: string;
+
+  @Prop()
+  skills?: string[]
 }
 
 export const profileSchema = SchemaFactory.createForClass(Profile);

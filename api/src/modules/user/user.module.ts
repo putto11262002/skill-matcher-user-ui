@@ -10,6 +10,7 @@ import { User, userSchema } from './schemas/user.schema';
 import { UserPrivacySettingService } from './services/user-privacy-setting.service';
 import { UserService } from './services/user.service';
 import { FileModule } from '../file/file.module';
+import { UserSkillListener } from './listeners/user-skill.listener';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { FileModule } from '../file/file.module';
     UserPrivacySettingController,
     AdminUserPrivacySettingController,
   ],
-  providers: [UserService, UserPrivacySettingService],
+  providers: [UserService, UserPrivacySettingService, UserSkillListener],
   exports: [UserService],
 })
 export class UserModule {}

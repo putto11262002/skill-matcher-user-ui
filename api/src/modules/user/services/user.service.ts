@@ -259,4 +259,5 @@ export class UserService {
     await this.userModel.updateOne({ _id: id }, { avatar: createdFile._id });
     return createdFile;
   }
+
 }

@@ -4,6 +4,7 @@ export const NOT_ALLOWED_UPDATE = [
   'username',
   'role',
   'refreshToken',
+  'profile.skills'
 ];
 
 export const NOT_ALLOWED_SELF_UPDATE = [];
