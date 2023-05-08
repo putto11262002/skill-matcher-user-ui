@@ -32,6 +32,7 @@ const BrowseUserPage = () => {
       refetchOnWindowFocus: false,
       enabled: false,
       onSuccess: (res) => {
+        console.log("done fetching");
         const newFeed = [...feed, ...res?.data?.data];
         setHasMore(newFeed.length < res?.data?.total);
         setFeed(newFeed);
@@ -46,6 +47,8 @@ const BrowseUserPage = () => {
   const handleMatch = (user) => {
     matchUser({ userId: user._id });
   };
+
+  console.log(feed);
 
   useEffect(() => {
     refetch();

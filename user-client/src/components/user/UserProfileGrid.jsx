@@ -1,4 +1,4 @@
-import { Grid, Pagination, Stack, Typography } from "@mui/material";
+import { Box, CircularProgress, Grid, Pagination, Stack, Typography } from "@mui/material";
 import React from "react";
 import UserProfileCard from "./UserProfileCard";
 import Loader from "../common/Loader";
@@ -6,21 +6,22 @@ import Error from "../common/Error";
 import dynamic from "next/dynamic";
 import InfiniteScroll from "react-infinite-scroll-component";
 const UserProfileGrid = ({
-  loading,
+  // loading,
   error,
   users,
-  pageSize,
-  total,
-  page,
-  onPageChange,
+  // pageSize,
+  // total,
+  // page,
+  // onPageChange,
   onMatch,
   onNext,
   hasMore
 }) => {
-  console.log(users)
-  if (loading) return <Loader />;
+
+  // if (loading) return <Loader />;
   if (error) return <Error />;
-  if(users?.length < 1) return <Typography sx={{textAlign: 'center'}}>No more users</Typography>
+  // if(users?.length < 1) return <Typography sx={{textAlign: 'center'}}>No more users</Typography>
+
   
   return (
    
@@ -28,7 +29,11 @@ const UserProfileGrid = ({
       dataLength={users.length}
       next={onNext}
       hasMore={hasMore}
-     
+      scrollThreshold={1}
+      loader={<Box sx={{marginTop: 3}}><Loader/></Box>}
+      style={{ overflow: "unset" }}
+      
+      
       >
       <Grid rowSpacing={3} container>
         {users.map((user) => (
