@@ -64,8 +64,10 @@ const UserProfileCard = ({ user, onMatch }) => {
                 <Button
                   disableElevation
                   sx={{
-                    background: grey[100],
-                    ":hover": { background: grey[100] },
+                    background: (theme) => theme.palette.secondary.main,
+                    ":hover": {
+                      background: (theme) => theme.palette.secondary.main,
+                    },
                   }}
                   variant="info"
                 >
