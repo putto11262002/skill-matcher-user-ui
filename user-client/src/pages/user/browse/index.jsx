@@ -2,15 +2,16 @@ import React, { useEffect, useState } from "react";
 
 import UserProfileGrid from "@/components/user/UserProfileGrid";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import userService from "@/services/user.service";
 import { USER_PAGE_SIZE } from "@/constants/user.constant";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import useAuth from "@/hooks/useAuth";
 import matchService from "../../../services/match.service";
 import feedService, { FeedService } from "@/services/feed.service";
+import { enqueueSnackbar } from "notistack";
 
 const BrowseUserPage = () => {
   useAuth();
+
   const [query, setQuery] = useState({});
   const [page, setPage] = useState(0);
   const [feed, setFeed] = useState([]);
@@ -32,7 +33,6 @@ const BrowseUserPage = () => {
       refetchOnWindowFocus: false,
       enabled: false,
       onSuccess: (res) => {
-        console.log("done fetching");
         const newFeed = [...feed, ...res?.data?.data];
         setHasMore(newFeed.length < res?.data?.total);
         setFeed(newFeed);
@@ -41,14 +41,14 @@ const BrowseUserPage = () => {
   );
 
   const { mutate: matchUser } = useMutation(matchService.match, {
-    onSuccess: (res) => console.log(res),
+    onSuccess: (res) =>
+      enqueueSnackbar("Match request has been sent", { variant: "success" }),
+    onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
   });
 
   const handleMatch = (user) => {
     matchUser({ userId: user._id });
   };
-
-  console.log(feed);
 
   useEffect(() => {
     refetch();
