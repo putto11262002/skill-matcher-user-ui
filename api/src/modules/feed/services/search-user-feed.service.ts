@@ -8,6 +8,7 @@ import { SearchSkillDto } from '../../skill/dtos/requests/search-skill.dto';
 import { SearchUserDto } from '../../user/dtos/requests/search-user.dto';
 import { MatchService } from '../../match/services/match.service';
 import * as _ from 'lodash';
+import { User } from '../../user/schemas/user.schema';
 @Injectable()
 export class SearchUserFeedService {
   private logger = new Logger(SearchUserFeedService.name);
@@ -135,23 +136,20 @@ export class SearchUserFeedService {
       this.userSkillService.advanceSearch([...pipe, { $count: 'count' }]),
     ]);
 
-    this.logger.debug(_.uniq(searchedUsers.map((u) => u._id)));
+    const userIds = searchedUsers.map((u) => u._id?.toHexString())
 
     const { users } = await this.userService.search({
-      includeIds: searchedUsers.map((u) => u._id),
+      includeIds: userIds,
    
     } as any);
 
-    // TODO - make sure that users has the same order as includeIds
-    // https://stackoverflow.com/a/62298591
-    //  function sortByArray<T, U>({ source, by, sourceTransformer = identity }: { source: T[]; by: U[]; sourceTransformer?: (item: T) => U }) {
-    //   const indexesByElements = new Map(by.map((item, idx) => [item, idx]));
-    //   const orderedResult = sortBy(source, (p) => indexesByElements.get(sourceTransformer(p)));
-    //   return orderedResult;
-    // }
+    const userMap = new Map<string, User>();
+    users.forEach((user) => userMap.set(user._id.toHexString(), user));
+
+
 
     return {
-      users: users,
+      users: userIds.map((id) => userMap.get(id)),
       total: count[0]?.count ? count[0]?.count : 0,
       pageSize: query.pageSize,
       pageNumber: query.pageNumber,

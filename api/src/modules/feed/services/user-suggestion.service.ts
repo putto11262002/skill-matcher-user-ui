@@ -6,6 +6,7 @@ import { UserSkillService } from '../../skill/services/user-skill.service';
 import mongoose from 'mongoose';
 import { SearchSkillDto } from '../../skill/dtos/requests/search-skill.dto';
 import { UserSuggestionQueryDto } from '../dtos/requests/user-suggestion-query.dto';
+import { User } from '../../user/schemas/user.schema';
 
 @Injectable()
 export class UserSuggestionService {
@@ -105,7 +106,7 @@ export class UserSuggestionService {
        * Group by user id and sum the score
        */
       {
-        $group: {_id: "$userId", score: {$sum: "$skillScore"}}
+        $group: { _id: '$userId', score: { $sum: '$skillScore' } },
       },
 
       /**
@@ -119,8 +120,6 @@ export class UserSuggestionService {
       },
     ];
 
-    
-
     const [searchedUsers, count] = await Promise.all([
       this.userSkillService.advanceSearch([
         ...pipe,
@@ -130,17 +129,20 @@ export class UserSuggestionService {
       this.userSkillService.advanceSearch([...pipe, { $count: 'count' }]),
     ]);
 
-
     // log out searched values
     this.logger.verbose(searchedUsers, count);
 
-    const users = await this.userService.search({
-      includeIds: searchedUsers.map((u) => u._id),
-     
+    const userIds = searchedUsers.map((u) => u._id?.toHexString());
+
+    const {users} = await this.userService.search({
+      includeIds: userIds,
     } as any);
 
+    const userMap = new Map<string, User>();
+    users.forEach((user) => userMap.set(user._id.toHexString(), user));
+
     return {
-      users: users.users,
+      users: userIds.map((id) => userMap.get(id)),
       total: count[0]?.count ? count[0]?.count : 0,
       pageSize: query.pageSize,
       pageNumber: query.pageNumber,
