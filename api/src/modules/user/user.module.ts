@@ -11,12 +11,14 @@ import { UserPrivacySettingService } from './services/user-privacy-setting.servi
 import { UserService } from './services/user.service';
 import { FileModule } from '../file/file.module';
 import { UserSkillListener } from './listeners/user-skill.listener';
+import { MatchModule } from '../match/match.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: userSchema }]),
     forwardRef(() => AuthModule),
-    FileModule
+    FileModule,
+    forwardRef(() => MatchModule)
   ],
   controllers: [
     UserController,

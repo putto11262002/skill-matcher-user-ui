@@ -146,8 +146,6 @@ export class SearchUserFeedService {
     const userMap = new Map<string, User>();
     users.forEach((user) => userMap.set(user._id.toHexString(), user));
 
-
-
     return {
       users: userIds.map((id) => userMap.get(id)),
       total: count[0]?.count ? count[0]?.count : 0,

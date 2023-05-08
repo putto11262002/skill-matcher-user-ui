@@ -19,7 +19,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CurrentJwt } from '../../auth/decorators/current-jwt.decorator';
-import { JwtAccessTokenPayloadDto } from '../../auth/dtos/request/jwt-access-token-payload.dto'; 
+import { JwtAccessTokenPayloadDto } from '../../auth/dtos/request/jwt-access-token-payload.dto';
 import { AuthGuard } from '../../auth/guards/auth.guard';
 import { UpdateUserDto } from '../dtos/requests/update-user.dto';
 import { UserDto } from '../dtos/responses/user.dto';
@@ -40,10 +40,15 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { FileDto } from '../../file/dto/file.dto';
 import { ImageValidator } from '../../file/validators/image.validator';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
+import { MatchService } from '../../match/services/match.service';
+import { User } from '../schemas/user.schema';
 @ApiTags('User')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly matchService: MatchService,
+  ) {}
 
   @UseGuards(AuthGuard)
   @Get('self')
@@ -66,30 +71,61 @@ export class UserController {
     );
   }
 
-
   @UseGuards(AuthGuard)
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  async getUserById(@Param('id', ParseObjectIdPipe) id: Types.ObjectId) {
+  async getUserById(
+    @Param('id', ParseObjectIdPipe) id: Types.ObjectId,
+    @CurrentUser() currentUser: User,
+  ) {
     const user = await this.userService.getById(id);
     if (!user) {
       throw new NotFoundException('User with this id does not exist.');
     }
     // check relationship between users to determie reponse types
 
-    return new UserDto(user).toPublicResponse();
-  }
+    const matched = await this.matchService.matchExists(
+      currentUser._id,
+      user._id,
+    );
 
+    return matched
+      ? new UserDto(user).toMatchedUserResponse()
+      : new UserDto(user).toPublicResponse();
+  }
 
   @UseGuards(AuthGuard)
   @Get('')
   @HttpCode(HttpStatus.OK)
-  async searchUser(@Query() query: SearchUserDto, @CurrentJwt() currentUser: JwtAccessTokenPayloadDto) {
+  async searchUser(
+    @Query() query: SearchUserDto,
+    @CurrentUser() currentUser: User,
+  ) {
     const { users, total } = await this.userService.search(
-      omit({...query, status: USER_STATUS.ACTIVE, excludeIds: [currentUser.id], roles: ['user']}, ONLY_ADMIN_SEARCH_FIELDS) as SearchUserDto,
+      omit(
+        {
+          ...query,
+          status: USER_STATUS.ACTIVE,
+          excludeIds: [currentUser._id],
+          roles: ['user'],
+        },
+        ONLY_ADMIN_SEARCH_FIELDS,
+      ) as SearchUserDto,
     );
+
+    const { matches } = await this.matchService.getMatchByUser(currentUser._id);
+    const matchedUser = new Set<string>();
+    matches.forEach((match) => {
+      const u = match.users.find((u) => !u.userId.equals(currentUser._id));
+      matchedUser.add(u.userId.toHexString());
+    });
+
     return new Pagination(
-      users.map((user) => new UserDto(user)),
+      users.map((user) =>
+        matchedUser.has(user._id.toHexString())
+          ? new UserDto(user).toMatchedUserResponse()
+          : new UserDto(user).toPublicResponse(),
+      ),
       query.pageSize,
       query.pageNumber,
       total,
@@ -100,7 +136,18 @@ export class UserController {
   @Put('self/avatar')
   @UseInterceptors(FileInterceptor('avatar'))
   @HttpCode(HttpStatus.OK)
-  async updateUserAvatar(@UploadedFile(new ParseFilePipe({validators: [new MaxFileSizeValidator({maxSize: USER_AVATAR_MAX_SIZE}), new ImageValidator()]})) avatar: Express.Multer.File, @CurrentUser() currentUser: JwtAccessTokenPayloadDto){
+  async updateUserAvatar(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: USER_AVATAR_MAX_SIZE }),
+          new ImageValidator(),
+        ],
+      }),
+    )
+    avatar: Express.Multer.File,
+    @CurrentUser() currentUser: JwtAccessTokenPayloadDto,
+  ) {
     const file = await this.userService.updateAvatar(currentUser.id, avatar);
     return new FileDto(file);
   }

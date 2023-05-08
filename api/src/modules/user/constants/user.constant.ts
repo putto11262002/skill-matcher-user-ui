@@ -4,7 +4,7 @@ export const NOT_ALLOWED_UPDATE = [
   'username',
   'role',
   'refreshToken',
-  'profile.skills'
+  'profile.skills',
 ];
 
 export const NOT_ALLOWED_SELF_UPDATE = [];
@@ -20,17 +20,23 @@ export const USER_STATUS = {
 export const USER_ROLE = {
   USER: 'user',
   ADMIN: 'admin',
-  ROOT: 'root'
+  ROOT: 'root',
 };
-
 
 export const USER_GENDER = {
   MALE: 'male',
   FEMALE: 'female',
-  OTHER: 'other'
-}
-export const USER_AVATAR_MAX_SIZE = 5242880
-export const USER_AVATAR_HEIGHT = 180
-export const USER_AVATAR_WIDTH = 180
+  OTHER: 'other',
+};
+export const USER_AVATAR_MAX_SIZE = 5242880;
+export const USER_AVATAR_HEIGHT = 180;
+export const USER_AVATAR_WIDTH = 180;
 
-
+export const PUBLIC_RESPONSE_OMIT_FIELDS = [
+  'profile.facebook',
+  'profile.instagram',
+  'profile.snapchat',
+  'email',
+  'profile.contactEmail',
+  'profile.phoneNumber'
+];
