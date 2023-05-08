@@ -9,7 +9,7 @@ export const theme = createTheme({
             light: blue.A200
         },
         secondary: {
-            main: lightBlue.A400
+            main: '#f9c013'
         }
     },
   components: {
