@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import UserProfileGrid from "@/components/user/UserProfileGrid";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -13,16 +13,30 @@ const BrowseUserPage = () => {
   useAuth();
   const [query, setQuery] = useState({});
   const [page, setPage] = useState(0);
+  const [feed, setFeed] = useState([]);
+  const [hasMore, setHasMore] = useState(false);
   const {
     isLoading: isLoadingUsers,
-    data,
+
     error,
-  } = useQuery(["users", page, query], () =>
-    feedService.get({
-      ...query,
-      pageSize: USER_PAGE_SIZE,
-      pageNumber: page,
-    })
+    refetch,
+  } = useQuery(
+    ["feed", "suggestion", page, query],
+    () =>
+      feedService.get({
+        ...query,
+        pageSize: USER_PAGE_SIZE,
+        pageNumber: page,
+      }),
+    {
+      refetchOnWindowFocus: false,
+      enabled: false,
+      onSuccess: (res) => {
+        const newFeed = [...feed, ...res?.data?.data];
+        setHasMore(newFeed.length < res?.data?.total);
+        setFeed(newFeed);
+      },
+    }
   );
 
   const { mutate: matchUser } = useMutation(matchService.match, {
@@ -32,11 +46,15 @@ const BrowseUserPage = () => {
   const handleMatch = (user) => {
     matchUser({ userId: user._id });
   };
+
+  useEffect(() => {
+    refetch();
+  }, [page]);
   return (
     <Box
       sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
-      <Box maxWidth={600} sx={{width: '100%'}}>
+      <Box maxWidth={600} sx={{ width: "100%" }}>
         {/* <SkillSlider  skills={['computer science', 'java', 'python', 'machine learning', 'amazon web services', 'google cloud', 'go', 'rust']}/> */}
 
         {/* <Typography
@@ -50,8 +68,10 @@ const BrowseUserPage = () => {
         {/* <SearchUserSection /> */}
         {/* <Typography variant="5" component='h5' marginBottom={2}>Suggested users</Typography> */}
         <UserProfileGrid
+          hasMore={hasMore}
+          onNext={() => setPage((prevPage) => prevPage + 1)}
           onMatch={handleMatch}
-          users={data?.data?.data}
+          users={feed}
           loading={isLoadingUsers}
           error={error}
         />

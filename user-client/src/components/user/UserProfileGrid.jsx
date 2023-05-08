@@ -4,6 +4,7 @@ import UserProfileCard from "./UserProfileCard";
 import Loader from "../common/Loader";
 import Error from "../common/Error";
 import dynamic from "next/dynamic";
+import InfiniteScroll from "react-infinite-scroll-component";
 const UserProfileGrid = ({
   loading,
   error,
@@ -12,14 +13,23 @@ const UserProfileGrid = ({
   total,
   page,
   onPageChange,
-  onMatch
+  onMatch,
+  onNext,
+  hasMore
 }) => {
   console.log(users)
   if (loading) return <Loader />;
   if (error) return <Error />;
   if(users?.length < 1) return <Typography sx={{textAlign: 'center'}}>No more users</Typography>
+  
   return (
-    <Stack spacing={3} sx={{ justifyContent: "center", alignItems: "center" }}>
+   
+      <InfiniteScroll
+      dataLength={users.length}
+      next={onNext}
+      hasMore={hasMore}
+     
+      >
       <Grid rowSpacing={3} container>
         {users.map((user) => (
           <Grid key={user._id} xs={12} item>
@@ -27,12 +37,9 @@ const UserProfileGrid = ({
           </Grid>
         ))}
       </Grid>
-      {/* <Pagination
-        onChange={(e, newPage) => onPageChange(newPage)}
-        count={Math.ceil(total / pageSize)}
-        page={page}
-      /> */}
-    </Stack>
+      </InfiniteScroll>
+    
+   
   );
 };
 

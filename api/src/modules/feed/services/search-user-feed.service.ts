@@ -131,8 +131,7 @@ export class SearchUserFeedService {
 
     const { users } = await this.userService.search({
       includeIds: searchedUsers.map((u) => u.userId),
-      pageSize: query.pageSize,
-      pageNumber: query.pageNumber,
+   
     } as any);
 
     // TODO - make sure that users has the same order as includeIds

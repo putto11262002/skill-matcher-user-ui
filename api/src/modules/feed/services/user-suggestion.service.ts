@@ -112,6 +112,8 @@ export class UserSuggestionService {
       },
     ];
 
+    
+
     const [searchedUsers, count] = await Promise.all([
       this.userSkillService.advanceSearch([
         ...pipe,
@@ -127,9 +129,9 @@ export class UserSuggestionService {
 
     const users = await this.userService.search({
       includeIds: searchedUsers.map((u) => u.userId),
-      pageSize: query.pageSize,
-      pageNumber: query.pageNumber,
+     
     } as any);
+
     return {
       users: users.users,
       total: count[0]?.count ? count[0]?.count : 0,

@@ -187,6 +187,7 @@ export class UserService {
       filer.$and.push({role: {'$in': query.roles}})
     }
 
+
     const [users, total] = await Promise.all([
       this.userModel
         .find(filer)

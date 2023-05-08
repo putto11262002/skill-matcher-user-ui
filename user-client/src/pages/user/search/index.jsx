@@ -13,7 +13,7 @@ import {
   InputBase,
   Stack,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import SearchIcon from "@mui/icons-material/Search";
 import UserProfileCard from "@/components/user/UserProfileGrid";
 import userService from "@/services/user.service";
@@ -22,7 +22,7 @@ import styled from "styled-components";
 import SearchSection from "@/components/user/SearchSection";
 import feedService from "@/services/feed.service";
 import UserProfileGrid from "@/components/user/UserProfileGrid";
-
+import matchService from "@/services/match.service";
 
 
 const SearchUsers = () => {
@@ -38,11 +38,18 @@ const SearchUsers = () => {
   } = useQuery(['user', user?._id, 'skills'] ,() => userService.getSelfSkill(), {staleTime: 300000});
 
 
+    const { mutate: matchUser } = useMutation(matchService.match, {
+    onSuccess: (res) => console.log(res),
+  });
   const {data: feedRes, isLoading: loadingFeed, refetch: handleSearchFeed, error: searchFeedError} = useQuery(['feed', 'search'], () => feedService.search(query), {enabled: false})
 
   useEffect(() => {
     handleSearchFeed()
   }, [query])
+
+    const handleMatch = (user) => {
+    matchUser({ userId: user._id });
+  };
 
   return (
     <Box
@@ -187,7 +194,7 @@ const SearchUsers = () => {
       }} skills={userSkillRes?.data?.data}/>
     <Stack spacing={2}>
     <Typography>Search Result</Typography>
-    <UserProfileGrid error={searchFeedError} loading={loadingFeed} users={feedRes?.data?.data || []}/>
+    <UserProfileGrid onMatch={handleMatch} error={searchFeedError} loading={loadingFeed} users={feedRes?.data?.data || []}/>
     </Stack>
 
 </Stack>
