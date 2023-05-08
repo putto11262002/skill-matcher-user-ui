@@ -1,0 +1,1 @@
+export const MATCH_PAGE_SIZE = 20

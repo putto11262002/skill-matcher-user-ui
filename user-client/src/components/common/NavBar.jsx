@@ -61,7 +61,7 @@ const navLinks = [
   },
   {
     label: "Matches",
-    path: "/my/match",
+    path: "/match",
     visibility: "auth",
     icon: (props) => <StarIcon {...props} />,
   },
