@@ -6,7 +6,7 @@ export class FeedService {
     }
 
     async search(query){
-        return api.get('/feed/user/self', {params: query})
+        return api.get('/feed/search/user/self', {params: query})
     }
 }
 

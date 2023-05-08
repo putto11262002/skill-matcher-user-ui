@@ -21,6 +21,7 @@ export class SearchUserFeedQueryDto extends SearchDto {
     @ApiProperty()
     @IsOptional()
     @IsBoolean()
+    @Transform(({value}) => value === 'true' ? true : false)
      matched?: boolean;
 
     @ApiProperty()

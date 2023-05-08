@@ -14,7 +14,7 @@ import { SearchUserFeedQueryDto } from '../dtos/requests/search-user-query.dto';
 import { Pagination } from '../../../common/dtos/responses/pagination.dto';
 import { UserDto } from '../../user/dtos/responses/user.dto';
 
-@Controller('feed')
+@Controller('feed/search')
 export class SearchUserFeedController {
   constructor(private readonly searchUserFeedService: SearchUserFeedService) {}
 

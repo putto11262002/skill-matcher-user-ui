@@ -14,9 +14,10 @@ const UserProfileGrid = ({
   onPageChange,
   onMatch
 }) => {
+  console.log(users)
   if (loading) return <Loader />;
   if (error) return <Error />;
-  if(users.length < 1) return <Typography sx={{textAlign: 'center'}}>No more users</Typography>
+  if(users?.length < 1) return <Typography sx={{textAlign: 'center'}}>No more users</Typography>
   return (
     <Stack spacing={3} sx={{ justifyContent: "center", alignItems: "center" }}>
       <Grid rowSpacing={3} container>

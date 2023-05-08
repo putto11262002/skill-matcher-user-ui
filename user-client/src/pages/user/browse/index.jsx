@@ -7,7 +7,7 @@ import { USER_PAGE_SIZE } from "@/constants/user.constant";
 import { Box, Stack, Typography } from "@mui/material";
 import useAuth from "@/hooks/useAuth";
 import matchService from "../../../services/match.service";
-import feedService, { FeedService } from "@/services/feedService";
+import feedService, { FeedService } from "@/services/feed.service";
 
 const BrowseUserPage = () => {
   useAuth();

@@ -64,7 +64,7 @@ export class SearchUserFeedService {
       });
     }
 
-    if (query.matched) {
+    if (query.matched !== undefined) {
       pipe.push({
         $match: {
           userId: query.matched
