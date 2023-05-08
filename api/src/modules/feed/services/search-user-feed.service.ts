@@ -96,9 +96,9 @@ export class SearchUserFeedService {
     pipe.push({
       $project: {
         userId: 1,
-        skill: process.env.NODE_ENV === 'development' ? 1 : 0,
-        proficiency: process.env.NODE_ENV === 'development' ? 1 : 0,
-        score: {
+        // skill: process.env.NODE_ENV === 'development' ? 1 : 0,
+        // proficiency: process.env.NODE_ENV === 'development' ? 1 : 0,
+        skillScore: {
           $cond: {
             if: {
               $in: ['$skill', skills],
@@ -109,6 +109,14 @@ export class SearchUserFeedService {
         },
       },
     });
+
+     /**
+    * Group by user id and sum the score
+    */
+    pipe.push( 
+   {
+     $group: {_id: "$userId", score: {$sum: "$skillScore"}}
+   },)
 
     pipe.push({
       $sort: {
@@ -127,10 +135,10 @@ export class SearchUserFeedService {
       this.userSkillService.advanceSearch([...pipe, { $count: 'count' }]),
     ]);
 
-    this.logger.debug(_.uniq(searchedUsers.map((u) => u.userId)));
+    this.logger.debug(_.uniq(searchedUsers.map((u) => u._id)));
 
     const { users } = await this.userService.search({
-      includeIds: searchedUsers.map((u) => u.userId),
+      includeIds: searchedUsers.map((u) => u._id),
    
     } as any);
 

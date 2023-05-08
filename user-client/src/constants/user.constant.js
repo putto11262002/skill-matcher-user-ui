@@ -1,1 +1,1 @@
-export const USER_PAGE_SIZE = 5
+export const USER_PAGE_SIZE = 7

@@ -88,9 +88,9 @@ export class UserSuggestionService {
       {
         $project: {
           userId: 1,
-          skill:  process.env.NODE_ENV === 'development' ? 1 : 0,
-          proficiency: process.env.NODE_ENV === 'development' ? 1 : 0,
-          score: {
+          // skill:  process.env.NODE_ENV === 'development' ? 1 : 0,
+          // proficiency: process.env.NODE_ENV === 'development' ? 1 : 0,
+          skillScore: {
             $cond: {
               if: {
                 $in: ['$skill', skills],
@@ -101,6 +101,13 @@ export class UserSuggestionService {
           },
         },
       },
+      /**
+       * Group by user id and sum the score
+       */
+      {
+        $group: {_id: "$userId", score: {$sum: "$skillScore"}}
+      },
+
       /**
        * Sort user skills by score in descending order
        */
@@ -125,10 +132,10 @@ export class UserSuggestionService {
 
 
     // log out searched values
-    this.logger.verbose(searchedUsers);
+    this.logger.verbose(searchedUsers, count);
 
     const users = await this.userService.search({
-      includeIds: searchedUsers.map((u) => u.userId),
+      includeIds: searchedUsers.map((u) => u._id),
      
     } as any);
 
