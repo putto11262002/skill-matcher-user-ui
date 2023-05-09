@@ -4,12 +4,13 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { USER_PAGE_SIZE } from "@/constants/user.constant";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import useAuth from "@/hooks/useAuth";
-import matchService from "../../services/match.service";
+import matchService from "@/services/match.service";
 import feedService, { FeedService } from "@/services/feed.service";
 import { enqueueSnackbar } from "notistack";
-import MatchGrid from "../../components/match/MatchGrid";
-import SearchInput from "../../components/common/form/SearchInput";
+import MatchCardRequest from "@/components/match/MatchCardRequest";
+import SearchInput from "@/components/common/form/SearchInput";
 import { MATCH_PAGE_SIZE, MATCH_STATUS } from "@/constants/match.constant";
+import MatchGridRequest from "@/components/match/MatchGridRequest";
 
 const RequestsPage = () => {
   useAuth();
@@ -58,21 +59,43 @@ const RequestsPage = () => {
     onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
   });
 
-  const handleMatch = (user) => {
-    matchUser({ userId: user._id });
-  };
+
+  const { mutate: declineRequest } = useMutation(matchService.declineRequest, {
+    onSuccess: (res) =>
+      enqueueSnackbar("Match request has been declined", { variant: "success" }),
+    onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
+  });
+
+  const { mutate: acceptRequest } = useMutation(matchService.acceptRequest, {
+    onSuccess: (res) =>
+      enqueueSnackbar("Match request has been accepted", { variant: "success" }),
+    onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
+  });
+
 
   useEffect(() => {
     setUpdateSearchTerm(false);
     refetch();
   }, [page]);
 
+  const handleDecline = (user) => {
+    declineRequest(user._id);
+    // setFeed(prevFeed => prevFeed.filter(u => u._id !== user._id))
+  }
+
+  const handleAccept = (user) =>{
+    acceptRequest(user._id);
+    console.log(user)
+  }
+
+
+  console.log(feed)
   return (
     
     <Box
       sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
-      <Typography> Match History </Typography>
+      <Typography> Match Requests </Typography>
       <Stack spacing={3} maxWidth={600} sx={{ width: "100%" }}>
         <Box
           onSubmit={(e) => {
@@ -85,13 +108,15 @@ const RequestsPage = () => {
         >
           <SearchInput onChange={(searchTerm) => setSearchTerm(searchTerm)} />
         </Box>
-        <MatchGrid
+        <MatchGridRequest
           hasMore={hasMore}
           onNext={() => setPage((prevPage) => prevPage + 1)}
-          onMatch={handleMatch}
+          onDecline={handleDecline}
+          onAccept ={handleAccept}
           users={feed}
           loading={isLoadingUsers}
           error={error}
+
         />
       </Stack>
     </Box>
