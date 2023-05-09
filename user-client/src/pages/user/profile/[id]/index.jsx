@@ -52,10 +52,12 @@ const UserHomePage = () => {
   } = useQuery(["user", id], () => userService.getUserById(id), {
     onSuccess: (res) => {
       setUser(res.data);
-      setMatched(res?.data?.matchStatus === MATCH_STATUS.ACTIVE);
+      setMatched(res?.data?.matchStatus);
     },
     enabled: false,
   });
+
+  
 
   const {
     isLoading: isLoadingUserTutorSkills,
@@ -152,28 +154,28 @@ const UserHomePage = () => {
             </Typography>
             <Grid sx={{ justifyContent: "center" }} gap={2} container>
               <InfoBadge
-                display={matched}
+                display={matched === MATCH_STATUS.ACTIVE}
                 label={<EmailIcon />}
                 value={user?.profile?.email || user?.email}
               />
               <InfoBadge
-                display={matched}
+                display={matched === MATCH_STATUS.ACTIVE}
                 label={<PhoneIcon />}
                 value={user?.profile?.phoneNumber}
               />
 
               <InfoBadge
-                display={matched && user?.profile?.facebook}
+                display={matched === MATCH_STATUS.ACTIVE && user?.profile?.facebook}
                 label={<FacebookIcon />}
                 value={user?.profile?.facebook}
               />
               <InfoBadge
-                display={matched && user?.profile?.instagram}
+                display={matched === MATCH_STATUS.ACTIVE && user?.profile?.instagram}
                 label={<InstagramIcon />}
                 value={user?.profile?.instagram}
               />
               <InfoBadge
-                display={matched && user?.profile?.whatsapp}
+                display={matched === MATCH_STATUS.ACTIVE && user?.profile?.whatsapp}
                 label={<WhatsAppIcon />}
                 value={user?.profile?.whatsapp}
               />
