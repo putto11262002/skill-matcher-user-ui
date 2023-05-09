@@ -25,6 +25,7 @@ import UserProfileGrid from "@/components/user/UserProfileGrid";
 import matchService from "@/services/match.service";
 import { USER_PAGE_SIZE } from "@/constants/user.constant";
 import { enqueueSnackbar } from "notistack";
+import { MATCH_STATUS } from "@/constants/match.constant";
 const SearchUsers = () => {
   useAuth();
 
@@ -62,6 +63,7 @@ const SearchUsers = () => {
         ...query,
         pageSize: USER_PAGE_SIZE,
         pageNumber: page,
+        match: MATCH_STATUS.NOT_MATCHED
       }),
     {
       enabled: false,
