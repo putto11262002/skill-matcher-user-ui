@@ -12,7 +12,6 @@ import Stack from '@mui/material/Stack';
 import SnackbarContent from '@mui/material/SnackbarContent';
 import Rating from '@mui/material/Rating';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Dashboard } from '@mui/icons-material';
 
 const action = (
     <Button color="primary" size="small">
