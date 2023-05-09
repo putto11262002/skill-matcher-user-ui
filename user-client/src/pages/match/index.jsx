@@ -4,7 +4,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { USER_PAGE_SIZE } from "@/constants/user.constant";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import useAuth from "@/hooks/useAuth";
-import matchService from "../../services/match.service";
+import matchService from "@/services/match.service";
 import feedService, { FeedService } from "@/services/feed.service";
 import { enqueueSnackbar } from "notistack";
 import MatchGrid from "../../components/match/MatchGrid";
