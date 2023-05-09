@@ -75,56 +75,6 @@ const UserProfileCard = ({ user, onMatch }) => {
                 </Button>
               </Box>
             ))}
-            {/* <Stack spacing={0.5}>
-              {(!isLoadingSkill || !error) &
-              (data?.data?.data?.filter((skill) => skill.role === "learner")
-                .length >
-                0) ? (
-                <Typography
-                  variant="body2"
-                  fontWeight={(theme) => theme.typography.fontWeightBold}
-                >
-                  Learns
-                </Typography>
-              ) : null}
-              {isLoadingSkill || error ? (
-                <Loader />
-              ) : (
-                data?.data?.data
-                  .filter((skill) => skill.role === "learner")
-                  .map((skill) => (
-                    <UserSkill
-                      key={skill.skill + skill.role}
-                     value={skill}
-                    />
-                  ))
-              )}
-            </Stack>
-            <Stack spacing={0.5}>
-              {(!isLoadingSkill || !error) &
-              (data?.data?.data?.filter((skill) => skill.role === "tutor")
-                .length >
-                0) ? (
-                <Typography
-                  variant="body2"
-                  fontWeight={(theme) => theme.typography.fontWeightBold}
-                >
-                  Teaches
-                </Typography>
-              ) : null}
-              {isLoadingSkill || error ? (
-                <Loader />
-              ) : (
-                data?.data?.data
-                  .filter((skill) => skill.role === "tutor")
-                  .map((skill) => (
-                    <UserSkill
-                      key={skill.skill + skill.role}
-                    value={skill}
-                    />
-                  ))
-              )}
-            </Stack> */}
           </Box>
         </Stack>
       </CardContent>
