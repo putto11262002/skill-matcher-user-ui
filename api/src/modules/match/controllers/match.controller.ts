@@ -46,9 +46,8 @@ export class MatchController {
   @HttpCode(HttpStatus.OK)
   async createMatch(
     @CurrentUser() currentUser: User,
-   @Body() payload: createMatchDto,
+    @Body() payload: createMatchDto,
   ) {
-  
     const matchTarget = await this.userService.getById(payload.userId);
     const createdMatch = await this.matchService.createMatch(
       currentUser,
@@ -59,22 +58,22 @@ export class MatchController {
     return new MatchDto(createdMatch);
   }
 
-  @Put('user/self/match/:id/accept')
+  @Put('user/self/match/:userId/accept')
   @HttpCode(HttpStatus.NO_CONTENT)
   async acceptMatch(
     @CurrentUser() currentUser: User,
-    @Param('id', ParseObjectIdPipe) id: Types.ObjectId,
+    @Param('userId', ParseObjectIdPipe) otherId: Types.ObjectId,
   ) {
-    await this.matchService.acceptMatch(id, currentUser._id);
+    await this.matchService.acceptMatch(currentUser._id, otherId);
   }
 
-  @Delete('user/self/match/:id/decline')
+  @Delete('user/self/match/:userId/decline')
   @HttpCode(HttpStatus.NO_CONTENT)
   async rejectMatch(
     @CurrentUser() currentUser: User,
-    @Param('id', ParseObjectIdPipe) id: Types.ObjectId,
+    @Param('userId', ParseObjectIdPipe) otherId: Types.ObjectId,
   ) {
-    await this.matchService.declineMatch(id, currentUser._id);
+    await this.matchService.declineMatch(currentUser._id, otherId);
   }
 
   // @Get('user/self/match/:id')
@@ -86,8 +85,11 @@ export class MatchController {
 
   @Delete('user/self/match/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async unmatch(@Param('id', ParseObjectIdPipe) id: Types.ObjectId, @CurrentUser() user: User){
-    await this.matchService.deleteMatch(id, user._id)
+  async unmatch(
+    @Param('id', ParseObjectIdPipe) id: Types.ObjectId,
+    @CurrentUser() user: User,
+  ) {
+    await this.matchService.deleteMatch(id, user._id);
   }
 
   @Get('user/self/match')
@@ -96,9 +98,10 @@ export class MatchController {
     @Query() query: SearchMatchQueryDto,
   ) {
     const { matches, total, pageNumber, pageSize } =
-      await this.matchService.searchMatches(
-       {includeIds: [currentUser._id], ...query},
-      );
+      await this.matchService.searchMatches({
+        includeIds: [currentUser._id],
+        ...query,
+      });
     return new Pagination(matches, pageSize, pageNumber, total);
   }
 }

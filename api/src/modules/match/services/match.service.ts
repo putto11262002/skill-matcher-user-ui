@@ -150,17 +150,32 @@ export class MatchService {
     await this.matchModel.deleteOne({ _id });
   }
 
-  async acceptMatch(id: Types.ObjectId, userId: Types.ObjectId) {
+  async acceptMatch(selfId: Types.ObjectId, otherId: Types.ObjectId) {
     const match = await this.matchModel.findOne({
-      _id: id,
-      users: { $elemMatch: { userId } },
+      $and: [
+        {
+          users: {
+            $elemMatch: {
+              userId: selfId,
+            },
+          },
+        },
+        {
+          users: {
+            $elemMatch: {
+              userId: otherId,
+            },
+          },
+        },
+      ],
     });
+
     if (!match) {
       throw new NotFoundException('Match does not exist');
     }
 
     match.users = match.users.map((user) =>
-      user.userId.equals(userId)
+      user.userId.equals(selfId)
         ? { ...user, status: MATCH_USER_STATUS.ACCEPTED }
         : user,
     );
@@ -168,13 +183,44 @@ export class MatchService {
       (user) => user.status === MATCH_USER_STATUS.ACCEPTED,
     );
     match.status = bothAccepted ? MATCH_STATUS.ACTIVE : match.status;
-    await this.matchModel.updateOne({ _id: id }, match);
+    await this.matchModel.updateOne({
+      $and: [
+        {
+          users: {
+            $elemMatch: {
+              userId: selfId,
+            },
+          },
+        },
+        {
+          users: {
+            $elemMatch: {
+              userId: otherId,
+            },
+          },
+        },
+      ],
+    }, match);
   }
 
-  async declineMatch(id: Types.ObjectId, userId: Types.ObjectId) {
+  async declineMatch(selfId: Types.ObjectId, otherId: Types.ObjectId) {
     const match = await this.matchModel.findOne({
-      _id: id,
-      users: { $elemMatch: { userId } },
+      $and: [
+        {
+          users: {
+            $elemMatch: {
+              userId: selfId,
+            },
+          },
+        },
+        {
+          users: {
+            $elemMatch: {
+              userId: otherId,
+            },
+          },
+        },
+      ],
     });
     if (!match) {
       throw new NotFoundException('Match does not exist');
@@ -182,7 +228,24 @@ export class MatchService {
     if (match.status === MATCH_STATUS.ACTIVE) {
       throw new BadRequestException('Cannot modify active match');
     }
-    await this.matchModel.deleteOne({ _id: id });
+    await this.matchModel.deleteOne({
+      $and: [
+        {
+          users: {
+            $elemMatch: {
+              userId: selfId,
+            },
+          },
+        },
+        {
+          users: {
+            $elemMatch: {
+              userId: otherId,
+            },
+          },
+        },
+      ],
+    });
   }
 
   async searchMatches(
