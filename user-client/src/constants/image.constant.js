@@ -1,0 +1,1 @@
+export const VALID_IMAGE_MIME = ['image/jpg', 'image/jpeg', 'image/png']

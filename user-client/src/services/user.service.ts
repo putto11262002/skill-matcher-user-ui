@@ -1,4 +1,5 @@
 import api from "./api";
+import authService from "./auth.service";
 
 export class UserService {
     // get information about the logged in user
@@ -8,7 +9,10 @@ export class UserService {
 
     // update information of the logged user
     async updateSelf(payload){
-        return api.put("/user/self", payload)
+        const res = await  api.put("/user/self", payload)
+        const prevUser = authService.getLocalUser();
+        authService.setLocalUser({...prevUser, ...payload})
+        return res
     }
 
     // search useres
@@ -27,7 +31,10 @@ export class UserService {
     async updateAvatar(file){
         const formData = new FormData()
         formData.append('avatar', file)
-        return api.putForm("/user/self/avatar",formData )
+        const res = await api.putForm("/user/self/avatar",formData )
+        const prevUser = authService.getLocalUser();
+        authService.setLocalUser({...prevUser, avatar: res.data})
+        return res;
     }
 
     async addSkill(payload){
@@ -45,6 +52,14 @@ export class UserService {
     // get other user's skill
     async getUserSkills({userId, query}){
         return api.get(`/user/${userId}/skill`, {params: query})
+    }
+
+    async getSelfSkills({query}){
+        return api.get(`/user/self/skill`, {params: query})
+    }
+
+    async updateSelfSkill({skill, payload}){
+        return api.put(`/user/self/skill/${skill}`, payload)
     }
 }
 
