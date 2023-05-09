@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import InfiniteScroll from "react-infinite-scroll-component";
 import MatchCard from "./MatchCard";
 import Button from '@mui/material/Button';
+import Link from '@mui/material';
 
 const MatchGrid = ({
   // loading,
@@ -41,7 +42,7 @@ const MatchGrid = ({
         {users.map((user) => (
           <Grid key={user._id} xs={12} item>
             <MatchCard onMatch={onMatch} user={user} />
-          </Grid>
+            </Grid>
         ))}
       </Grid>
       </InfiniteScroll>
