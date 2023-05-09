@@ -9,6 +9,7 @@ import { SearchUserDto } from '../../user/dtos/requests/search-user.dto';
 import { MatchService } from '../../match/services/match.service';
 import * as _ from 'lodash';
 import { User } from '../../user/schemas/user.schema';
+import { MATCH_STATUS } from '../constant';
 @Injectable()
 export class SearchUserFeedService {
   private logger = new Logger(SearchUserFeedService.name);
@@ -65,14 +66,36 @@ export class SearchUserFeedService {
       });
     }
 
-    if (query.matched !== undefined) {
-      pipe.push({
-        $match: {
-          userId: query.matched
-            ? { $in: matchedUserIds }
-            : { $nin: matchedUserIds },
-        },
-      });
+    if (query.match) {
+      if (query.match === MATCH_STATUS.ACTIVE) {
+        const activeMatchedUserIds = matches.matches
+          .filter((m) => m.status === MATCH_STATUS.ACTIVE)
+          .map((m) => m.users.find((u) => !u.userId.equals(userId))?.userId);
+        pipe.push({
+          $match: {
+            userId: { $in: activeMatchedUserIds },
+          },
+        });
+      }
+      if (query.match === MATCH_STATUS.NOT_MATCHED) {
+        pipe.push({
+          $match: {
+            userId: { $nin: matchedUserIds },
+          },
+        });
+      }
+
+      if (query.match === MATCH_STATUS.PENDING) {
+        const pendingMatchUserIds = matches.matches
+          .filter((m) => m.status === MATCH_STATUS.PENDING)
+          .map((m) => m.users.find((u) => !u.userId.equals(userId))?.userId);
+
+        pipe.push({
+          $match: {
+            userId: { $in: pendingMatchUserIds },
+          },
+        });
+      }
     }
 
     if (query.skills) {
@@ -111,13 +134,12 @@ export class SearchUserFeedService {
       },
     });
 
-     /**
-    * Group by user id and sum the score
-    */
-    pipe.push( 
-   {
-     $group: {_id: "$userId", score: {$sum: "$skillScore"}}
-   },)
+    /**
+     * Group by user id and sum the score
+     */
+    pipe.push({
+      $group: { _id: '$userId', score: { $sum: '$skillScore' } },
+    });
 
     pipe.push({
       $sort: {
@@ -136,11 +158,10 @@ export class SearchUserFeedService {
       this.userSkillService.advanceSearch([...pipe, { $count: 'count' }]),
     ]);
 
-    const userIds = searchedUsers.map((u) => u._id?.toHexString())
+    const userIds = searchedUsers.map((u) => u._id?.toHexString());
 
     const { users } = await this.userService.search({
       includeIds: userIds,
-   
     } as any);
 
     const userMap = new Map<string, User>();

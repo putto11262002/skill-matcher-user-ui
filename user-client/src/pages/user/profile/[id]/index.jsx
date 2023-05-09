@@ -25,6 +25,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import { MATCH_STATUS } from "@/constants/match.constant";
 const UserHomePage = () => {
   useAuth();
   const router = useRouter();
@@ -51,38 +52,11 @@ const UserHomePage = () => {
   } = useQuery(["user", id], () => userService.getUserById(id), {
     onSuccess: (res) => {
       setUser(res.data);
-      console.log(res?.data?.matched);
-      setMatched(res?.data?.matched);
+      setMatched(res?.data?.matchStatus === MATCH_STATUS.ACTIVE);
     },
     enabled: false,
   });
 
-  //fetching user details
-  // const { isLoading: isLoadingUserdetails, error: errorUserDetails, refetch: fetchUserDetails } = useQuery(
-  //   ["user", ],
-  //   userService.getSelf,
-  //   {
-  //     onSuccess: (res) => {
-
-  //       setUser(res.data);
-  //       setFirstName(res.data?.profile?.firstName || '');
-  //       setLastName(res.data?.profile?.lastName || '');
-  //       setAboutMe(res.data?.aboutMe || '');
-  //       setPhoneNumber(res.data?.phoneNumber || '');
-  //       setEmail(res.data?.email || '');
-  //       setInstagram(res.data?.instagram || '');
-  //       setSnapchat(res.data?.snapchat || '');
-  //       setFacebook(res.data?.facebook || '');
-  //       setWhatsapp(res.data?.whatsapp || '');
-  //       setMatched(res?.data?.matched)
-  //     },
-  //     enabled: false
-  //   }
-  // );
-
-  // console.log(matched)
-
-  // fetching user skills (tutor)
   const {
     isLoading: isLoadingUserTutorSkills,
     refetch: fetchUserTutorSkills,
@@ -174,7 +148,7 @@ const UserHomePage = () => {
             </Typography>
 
             <Typography sx={{ textAlign: "center" }}>
-              About Me: {user?.profile?.aboutMe}
+              {user?.profile?.aboutMe}
             </Typography>
             <Grid sx={{ justifyContent: "center" }} gap={2} container>
               <InfoBadge

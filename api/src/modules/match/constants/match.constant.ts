@@ -1,7 +1,7 @@
 export const MATCH_STATUS = {
     ACTIVE: 'active',
     PENDING: 'pending',
-    INACTIVE: 'inactive'
+    INACTIVE: 'inactive',
 }
 
 export const MATCH_USER_STATUS = {

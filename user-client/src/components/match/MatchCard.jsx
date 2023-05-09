@@ -74,7 +74,7 @@ const MatchCard = ({ user, onMatch }) => {
             </Tooltip>
           </Box>
         )} */}
-        {/* <Box
+        <Box
           sx={{
             background:grey[100],
             width: "2.5rem",
@@ -95,7 +95,7 @@ const MatchCard = ({ user, onMatch }) => {
               </IconButton>
             </Link>
           </Tooltip>
-        </Box> */}
+        </Box>
       </CardActions>
     </Card>
   );

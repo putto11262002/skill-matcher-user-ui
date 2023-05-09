@@ -225,8 +225,8 @@ export class MatchService {
   async matchExists(
     userId1: Types.ObjectId,
     userId2: Types.ObjectId,
-  ): Promise<boolean> {
-    const id = await this.matchModel.exists({
+  ): Promise<string> {
+    const match = await this.matchModel.findOne({
       $and: [
         {
           users: {
@@ -244,6 +244,7 @@ export class MatchService {
         },
       ],
     });
-    return id ? true : false;
+
+    return match?.status;
   }
 }

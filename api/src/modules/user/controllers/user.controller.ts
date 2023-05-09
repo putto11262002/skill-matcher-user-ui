@@ -85,14 +85,14 @@ export class UserController {
     }
     // check relationship between users to determie reponse types
 
-    const matched = await this.matchService.getMatchByUsers(
+    const status = await this.matchService.matchExists(
       currentUser._id,
       user._id,
     );
 
-    return matched?.status === MATCH_STATUS.ACTIVE
+    return status === MATCH_STATUS.ACTIVE
       ? new UserDto(user, MATCH_STATUS.ACTIVE).toMatchedUserResponse()
-      : new UserDto(user, matched?.status).toPublicResponse();
+      : new UserDto(user, status).toPublicResponse();
   }
 
   @UseGuards(AuthGuard)

@@ -14,6 +14,7 @@ import { SearchUserFeedQueryDto } from '../dtos/requests/search-user-query.dto';
 import { Pagination } from '../../../common/dtos/responses/pagination.dto';
 import { UserDto } from '../../user/dtos/responses/user.dto';
 import { MatchService } from '../../match/services/match.service';
+import { MATCH_STATUS } from '../constant';
 
 @Controller('feed/search')
 export class SearchUserFeedController {
@@ -37,17 +38,17 @@ export class SearchUserFeedController {
      */
 
     const { matches } = await this.matchService.getMatchByUser(user._id);
-    const matchedUser = new Set<string>();
+    const matchedUser = new Map<string, string>();
     matches.forEach((match) => {
       const u = match.users.find((u) => !u.userId.equals(user._id));
-      matchedUser.add(u.userId.toHexString());
+      matchedUser.set(u.userId.toHexString(), match.status);
     });
 
     return new Pagination(
       users.map((u) =>
-        matchedUser.has(u._id.toHexString())
-          ? new UserDto(u).toMatchedUserResponse()
-          : new UserDto(u).toPublicResponse(),
+        matchedUser.get(u._id.toHexString()) === MATCH_STATUS.ACTIVE
+          ? new UserDto(u, MATCH_STATUS.ACTIVE).toMatchedUserResponse()
+          : new UserDto(u, matchedUser.get(u._id.toHexString())).toPublicResponse(),
       ),
       pageSize,
       pageNumber,

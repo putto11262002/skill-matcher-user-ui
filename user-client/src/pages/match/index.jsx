@@ -9,7 +9,7 @@ import feedService, { FeedService } from "@/services/feed.service";
 import { enqueueSnackbar } from "notistack";
 import MatchGrid from "../../components/match/MatchGrid";
 import SearchInput from "../../components/common/form/SearchInput";
-import { MATCH_PAGE_SIZE } from "@/constants/match.constant";
+import { MATCH_PAGE_SIZE, MATCH_STATUS } from "@/constants/match.constant";
 
 const BrowseUserPage = () => {
   useAuth();
@@ -32,7 +32,7 @@ const BrowseUserPage = () => {
         ...query,
         pageSize: MATCH_PAGE_SIZE,
         q: searchTerm,
-        matched: true,
+        match: MATCH_STATUS.ACTIVE,
         pageNumber: page,
       }),
     {
