@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Container, Typography, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-//import './Homepage.css';
+//import './hi.module.css';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Box } from '@mui/material';
 import Avatar from '@material-ui/core/Avatar';
@@ -12,13 +12,13 @@ import Stack from '@mui/material/Stack';
 import SnackbarContent from '@mui/material/SnackbarContent';
 import Rating from '@mui/material/Rating';
 import DeleteIcon from '@mui/icons-material/Delete';
-
+ 
 const action = (
     <Button color="primary" size="small">
         open
     </Button>
 );
-
+ 
 const useStyles = makeStyles((theme) => ({
     container: {
         backgroundColor: '#ffff',
@@ -53,12 +53,12 @@ const useStyles = makeStyles((theme) => ({
         },
     },
 }));
-
+ 
 function Dashboard() {
     const classes = useStyles();
-
+ 
     return (
-        <Container maxWidth="lg">
+        <Container classes={classes.container} maxWidth="lg">
             <Grid container spacing={4}>
                 <Grid item xs={12}>
                     <Typography variant="h1" align="center">
@@ -80,12 +80,12 @@ function Dashboard() {
                                 Software Engineer
                             </Typography>
                         </Box>
-
+ 
                         <Box marginTop={2} /> {/* Adds vertical space */}
                         <Typography variant="body1">
-
+ 
                         </Typography>
-
+ 
                         <Box marginTop={5} display="flex" justifyContent="center">
                             <Box display="flex" flexDirection="column" alignItems="center">
                                 <Typography variant="h3" className={classes.center}>
@@ -111,7 +111,7 @@ function Dashboard() {
                         <Button variant="outlined">Edit Profile </Button>
                     </Container>
                 </Grid>
-
+ 
                 <Grid item xs={13} md={4}>
                     <Container className={classes.container}>
                         <Typography variant="h3" className={classes.sectionTitle} style={{ textAlign: 'center' }}>
@@ -130,7 +130,7 @@ function Dashboard() {
                                     <DeleteIcon />
                                 </Box>
                             </li>
-
+ 
                             <li>
                             <Box marginTop={3} /> {/* Adds vertical space */}
                             <Box display="flex" alignItems="center" justifyContent="space-between">
@@ -172,8 +172,8 @@ function Dashboard() {
                         </ul>
                     </Container>
                 </Grid>
-
-
+ 
+ 
                 <Grid item xs={12} md={4}>
                     <Container className={classes.container}>
                         <Typography variant="h3" className={classes.sectionTitle} style={{ textAlign: 'center' }}>
@@ -218,25 +218,25 @@ function Dashboard() {
                         </ul>
                     </Container>
                 </Grid>
-
+ 
                 <Grid item xs={12} md={4}>
                     <Container className={classes.container}>
                         <Stack spacing={2} sx={{ maxWidth: 600 }}>
                             <Typography variant="h3" className={classes.sectionTitle}>
                                 Notifications
                             </Typography>
-                            <SnackbarContent sx={{background: theme => theme.palette.background.paper}} message="I love snacks." action={action} />
-                            <SnackbarContent
+                            <SnackbarContent sx={{ background: theme => theme.palette.background.paper, color: "black" }} message="I love snacks." action={action} />
+                            <SnackbarContent sx={{ background: theme => theme.palette.background.paper, color: "black" }} 
                                 message={
                                     'Reece wants to match with you'
                                 }
                                 action={action}
                             />
-                            <SnackbarContent
+                            <SnackbarContent sx={{ background: theme => theme.palette.background.paper, color: "black" }} 
                                 message="Maggie has accepted your request"
                                 action={action}
                             />
-                            <SnackbarContent
+                            <SnackbarContent sx={{ background: theme => theme.palette.background.paper, color: "black" }} 
                                 message={
                                     'Nathan has accepted your request'
                                 }
@@ -244,11 +244,13 @@ function Dashboard() {
                             />
                         </Stack>
                         <Box marginBottom={2} /> {/* Adds vertical space */}
+                        <Link href="/profile-creation" underline="none">
                         <Button variant="outlined">See All</Button>
+                        </Link>
                     </Container>
                 </Grid>
-
-
+ 
+ 
                 <Grid item xs={12}>
                     <Typography variant="body2" align="center">
                         &copy; 2023 John Doe
@@ -258,5 +260,5 @@ function Dashboard() {
         </Container>
     );
 }
-
+ 
 export default Dashboard;
