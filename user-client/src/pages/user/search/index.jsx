@@ -81,7 +81,7 @@ const SearchUsers = () => {
   );
 
   useEffect(() => {
-    if (!query) return;
+    // if (!query) return;
     setUpdateQuery(true);
     setPage(0);
     handleSearchFeed();
