@@ -32,7 +32,7 @@ const MatchCard = ({ user, onMatch }) => {
     <Card>
       <CardHeader
         avatar={<Avatar src={user?.avatar?.url || "/images/no-avatar.jpg"} />}
-        subheader={`${user.email}`}
+        subheader={`${user?.email}`}
         title={`${user?.profile?.firstName} ${user?.profile?.lastName}`}
       />
       <CardContent sx={{ paddingY: 1 }}>
@@ -87,7 +87,7 @@ const MatchCard = ({ user, onMatch }) => {
         >
           {" "}
           <Tooltip title="View profile">
-            <Link href={`/user/profile/${user._id}`}>
+            <Link href={`/user/profile/${user?._id}`}>
               <IconButton sx={{ width: "100%", height: "100%" }}>
                 <VisibilityIcon
                   sx={{ color: (theme) => theme.palette.secondary.main }}
