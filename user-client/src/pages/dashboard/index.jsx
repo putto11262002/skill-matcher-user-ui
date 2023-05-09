@@ -1,12 +1,12 @@
 import React from 'react';
 import { Grid, Container, Typography, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import './Homepage.css';
+//import './Homepage.css';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Box } from '@mui/material';
 import Avatar from '@material-ui/core/Avatar';
 import StarRateIcon from '@mui/icons-material/StarRate';
-import './style.js'
+//import './style.js'
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import SnackbarContent from '@mui/material/SnackbarContent';
@@ -225,20 +225,20 @@ function Dashboard() {
                             <Typography variant="h3" className={classes.sectionTitle}>
                                 Notifications
                             </Typography>
-                            <SnackbarContent message="I love snacks." action={action} />
+                            <SnackbarContent sx={{background: theme => theme.palette.background.paper}} message="I love snacks." action={action} />
                             <SnackbarContent
                                 message={
-                                    'I love candy. I love cookies. I love cupcakes.'
+                                    'Reece wants to match with you'
                                 }
                                 action={action}
                             />
                             <SnackbarContent
-                                message="I love candy. I love cookies. I love cupcakes."
+                                message="Maggie has accepted your request"
                                 action={action}
                             />
                             <SnackbarContent
                                 message={
-                                    'I love candy. I love cookies. I love cupcakes.'
+                                    'Nathan has accepted your request'
                                 }
                                 action={action}
                             />
