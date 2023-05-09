@@ -13,7 +13,7 @@ import {
 import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
 import { VALID_IMAGE_MIME } from '@/constants/image.constant';
-import { USER_DEFAULT_AVATAR } from '@/constants/user.contant';
+import { USER_DEFAULT_AVATAR } from '@/constants/user.constant';
 
 const SingleFileUpload = ({  imageUrl, onUpload, loading, error }) => {
   const inputRef = useRef(null);
@@ -67,7 +67,7 @@ const SingleFileUpload = ({  imageUrl, onUpload, loading, error }) => {
 
   return (
     <Box>
-      <Stack spacing={3}>
+      <Stack flex alignItems='center' justifyContent='center' spacing={3}>
         <input onChange={handleChange} type='file' ref={inputRef} hidden />
         <Image
         priority={true}

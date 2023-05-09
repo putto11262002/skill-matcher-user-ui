@@ -11,7 +11,12 @@ export const authSlice = createSlice({
     loading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    updateUser: (state, action) => ({
+      ...state,
+      user: action.payload
+    })
+  },
   extraReducers(builder) {
     builder
       .addCase(signUp.pending, (state, action) => ({
@@ -60,11 +65,13 @@ export const authSlice = createSlice({
         user: null,
         isLoggedIn: false,
         error: payload,
-      }));
+      }))
+    
+      ;
   },
 });
 
-export const {} = authSlice.actions;
+export const {updateUser} = authSlice.actions;
 
 const authReducer = authSlice.reducer;
 
