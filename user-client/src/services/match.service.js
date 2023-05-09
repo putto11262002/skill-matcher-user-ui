@@ -5,7 +5,13 @@ export class MatchService {
         return api.post('/user/self/match', {userId})
     }
 
+    async acceptRequest(id) {
+        return api.put(`/user/self/match/${id}/accept`)
+    }
 
+    async declineRequest(id) {
+        return api.delete(`/user/self/match/${id}/decline`)
+    }
 }
 
 export default new MatchService()
