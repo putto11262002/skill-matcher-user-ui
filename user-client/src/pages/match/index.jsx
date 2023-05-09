@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { USER_PAGE_SIZE } from "@/constants/user.constant";
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import useAuth from "@/hooks/useAuth";
 import matchService from "../../services/match.service";
 import feedService, { FeedService } from "@/services/feed.service";
@@ -68,9 +68,11 @@ const BrowseUserPage = () => {
   }, [page]);
 
   return (
+    
     <Box
       sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
+      <Typography> Match History </Typography>
       <Stack spacing={3} maxWidth={600} sx={{ width: "100%" }}>
         <Box
           onSubmit={(e) => {
