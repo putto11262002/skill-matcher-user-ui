@@ -42,6 +42,7 @@ import { ImageValidator } from '../../file/validators/image.validator';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { MatchService } from '../../match/services/match.service';
 import { User } from '../schemas/user.schema';
+import { MATCH_STATUS } from '../../match/constants/match.constant';
 @ApiTags('User')
 @Controller('user')
 export class UserController {
@@ -84,14 +85,14 @@ export class UserController {
     }
     // check relationship between users to determie reponse types
 
-    const matched = await this.matchService.matchExists(
+    const matched = await this.matchService.getMatchByUsers(
       currentUser._id,
       user._id,
     );
 
-    return matched
-      ? new UserDto(user).toMatchedUserResponse()
-      : new UserDto(user).toPublicResponse();
+    return matched?.status === MATCH_STATUS.ACTIVE
+      ? new UserDto(user, MATCH_STATUS.ACTIVE).toMatchedUserResponse()
+      : new UserDto(user, matched?.status).toPublicResponse();
   }
 
   @UseGuards(AuthGuard)
@@ -114,17 +115,20 @@ export class UserController {
     );
 
     const { matches } = await this.matchService.getMatchByUser(currentUser._id);
-    const matchedUser = new Set<string>();
+    const matchedUser = new Map<string, string>();
     matches.forEach((match) => {
       const u = match.users.find((u) => !u.userId.equals(currentUser._id));
-      matchedUser.add(u.userId.toHexString());
+      matchedUser.set(u.userId.toHexString(), match.status);
     });
 
     return new Pagination(
       users.map((user) =>
-        matchedUser.has(user._id.toHexString())
-          ? new UserDto(user).toMatchedUserResponse()
-          : new UserDto(user).toPublicResponse(),
+        matchedUser.get(user._id.toHexString()) === MATCH_STATUS.ACTIVE
+          ? new UserDto(user, MATCH_STATUS.ACTIVE).toMatchedUserResponse()
+          : new UserDto(
+              user,
+              matchedUser.get(user._id.toHexString()),
+            ).toPublicResponse(),
       ),
       query.pageSize,
       query.pageNumber,

@@ -5,6 +5,7 @@ import { User, UserDocument } from '../../schemas/user.schema';
 import { FileDto } from '../../../file/dto/file.dto';
 import { omit } from 'lodash';
 import { PUBLIC_RESPONSE_OMIT_FIELDS } from '../../constants/user.constant';
+import { MATCH_STATUS } from '../../../match/constants/match.constant';
 
 class ProfileDto {
   @ApiProperty()
@@ -78,10 +79,10 @@ export class UserDto {
   avatar: FileDto;
 
   @ApiProperty()
-  matched?: boolean;
+  matchStatus: string;
 
 
-  constructor(user: UserDocument | User) {
+  constructor(user: UserDocument | User, matchStatus?: string) {
     this._id = user._id.toHexString();
     this.username = user.username;
     this.email = user.email;
@@ -89,6 +90,7 @@ export class UserDto {
     this.role = user.role;
     this.profile = user.profile ?  new ProfileDto(user.profile) : null;
     this.avatar = user.avatar ? new FileDto(user.avatar) : null;
+    this.matchStatus = matchStatus;
    
   }
 
@@ -96,8 +98,7 @@ export class UserDto {
   toPublicResponse(): Partial<UserDto> {
     return omit({
       ...this,
-      matched: false
-  
+      
     }, PUBLIC_RESPONSE_OMIT_FIELDS)
   }
 
@@ -105,7 +106,6 @@ export class UserDto {
   toMatchedUserResponse(): Partial<UserDto> {
     return {
       ...this,
-      matched: true
     };
   }
 
