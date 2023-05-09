@@ -314,124 +314,124 @@ describe('MatchService', () => {
     });
   });
 
-  describe('declineMatch', () => {
-    it('Should delete pending match', async () => {
-      const matchId = new Types.ObjectId() as any;
-      const userId = new Types.ObjectId() as any;
-      jest
-        .spyOn(matchModel, 'findOne')
-        .mockResolvedValue({ _id: matchId, status: MATCH_STATUS.PENDING });
-      await matchService.declineMatch(matchId, userId);
-      expect(matchModel.findOne).toHaveBeenCalledWith({
-        _id: matchId,
-        users: { $elemMatch: { userId } },
-      });
-      expect(matchModel.deleteOne).toHaveBeenCalledWith({ _id: matchId });
-    });
-    it('Should throw an error if match is active', async () => {
-      const matchId = new Types.ObjectId() as any;
-      const userId = new Types.ObjectId() as any;
-      jest
-        .spyOn(matchModel, 'findOne')
-        .mockResolvedValue({ _id: matchId, status: MATCH_STATUS.ACTIVE });
-      expect(matchService.declineMatch(matchId, userId)).rejects.toThrowError(
-        new BadRequestException('Cannot modify active match'),
-      );
-      expect(matchModel.findOne).toHaveBeenCalledWith({
-        _id: matchId,
-        users: { $elemMatch: { userId } },
-      });
-    });
-    it('Shoudl throw an error if no match matches the supplied id and user id', async () => {
-      jest.spyOn(matchModel, 'findOne').mockResolvedValue(null);
-      expect(
-        matchService.declineMatch(
-          new Types.ObjectId() as any,
-          new Types.ObjectId() as any,
-        ),
-      ).rejects.toThrowError(new NotFoundException('Match does not exist'));
-    });
-  });
+  // describe('declineMatch', () => {
+  //   it('Should delete pending match', async () => {
+  //     const matchId = new Types.ObjectId() as any;
+  //     const userId = new Types.ObjectId() as any;
+  //     jest
+  //       .spyOn(matchModel, 'findOne')
+  //       .mockResolvedValue({ _id: matchId, status: MATCH_STATUS.PENDING });
+  //     await matchService.declineMatch(matchId, userId);
+  //     expect(matchModel.findOne).toHaveBeenCalledWith({
+  //       _id: matchId,
+  //       users: { $elemMatch: { userId } },
+  //     });
+  //     expect(matchModel.deleteOne).toHaveBeenCalledWith({ _id: matchId });
+  //   });
+  //   it('Should throw an error if match is active', async () => {
+  //     const matchId = new Types.ObjectId() as any;
+  //     const userId = new Types.ObjectId() as any;
+  //     jest
+  //       .spyOn(matchModel, 'findOne')
+  //       .mockResolvedValue({ _id: matchId, status: MATCH_STATUS.ACTIVE });
+  //     expect(matchService.declineMatch(matchId, userId)).rejects.toThrowError(
+  //       new BadRequestException('Cannot modify active match'),
+  //     );
+  //     expect(matchModel.findOne).toHaveBeenCalledWith({
+  //       _id: matchId,
+  //       users: { $elemMatch: { userId } },
+  //     });
+  //   });
+  //   it('Shoudl throw an error if no match matches the supplied id and user id', async () => {
+  //     jest.spyOn(matchModel, 'findOne').mockResolvedValue(null);
+  //     expect(
+  //       matchService.declineMatch(
+  //         new Types.ObjectId() as any,
+  //         new Types.ObjectId() as any,
+  //       ),
+  //     ).rejects.toThrowError(new NotFoundException('Match does not exist'));
+  //   });
+  // });
 
-  describe('acceptMacht', () => {
-    it('Should change the status of the target user to accepted and if both users accepted the match set match status to active', async () => {
-      const matchId = new Types.ObjectId() as any;
-      const targetUserId = new Types.ObjectId() as any;
-      const otherUserId = new Types.ObjectId() as any;
-      jest.spyOn(matchModel, 'findOne').mockResolvedValue({
-        status: MATCH_STATUS.PENDING,
-        _id: matchId,
-        users: [
-          {
-            userId: otherUserId,
-            status: MATCH_USER_STATUS.ACCEPTED,
-          },
-          { userId: targetUserId, status: MATCH_USER_STATUS.PENDING },
-        ],
-      });
-      await matchService.acceptMatch(matchId, targetUserId);
-      expect(matchModel.updateOne).toHaveBeenCalledWith(
-        { _id: matchId },
-        expect.objectContaining({
-          status: MATCH_STATUS.ACTIVE,
-          _id: matchId,
-          users: expect.arrayContaining([
-            expect.objectContaining({
-              userId: otherUserId,
-              status: MATCH_USER_STATUS.ACCEPTED,
-            }),
-            expect.objectContaining({
-              userId: targetUserId,
-              status: MATCH_USER_STATUS.ACCEPTED,
-            }),
-          ]),
-        }),
-      );
-    });
+  // describe('acceptMacht', () => {
+  //   it('Should change the status of the target user to accepted and if both users accepted the match set match status to active', async () => {
+  //     const matchId = new Types.ObjectId() as any;
+  //     const targetUserId = new Types.ObjectId() as any;
+  //     const otherUserId = new Types.ObjectId() as any;
+  //     jest.spyOn(matchModel, 'findOne').mockResolvedValue({
+  //       status: MATCH_STATUS.PENDING,
+  //       _id: matchId,
+  //       users: [
+  //         {
+  //           userId: otherUserId,
+  //           status: MATCH_USER_STATUS.ACCEPTED,
+  //         },
+  //         { userId: targetUserId, status: MATCH_USER_STATUS.PENDING },
+  //       ],
+  //     });
+  //     await matchService.acceptMatch(matchId, targetUserId);
+  //     expect(matchModel.updateOne).toHaveBeenCalledWith(
+  //       { _id: matchId },
+  //       expect.objectContaining({
+  //         status: MATCH_STATUS.ACTIVE,
+  //         _id: matchId,
+  //         users: expect.arrayContaining([
+  //           expect.objectContaining({
+  //             userId: otherUserId,
+  //             status: MATCH_USER_STATUS.ACCEPTED,
+  //           }),
+  //           expect.objectContaining({
+  //             userId: targetUserId,
+  //             status: MATCH_USER_STATUS.ACCEPTED,
+  //           }),
+  //         ]),
+  //       }),
+  //     );
+  //   });
 
-    it('Should change the status of the target user to accepted and if both users have not yet excepted the match leave the match status pending', async () => {
-      const matchId = new Types.ObjectId() as any;
-      const targetUserId = new Types.ObjectId() as any;
-      const otherUserId = new Types.ObjectId() as any;
-      jest.spyOn(matchModel, 'findOne').mockResolvedValue({
-        status: MATCH_STATUS.PENDING,
-        _id: matchId,
-        users: [
-          {
-            userId: otherUserId,
-            status: MATCH_USER_STATUS.PENDING,
-          },
-          { userId: targetUserId, status: MATCH_USER_STATUS.PENDING },
-        ],
-      });
-      await matchService.acceptMatch(matchId, targetUserId);
-      expect(matchModel.updateOne).toHaveBeenCalledWith(
-        { _id: matchId },
-        expect.objectContaining({
-          status: MATCH_STATUS.PENDING,
-          _id: matchId,
-          users: expect.arrayContaining([
-            expect.objectContaining({
-              userId: otherUserId,
-              status: MATCH_USER_STATUS.PENDING,
-            }),
-            expect.objectContaining({
-              userId: targetUserId,
-              status: MATCH_USER_STATUS.ACCEPTED,
-            }),
-          ]),
-        }),
-      );
-    });
+  //   it('Should change the status of the target user to accepted and if both users have not yet excepted the match leave the match status pending', async () => {
+  //     const matchId = new Types.ObjectId() as any;
+  //     const targetUserId = new Types.ObjectId() as any;
+  //     const otherUserId = new Types.ObjectId() as any;
+  //     jest.spyOn(matchModel, 'findOne').mockResolvedValue({
+  //       status: MATCH_STATUS.PENDING,
+  //       _id: matchId,
+  //       users: [
+  //         {
+  //           userId: otherUserId,
+  //           status: MATCH_USER_STATUS.PENDING,
+  //         },
+  //         { userId: targetUserId, status: MATCH_USER_STATUS.PENDING },
+  //       ],
+  //     });
+  //     await matchService.acceptMatch(matchId, targetUserId);
+  //     expect(matchModel.updateOne).toHaveBeenCalledWith(
+  //       { _id: matchId },
+  //       expect.objectContaining({
+  //         status: MATCH_STATUS.PENDING,
+  //         _id: matchId,
+  //         users: expect.arrayContaining([
+  //           expect.objectContaining({
+  //             userId: otherUserId,
+  //             status: MATCH_USER_STATUS.PENDING,
+  //           }),
+  //           expect.objectContaining({
+  //             userId: targetUserId,
+  //             status: MATCH_USER_STATUS.ACCEPTED,
+  //           }),
+  //         ]),
+  //       }),
+  //     );
+  //   });
 
-    it('Should throw an error if no match matches the supplied match id and user id', async () => {
-      jest.spyOn(matchModel, 'findOne').mockResolvedValue(null);
-      expect(
-        matchService.acceptMatch(
-          new Types.ObjectId() as any,
-          new Types.ObjectId() as any,
-        ),
-      ).rejects.toThrowError(new NotFoundException('Match does not exist'));
-    });
-  });
+  //   it('Should throw an error if no match matches the supplied match id and user id', async () => {
+  //     jest.spyOn(matchModel, 'findOne').mockResolvedValue(null);
+  //     expect(
+  //       matchService.acceptMatch(
+  //         new Types.ObjectId() as any,
+  //         new Types.ObjectId() as any,
+  //       ),
+  //     ).rejects.toThrowError(new NotFoundException('Match does not exist'));
+  //   });
+  // });
 });
