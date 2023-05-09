@@ -1,7 +1,7 @@
 import {Injectable, Inject, forwardRef, BadRequestException, NotFoundException} from "@nestjs/common"
 import { CreateSkillDto } from "../dtos/requests/create-skill.dto";
 import { Skill } from "../schemas/skill.schema";
-import {FilterQuery, Model} from 'mongoose'
+import mongoose, {FilterQuery, Model} from 'mongoose'
 import {InjectModel} from '@nestjs/mongoose'
 import {difference} from "lodash"
 import { UpdateSkillDto } from "../dtos/requests/update.skill.dto";
@@ -41,20 +41,32 @@ export class SkillService {
     }
 
     // TODO - implement searching algorithm
-    async searchSkills(query: SearchSkillDto){
-        let filter: FilterQuery<Skill> = {};
-        filter.$or = []
+    async searchSkills(query?: SearchSkillDto){
+        const filter: mongoose.FilterQuery<Skill> = {};
+       
         if(query.q){
-            filter.$text = {$search: query.q}
+            filter.$or = [
+                {name: {'$regex': query.q, '$options': 'i'}}
+            ]
         }
 
-        if(filter.$or.length < 1) filter = omit(filter, ['$or']) 
+        if(query.status){
+            if(!filter.$and) filter.$and = []
+            filter.$and.push({status: query.status});
+        }
+
+        if(query.names){
+            if(!filter.$and) filter.$and = []
+            filter.$and.push({name: {'$in': query.names}});
+        }
+        // if(filter.$or.length < 1) filter = omit(filter, ['$or']) 
 
         const [skills, total] = await Promise.all([
             this.skillModel.find(filter)
-            .skip(query.pageNumber * query.pageSize)
-            .limit(query.pageSize)
-            .sort(query.q ? { score: { $meta: 'textScore' } }: {updatedAt: 1}),
+            .skip( query.pageNumber * query.pageSize )
+            .limit(query?.pageSize )
+            .sort(query.sort)
+            ,
             this.skillModel.countDocuments(filter)
         ])
         return {skills, total}

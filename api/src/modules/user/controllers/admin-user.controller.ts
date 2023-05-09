@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Logger,
   MaxFileSizeValidator,
   NotFoundException,
   Param,

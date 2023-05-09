@@ -7,7 +7,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model, ObjectId, Types } from 'mongoose';
+import mongoose, { FilterQuery, Model, ObjectId, Types } from 'mongoose';
 import { CreateUserDto } from '../dtos/requests/create-user.dto';
 import { UpdateUserDto } from '../dtos/requests/update-user.dto';
 import { User } from '../schemas/user.schema';
@@ -156,7 +156,8 @@ export class UserService {
 
   async search(
     query: SearchUserDto,
-  ): Promise<{ total: number; users: User[] }> {
+  ): Promise<{ total: number; users: User[], pageSize: number, pageNumber: number }> {
+    
     const filer: FilterQuery<User> = {}
     if(query.q){
       filer.$or = [
@@ -167,26 +168,36 @@ export class UserService {
     }
 
     if(query.status){
-      filer.status = query.status;
+      if(!filer.$and) filer.$and = [];
+      filer.$and.push({status: query.status})
+    }
+
+    if(query.includeIds){
+      if(!filer.$and) filer.$and = [];
+      filer.$and.push({_id: {'$in': query.includeIds}})
     }
 
     if(query.excludeIds){
-      filer._id = {'$nin': query.excludeIds}
+      if(!filer.$and) filer.$and = [];
+      filer.$and.push({_id: {'$nin': query.excludeIds}})
     }
 
     if(query.roles){
-      filer.role = {$in: [...query.roles]}
+      if(!filer.$and) filer.$and = [];
+      filer.$and.push({role: {'$in': query.roles}})
     }
+
 
     const [users, total] = await Promise.all([
       this.userModel
         .find(filer)
         .populate('avatar')
-        .skip((query.pageNumber !== undefined && query.pageSize !== undefined) ? query?.pageNumber * query?.pageSize : undefined)
+        .sort(query.sort)
+        .skip(query?.pageNumber * query?.pageSize )
         .limit(query?.pageSize),
       this.userModel.find(filer).countDocuments(),
     ]);
-    return { users, total };
+    return { users, total, pageSize: query.pageSize, pageNumber: query.pageNumber };
   }
 
   async createRootUser() {
@@ -219,6 +230,10 @@ export class UserService {
     });
   }
 
+  async advanceSearch(pipe: mongoose.PipelineStage[]){
+    return this.userModel.aggregate(pipe);
+  }
+
   async updateAvatar(id: Types.ObjectId, avatar: Express.Multer.File) {
     const user = await this.userModel.findOne({ _id: id });
     if (!user) {
@@ -245,4 +260,5 @@ export class UserService {
     await this.userModel.updateOne({ _id: id }, { avatar: createdFile._id });
     return createdFile;
   }
+
 }

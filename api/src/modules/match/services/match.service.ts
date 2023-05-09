@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Match } from '../schemas/match.schema';
-import { FilterQuery, Model } from 'mongoose';
+import mongoose, { FilterQuery, Model } from 'mongoose';
 import { UserService } from '../../user/services/user.service';
 import { User } from '../../user/schemas/user.schema';
 import { MATCH_STATUS, MATCH_USER_STATUS } from '../constants/match.constant';
@@ -88,11 +88,14 @@ export class MatchService {
   }
 
   async getMatch(id: Types.ObjectId, userId: Types.ObjectId) {
-    const match = await this.matchModel.findOne({ _id: id, 'users.userId': userId});
+    const match = await this.matchModel.findOne({
+      _id: id,
+      'users.userId': userId,
+    });
     if (!match) {
       throw new NotFoundException('Match not found');
     }
-    return match
+    return match;
   }
 
   async getMatchByUsers(userId1: Types.ObjectId, userId2: Types.ObjectId) {
@@ -155,7 +158,7 @@ export class MatchService {
     if (!match) {
       throw new NotFoundException('Match does not exist');
     }
-    
+
     match.users = match.users.map((user) =>
       user.userId.equals(userId)
         ? { ...user, status: MATCH_USER_STATUS.ACCEPTED }
@@ -182,65 +185,28 @@ export class MatchService {
     await this.matchModel.deleteOne({ _id: id });
   }
 
-  async searchMatchByUser(userId: Types.ObjectId, query: SearchMatchQueryDto) {
-    const filter: FilterQuery<Match> = {};
+  async searchMatches(
+    query?: SearchMatchQueryDto,
+   
+  ) {
+    const filter: mongoose.FilterQuery<Match> = {};
 
-    const { users } = await this.userService.search({
-      q: query.q,
-      pageNumber: undefined,
-      pageSize: undefined,
-      excludeIds: [userId],
-    } as SearchUserDto);
-    const userIds = users.map((user) => user._id);
-
-    if (query.status) {
-      query.status = query.status;
+    if(query.includeIds){
+      if(!filter.$and) filter.$and = [];
+      filter.$and.push({_id: {'$in': query.includeIds}});
     }
 
-    if (query.selfStatus) {
-      if (!filter.$and) filter.$and = [];
-      filter.$and.push({
-        users: {
-          $elemMatch: {
-            userId,
-            status: query.selfStatus,
-          },
-        },
-      });
-    }
-
-    if (query.otherStatus) {
-      if (!filter.$and) filter.$and = [];
-      filter.$and.push({
-        users: {
-          $elemMatch: {
-            userId: { $ne: userId },
-            status: query.selfStatus,
-          },
-        },
-      });
-    }
-
-    if (query.otherIds) {
-      if (!filter.$and) filter.$and = [];
-      filter.$and.push({
-        users: {
-          $elemMatch: {
-            userId: { $in: [...query.otherIds, ...userIds] },
-          },
-        },
-      });
+    if(query.status){
+      if(!filter.$and) filter.$and = [];
+      filter.$and.push({status: query.status});
     }
 
     const [matches, total] = await Promise.all([
       this.matchModel
         .find(filter)
-        .skip(
-          query.pageNumber !== undefined && query.pageSize !== undefined
-            ? query?.pageNumber * query?.pageSize
-            : undefined,
-        )
-        .limit(query?.pageSize),
+        .sort(query.sort)
+        .skip(query.pageSize * query.pageNumber)
+        .limit(query.pageSize),
       this.matchModel.countDocuments(filter),
     ]);
 
@@ -252,7 +218,14 @@ export class MatchService {
     };
   }
 
-  async matchExists(userId1: Types.ObjectId, userId2: Types.ObjectId): Promise<boolean> {
+  async advanceSearch(pipe: mongoose.PipelineStage[]){
+    return this.matchModel.aggregate(pipe);
+  }
+
+  async matchExists(
+    userId1: Types.ObjectId,
+    userId2: Types.ObjectId,
+  ): Promise<boolean> {
     const id = await this.matchModel.exists({
       $and: [
         {

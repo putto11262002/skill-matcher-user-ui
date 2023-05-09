@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { SearchDto } from '../../../../common/dtos/requests/search.dto';
-import { IsArray, IsIn, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsIn, IsOptional, IsString, Validate } from 'class-validator';
 import { USER_ROLE, USER_STATUS } from '../../constants/user.constant';
 import { ObjectId, Types } from 'mongoose';
 import { each } from 'lodash';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
+import { toMongoObjectId } from '../../../../common/helpers/dto.helper';
 
 export class SearchUserDto extends SearchDto {
   @ApiProperty()
@@ -12,6 +13,7 @@ export class SearchUserDto extends SearchDto {
   @IsIn(Object.values(USER_STATUS))
   status?: string;
 
+  // partial text search on username, email, first name, last name
   @ApiProperty()
   @IsOptional()
   @IsString()
@@ -20,8 +22,16 @@ export class SearchUserDto extends SearchDto {
   @ApiProperty()
   @IsOptional()
   @IsArray()
-  @IsString({each: true})
+  @Type(() => Array<Types.ObjectId>)
+  @Transform(({value}) => value.split(',').map(id =>  toMongoObjectId({value: id, key: undefined})))
   excludeIds?: Array<Types.ObjectId>;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsArray()
+  @Type(() => Array<Types.ObjectId>)
+  @Transform(({value}) => value.split(',').map(id =>  toMongoObjectId({value: id, key: undefined})))
+  includeIds?: Array<Types.ObjectId>;
 
   @ApiProperty()
   @IsOptional()
@@ -29,17 +39,4 @@ export class SearchUserDto extends SearchDto {
   @IsIn(Object.values(USER_ROLE), {each: true})
   @Transform(({value}) => value.split(','))
   roles: Array<String>;
-
-  constructor(
-    pageNumber: number,
-    pageSize: number,
-    status: string,
-    q: string,
-    excludeIds: Array<Types.ObjectId>,
-  ) {
-    super(pageNumber, pageSize);
-    this.status = status;
-    this.q = q;
-    this.excludeIds = excludeIds;
-  }
 }
