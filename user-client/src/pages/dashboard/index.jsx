@@ -1,15 +1,28 @@
 import React from 'react';
 import { Grid, Container, Typography, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-//import './Homepage.css';
+import './Homepage.css';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Box } from '@mui/material';
 import Avatar from '@material-ui/core/Avatar';
+import StarRateIcon from '@mui/icons-material/StarRate';
+import './style.js'
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import SnackbarContent from '@mui/material/SnackbarContent';
+import Rating from '@mui/material/Rating';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Dashboard } from '@mui/icons-material';
 
+const action = (
+    <Button color="primary" size="small">
+        open
+    </Button>
+);
 
 const useStyles = makeStyles((theme) => ({
     container: {
-        backgroundColor: '#fff',
+        backgroundColor: '#ffff',
         borderRadius: '10px',
         padding: '2rem',
         boxShadow: '0px 1px 5px rgba(0, 0, 0, 0.1)',
@@ -42,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function App() {
+function Dashboard() {
     const classes = useStyles();
 
     return (
@@ -60,7 +73,7 @@ function App() {
                         </Box>
                         <Box className={classes.center}>
                             <Typography variant="h3" className={classes.sectionTitle}>
-                                Username
+                                Harry Styles
                             </Typography>
                         </Box>
                         <Box className={classes.center}>
@@ -71,83 +84,137 @@ function App() {
 
                         <Box marginTop={2} /> {/* Adds vertical space */}
                         <Typography variant="body1">
-                            Hi, my name is John Doe and I'm a web developer. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed malesuada suscipit massa vel elementum. Sed eget lorem sapien. Nulla facilisi. Duis vulputate consequat eros vel blandit. Fusce porttitor, quam non luctus varius, mi lacus vehicula arcu, eu commodo elit nulla at velit.
+
                         </Typography>
 
-                        <Box marginTop={2} display="flex" justifyContent="space-between">
+                        <Box marginTop={5} display="flex" justifyContent="center">
                             <Box display="flex" flexDirection="column" alignItems="center">
                                 <Typography variant="h3" className={classes.center}>
                                     1000
                                 </Typography>
                                 <Typography variant="subtitle1" color="textSecondary" className={classes.center}>
-                                    Followers
+                                    Matches
                                 </Typography>
                             </Box>
+                            <Box marginTop={5} /> {/* Adds vertical space */}
+                            <Box marginRight={15} /> {/* Adds vertical space */}
                             <Box display="flex" flexDirection="column" alignItems="center">
                                 <Typography variant="h3" className={classes.center}>
-                                    500
+                                    <StarRateIcon sx={{ fontSize: 40, marginRight: "0.08rem" }} style={{ fill: "orange" }} />
+                                    3.5
                                 </Typography>
                                 <Typography variant="subtitle1" color="textSecondary" className={classes.center}>
-                                    Followers
-                                </Typography>
-                            </Box>
-                            <Box display="flex" flexDirection="column" alignItems="center">
-                                <Typography variant="h3" className={classes.center}>
-                                    100
-                                </Typography>
-                                <Typography variant="subtitle1" color="textSecondary" className={classes.center}>
-                                    Followers
+                                    Rating
                                 </Typography>
                             </Box>
                         </Box>
-
-
-
+                        <Box marginTop={2} /> {/* Adds vertical space */}
+                        <Button variant="outlined">Edit Profile </Button>
                     </Container>
                 </Grid>
-                <Grid item xs={12} md={4}>
+
+                <Grid item xs={13} md={4}>
                     <Container className={classes.container}>
-                        <Typography variant="h3" className={classes.sectionTitle}>
+                        <Typography variant="h3" className={classes.sectionTitle} style={{ textAlign: 'center' }}>
                             Matches
                         </Typography>
                         <ul>
                             <li>
-                                <Box marginTop={2} /> {/* Adds vertical space */}
-                                <Avatar alt="Person 1" src="images/avatar1.jpg" className={classes.avatar} />
-                                <Typography variant="subtitle1" className={classes.personName}>
-                                    Person 1
+                            <Box marginTop={4} /> {/* Adds vertical space */}
+                                <Box display="flex" alignItems="center" justifyContent="space-between">
+                                    <Box display="flex" alignItems="center">
+                                        <Avatar className={classes.orangeAvatar}>N</Avatar>
+                                        <Typography variant="subtitle1" className={classes.personName} style={{ marginLeft: '8px' }}>
+                                            Violet
+                                        </Typography>
+                                    </Box>
+                                    <DeleteIcon />
+                                </Box>
+                            </li>
+
+                            <li>
+                            <Box marginTop={3} /> {/* Adds vertical space */}
+                            <Box display="flex" alignItems="center" justifyContent="space-between">
+                                    <Box display="flex" alignItems="center">
+                                        <Avatar className={classes.orangeAvatar}>N</Avatar>
+                                        <Typography variant="subtitle1" className={classes.personName} style={{ marginLeft: '8px' }}>
+                                            George
+                                        </Typography>
+                                    </Box>
+                                    <DeleteIcon />
+                                </Box>
+                            </li>
+                            <li>
+                            <Box marginTop={3} /> {/* Adds vertical space */}
+                            <Box display="flex" alignItems="center" justifyContent="space-between">
+                                    <Box display="flex" alignItems="center">
+                                        <Avatar className={classes.orangeAvatar}>N</Avatar>
+                                        <Typography variant="subtitle1" className={classes.personName} style={{ marginLeft: '8px' }}>
+                                            Charlotte
+                                        </Typography>
+                                    </Box>
+                                    <DeleteIcon />
+                                </Box>
+                            </li>
+                            <li>
+                            <Box marginTop={3} /> {/* Adds vertical space */}
+                            <Box display="flex" alignItems="center" justifyContent="space-between">
+                                    <Box display="flex" alignItems="center">
+                                        <Avatar className={classes.orangeAvatar}>N</Avatar>
+                                        <Typography variant="subtitle1" className={classes.personName} style={{ marginLeft: '8px' }}>
+                                            Karly
+                                        </Typography>
+                                    </Box>
+                                    <DeleteIcon />
+                                </Box>
+                                <Box marginBottom={5} /> {/* Adds vertical space */}
+                                <Button variant="outlined">See All</Button>
+                            </li>
+                        </ul>
+                    </Container>
+                </Grid>
+
+
+                <Grid item xs={12} md={4}>
+                    <Container className={classes.container}>
+                        <Typography variant="h3" className={classes.sectionTitle} style={{ textAlign: 'center' }}>
+                            Reviews
+                        </Typography>
+                        <ul>
+                            <li>
+                                <Box display="flex" alignItems="center">
+                                    <Avatar className={classes.orangeAvatar}>A</Avatar>
+                                    <Typography variant="h6" className={classes.personName} style={{ marginLeft: '8px' }}>
+                                        Amanda
+                                    </Typography>
+                                </Box>
+                                <Box display="flex" justifyContent="center">
+                                    <Stack spacing={1}>
+                                        <Rating name="homepage" defaultValue={4.5} precision={0.5} readOnly size="medium" />
+                                    </Stack>
+                                </Box>
+                                <Typography variant="subtitle1" align="center" style={{ fontStyle: 'italic' }}>
+                                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
                                 </Typography>
                             </li>
                             <li>
                                 <Box marginTop={2} /> {/* Adds vertical space */}
-                                <Avatar alt="Person 2" src="images/avatar2.jpg" className={classes.avatar} />
-                                <Typography variant="subtitle1" className={classes.personName}>
-                                    Person 2
+                                <Box display="flex" alignItems="center">
+                                    <Avatar className={classes.orangeAvatar}>T</Avatar>
+                                    <Typography variant="h6" className={classes.personName} style={{ marginLeft: '8px' }}>
+                                        Tim
+                                    </Typography>
+                                </Box>
+                                <Box display="flex" justifyContent="center">
+                                    <Stack spacing={1}>
+                                        <Rating name="homepage" defaultValue={4} precision={0.5} readOnly size="medium" />
+                                    </Stack>
+                                </Box>
+                                <Typography variant="subtitle1" align="center" style={{ fontStyle: 'italic' }}>
+                                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
                                 </Typography>
-                            </li>
-                            <li>
-                                <Box marginTop={2} /> {/* Adds vertical space */}
-                                <Avatar alt="Person 3" src="/path/to/avatar3.jpg" className={classes.avatar} />
-                                <Typography variant="subtitle1" className={classes.personName}>
-                                    Person 3
-                                </Typography>
-                            </li>
-                            <li>
-                                <Box marginTop={2} /> {/* Adds vertical space */}
-                                <Avatar alt="Person 3" src="/path/to/avatar3.jpg" className={classes.avatar} />
-                                <Typography variant="subtitle1" className={classes.personName}>
-                                    Person 4
-                                </Typography>
-                                <Box marginTop={5} /> {/* Adds vertical space */}
-                                <Link
-                                    href="/Matches"
-                                    sx={{
-                                        color: (theme) => theme.palette.text.secondary,
-                                        textDecorationColor: (theme) => theme.palette.text.secondary,
-                                    }}
-                                >
-                                    {"See All"}
-                                </Link>
+                                <Box marginBottom={2} /> {/* Adds vertical space */}
+                                <Button variant="outlined">See All</Button>
                             </li>
                         </ul>
                     </Container>
@@ -155,40 +222,33 @@ function App() {
 
                 <Grid item xs={12} md={4}>
                     <Container className={classes.container}>
-                        <Typography variant="h3" className={classes.sectionTitle}>
-                            Tutor
-                        </Typography>
-                        <ul>
-                            <li>
-                                <Link href="#" className={classes.projectLink}>
-                                    Project 1
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="#" className={classes.projectLink}>
-                                    Project 2
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="#" className={classes.projectLink}>
-                                    Project 3
-                                </Link>
-                            </li>
-                        </ul>
+                        <Stack spacing={2} sx={{ maxWidth: 600 }}>
+                            <Typography variant="h3" className={classes.sectionTitle}>
+                                Notifications
+                            </Typography>
+                            <SnackbarContent message="I love snacks." action={action} />
+                            <SnackbarContent
+                                message={
+                                    'I love candy. I love cookies. I love cupcakes.'
+                                }
+                                action={action}
+                            />
+                            <SnackbarContent
+                                message="I love candy. I love cookies. I love cupcakes."
+                                action={action}
+                            />
+                            <SnackbarContent
+                                message={
+                                    'I love candy. I love cookies. I love cupcakes.'
+                                }
+                                action={action}
+                            />
+                        </Stack>
+                        <Box marginBottom={2} /> {/* Adds vertical space */}
+                        <Button variant="outlined">See All</Button>
                     </Container>
                 </Grid>
-                <Grid item xs={12} md={4}>
-                    <Container className={classes.container}>
-                        <Typography variant="h3" className={classes.sectionTitle}>
-                            Notifications
-                        </Typography>
-                        <ul>
-                            <li>New message received</li>
-                            <li>New project assigned</li>
-                            <li>Upcoming deadline</li>
-                        </ul>
-                    </Container>
-                </Grid>
+
 
                 <Grid item xs={12}>
                     <Typography variant="body2" align="center">
@@ -200,4 +260,4 @@ function App() {
     );
 }
 
-export default App;
+export default Dashboard;
