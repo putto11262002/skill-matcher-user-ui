@@ -14,4 +14,5 @@ export class MatchService {
     }
 }
 
-export default new MatchService()
+const matchService =  new MatchService()
+export default matchService
