@@ -22,7 +22,7 @@ const RoleFilterSection = ({ onChange }) => {
     onChange(selectedRole);
   }, [selectedRole]);
   return (
-    <Paper sx={{ padding: 2 }}>
+   
       <Stack rowGap={1}>
         <Typography
           variant="subtitle1"
@@ -53,7 +53,7 @@ const RoleFilterSection = ({ onChange }) => {
           />
         </Stack>
       </Stack>
-    </Paper>
+   
   );
 };
 
@@ -63,7 +63,7 @@ const SkillFilterSection = ({ skills, onChange }) => {
     onChange(selectedSkills);
   }, [selectedSkills]);
   return (
-    <Paper sx={{ padding: 2 }}>
+    
       <Stack rowGap={1}>
         <Typography
           variant="subtitle1"
@@ -72,7 +72,7 @@ const SkillFilterSection = ({ skills, onChange }) => {
         >
           Skills
         </Typography>
-        <Stack gap={3} direction="row">
+        <Stack gap={3} sx={{flexWrap: 'wrap'}} direction="row">
           {skills?.length > 1 &&
             skills?.map((skill) => (
               <FormControlLabel
@@ -94,7 +94,7 @@ const SkillFilterSection = ({ skills, onChange }) => {
             ))}
         </Stack>
       </Stack>
-    </Paper>
+   
   );
 };
 
@@ -123,8 +123,10 @@ const SearchSection = ({ skills, onSubmit, loading}) => {
     >
       <Stack spacing={3}>
         <SearchInput onChange={handleSearchTermChange} />
+        <Paper sx={{paddingX: 3, paddingY: 2}}>
         <RoleFilterSection onChange={handleRoleChange} />
         <SkillFilterSection skills={skills} onChange={handleSkillChange} />
+        </Paper>
       </Stack>
     </Box>
   );
