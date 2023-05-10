@@ -14,7 +14,7 @@ const HomePage = () => {
       <Box
         sx={{
           padding: '40px',
-          backgroundColor: '#f5f5f5',
+          backgroundColor: '#e1f5fe',
           textAlign: 'center',
         }}
       >
