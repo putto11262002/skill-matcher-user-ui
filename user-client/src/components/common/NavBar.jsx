@@ -84,7 +84,7 @@ const navLinks = [
   // },
   {
     label: "My Profile",
-    path: "/user/edit-profile",
+    path: "/dashboard",
     visibility: "auth",
     icon: (props) => <PersonIcon {...props} />,
   },
@@ -115,7 +115,7 @@ const NavBar = ({ }) => {
 
   const handleEditProfile = () => {
     handleCloseUserMenu();
-    router.push('/dashboard')
+    router.push('/user/edit-profile')
   }
 
   const handleLogout = () => {
@@ -335,7 +335,7 @@ const NavBar = ({ }) => {
               <Typography textAlign="center">Log out</Typography>
             </MenuItem>
             <MenuItem onClick={handleEditProfile}>
-              <Typography textAlign="center">Dashboard</Typography>
+              <Typography textAlign="center">Edit Profile</Typography>
             </MenuItem>
             <MenuItem onClick={handleCloseUserMenu}>
               <Typography textAlign="center">Change password</Typography>
