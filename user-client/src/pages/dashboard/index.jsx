@@ -12,6 +12,7 @@ import Stack from '@mui/material/Stack';
 import SnackbarContent from '@mui/material/SnackbarContent';
 import Rating from '@mui/material/Rating';
 import DeleteIcon from '@mui/icons-material/Delete';
+import userService from "@/services/user.service";
  
 const action = (
     <Button color="primary" size="small">
@@ -26,6 +27,10 @@ const useStyles = makeStyles((theme) => ({
         padding: '2rem',
         boxShadow: '0px 1px 5px rgba(0, 0, 0, 0.1)',
     },
+    body: {
+        backgroundColor: '#e1f5fe',
+    },
+
     section: {
         marginBottom: '2rem',
     },
@@ -56,15 +61,16 @@ const useStyles = makeStyles((theme) => ({
  
 function Dashboard() {
     const classes = useStyles();
+    
  
     return (
-        <Container classes={classes.container} maxWidth="lg">
+        <Container style={{ backgroundColor: '#e1f5fe' }} maxWidth="lg">
             <Grid container spacing={4}>
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                     <Typography variant="h1" align="center">
                         Dashboard
                     </Typography>
-                </Grid>
+                </Grid> */}
                 <Grid item xs={12} md={20}>
                     <Container className={classes.container}>
                         <Box textAlign="center" display="flex" justifyContent="center" alignItems="center">
@@ -108,7 +114,9 @@ function Dashboard() {
                             </Box>
                         </Box>
                         <Box marginTop={2} /> {/* Adds vertical space */}
+                        <Link href="/user/edit-profile" underline="none">
                         <Button variant="outlined">Edit Profile </Button>
+                        </Link>
                     </Container>
                 </Grid>
  
@@ -167,7 +175,9 @@ function Dashboard() {
                                     <DeleteIcon />
                                 </Box>
                                 <Box marginBottom={5} /> {/* Adds vertical space */}
+                                <Link href="/match" underline="none">
                                 <Button variant="outlined">See All</Button>
+                                </Link>
                             </li>
                         </ul>
                     </Container>
@@ -182,17 +192,17 @@ function Dashboard() {
                         <ul>
                             <li>
                                 <Box display="flex" alignItems="center">
-                                    <Avatar className={classes.orangeAvatar}>A</Avatar>
+                                    <Avatar alignItems="left" className={classes.orangeAvatar}>A</Avatar>
                                     <Typography variant="h6" className={classes.personName} style={{ marginLeft: '8px' }}>
                                         Amanda
                                     </Typography>
                                 </Box>
                                 <Box display="flex" justifyContent="center">
                                     <Stack spacing={1}>
-                                        <Rating name="homepage" defaultValue={4.5} precision={0.5} readOnly size="medium" />
+                                        <Rating name="homepage" alignItems="center" defaultValue={4.5} precision={0.5} readOnly size="medium" />
                                     </Stack>
                                 </Box>
-                                <Typography variant="subtitle1" align="center" style={{ fontStyle: 'italic' }}>
+                                <Typography variant="subtitle1" justifyContent="center" style={{ fontStyle: 'italic' }}>
                                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
                                 </Typography>
                             </li>
@@ -206,14 +216,16 @@ function Dashboard() {
                                 </Box>
                                 <Box display="flex" justifyContent="center">
                                     <Stack spacing={1}>
-                                        <Rating name="homepage" defaultValue={4} precision={0.5} readOnly size="medium" />
+                                        <Rating name="homepage" align="center" defaultValue={4} precision={0.5} readOnly size="medium" />
                                     </Stack>
                                 </Box>
-                                <Typography variant="subtitle1" align="center" style={{ fontStyle: 'italic' }}>
+                                <Typography variant="subtitle1" justifyContent="alignContent" style={{ fontStyle: 'italic' }}>
                                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
                                 </Typography>
-                                <Box marginBottom={2} /> {/* Adds vertical space */}
+                                <Box marginBottom={3} /> {/* Adds vertical space */}
+                                <Link href="/profile-creation" underline="none">
                                 <Button variant="outlined">See All</Button>
+                                </Link>
                             </li>
                         </ul>
                     </Container>
@@ -225,7 +237,7 @@ function Dashboard() {
                             <Typography variant="h3" className={classes.sectionTitle}>
                                 Notifications
                             </Typography>
-                            <SnackbarContent sx={{ background: theme => theme.palette.background.paper, color: "black" }} message="I love snacks." action={action} />
+                            {/* <SnackbarContent sx={{ background: theme => theme.palette.background.paper, color: "black" }} message="I love snacks." action={action} /> */}
                             <SnackbarContent sx={{ background: theme => theme.palette.background.paper, color: "black" }} 
                                 message={
                                     'Reece wants to match with you'
@@ -244,7 +256,7 @@ function Dashboard() {
                             />
                         </Stack>
                         <Box marginBottom={2} /> {/* Adds vertical space */}
-                        <Link href="/profile-creation" underline="none">
+                        <Link href="/match/requests" underline="none">
                         <Button variant="outlined">See All</Button>
                         </Link>
                     </Container>
