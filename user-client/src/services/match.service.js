@@ -12,10 +12,11 @@ export class MatchService {
   async declineRequest({ userId }) {
     return api.put(`/match-request/reject`, { userId });
   }
-
-  async unMatch({userId}){
-    return api.delete(`match/user/${userId}`)
+  
+  async unmatchRequest({userId}){
+    return api.delete(`/match/user/${userId}`)
   }
+
 }
 
 const matchService = new MatchService();
