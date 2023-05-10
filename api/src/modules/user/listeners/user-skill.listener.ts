@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
-import { USER_SKILL_EVENT } from "../../skill/constants/user-skill.constant";
-import { CreateUserSkillDto } from "../../skill/dtos/requests/create-user-skill.dot";
+import { USER_SKILL_EVENT } from "../constants/user-skill.constant";
+import { CreateUserSkillDto } from "../dtos/requests/create-user-skill.dot";
 import { InjectModel } from "@nestjs/mongoose";
 import { User } from "../schemas/user.schema";
 import { Model } from "mongoose";

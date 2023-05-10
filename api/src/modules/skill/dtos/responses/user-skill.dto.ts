@@ -1,5 +1,5 @@
 import { ObjectId } from "mongoose";
-import { UserSkill } from "../../schemas/user-skill.schema";
+import { UserSkill } from "../../../user/schemas/user-skill.schema";
 
 export class UserSkillDto {
     userId: string;

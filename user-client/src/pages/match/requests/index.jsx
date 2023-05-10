@@ -11,6 +11,7 @@ import MatchCardRequest from "@/components/match/MatchCardRequest";
 import SearchInput from "@/components/common/form/SearchInput";
 import { MATCH_PAGE_SIZE, MATCH_STATUS } from "@/constants/match.constant";
 import MatchGridRequest from "@/components/match/MatchGridRequest";
+import userService from "../../../services/user.service";
 
 const RequestsPage = () => {
   useAuth();
@@ -29,7 +30,7 @@ const RequestsPage = () => {
   } = useQuery(
     ["feed", "matched", page, query],
     () =>
-      feedService.search({
+      userService.getRequestedUsers({
         ...query,
         pageSize: MATCH_PAGE_SIZE,
         q: searchTerm,
@@ -84,8 +85,9 @@ const RequestsPage = () => {
   }
 
   const handleAccept = (user) =>{
-    acceptRequest(user._id);
     console.log(user)
+    acceptRequest(user._id);
+    
   }
 
 

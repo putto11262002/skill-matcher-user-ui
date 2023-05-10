@@ -4,7 +4,7 @@ import { IsArray, IsIn, IsOptional, IsString, Matches } from 'class-validator';
 import * as mongoose from 'mongoose';
 import { toMongoObjectId } from '../../../../common/helpers/dto.helper';
 import { USER_ROLE } from '../../../user/constants/user.constant';
-import { USER_SKILL_ROLE } from '../../constants/user-skill.constant';
+import { USER_SKILL_ROLE } from '../../../user/constants/user-skill.constant';
 import { ValidationPipe } from '@nestjs/common';
 export class SearchUserSkillDto {
   @ApiProperty()

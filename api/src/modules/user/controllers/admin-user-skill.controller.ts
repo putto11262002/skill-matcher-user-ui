@@ -14,75 +14,75 @@ import {
 import { AuthGuard } from '../../auth/guards/auth.guard';
 import { CreateUserSkillDto } from '../dtos/requests/create-user-skill.dot';
 import { UserSkillService } from '../services/user-skill.service';
-import { UserSkillDto } from '../dtos/responses/user-skill.dto';
+import { UserSkillDto } from '../../skill/dtos/responses/user-skill.dto';
 import { CurrentJwt } from '../../auth/decorators/current-jwt.decorator';
 import { JwtAccessTokenPayloadDto } from '../../auth/dtos/request/jwt-access-token-payload.dto';
-import { UserService } from '../../user/services/user.service';
-import { User } from '../../user/schemas/user.schema';
+import { UserService } from '../services/user.service';
+import { User } from '../schemas/user.schema';
 import { UpdateUserSkillDto } from '../dtos/requests/update-user-skill.dto';
 import { omit } from 'lodash';
 import { NOT_ALLOW_SELF_UPDATE_FIELDS } from '../constants/user-skill.constant';
-import { CurrentUser } from '../../auth/decorators/current-user.decorator';
+import { RoleGuard } from '../../auth/guards/role.guard';
+import { Roles } from '../../auth/decorators/roles.decorator';
 import { ParseObjectIdPipe } from '../../../common/pipes/pase-object-id.pipe';
 import { Types } from 'mongoose';
 import { SearchUserSkillByUserDto } from '../dtos/requests/search-user-skill-by-user.dto';
 import { Pagination } from '../../../common/dtos/responses/pagination.dto';
 
-@UseGuards(AuthGuard)
-@Controller()
-export class UserSkillController {
+@Roles('admin', 'root')
+@UseGuards(RoleGuard)
+@Controller('admin')
+export class AdminUserSkillController {
   constructor(
     private readonly userSkillService: UserSkillService,
     private readonly userService: UserService,
   ) {}
 
-  @Post('user/self/skill')
+  @Post('user/:userId/skill')
   @HttpCode(HttpStatus.CREATED)
   async addSelfSkill(
     @Body() payload: CreateUserSkillDto,
-    @CurrentUser() currentUser: User,
+    @Param('userId', ParseObjectIdPipe) userId: Types.ObjectId,
   ) {
+    
     const userSkill = await this.userSkillService.addSkill(
       payload,
-      currentUser,
+      userId
     );
-    return new UserSkillDto(userSkill).toSelfResponse();
+    return new UserSkillDto(userSkill).toAdminResponse();
   }
 
-  @Delete('user/self/skill/:name')
+  @Delete('user/:userId/skill/:name')
   @HttpCode(HttpStatus.NO_CONTENT)
   async removeSkill(
     @Param('name') skillName: string,
-    @CurrentJwt() currentUser: JwtAccessTokenPayloadDto,
+    @Param('userId', ParseObjectIdPipe) userId: Types.ObjectId,
   ) {
-    await this.userSkillService.removeSkill(skillName, currentUser.id);
+    await this.userSkillService.removeSkill(skillName, userId);
   }
 
-  @Put('user/self/skill/:name')
+  @Put('user/:userId/skill/:name')
   @HttpCode(HttpStatus.NO_CONTENT)
   async updateSkill(
     @Body() payload: UpdateUserSkillDto,
     @Param('name') skillName: string,
-    @CurrentJwt() currentUser: JwtAccessTokenPayloadDto,
+    @Param('userId', ParseObjectIdPipe) userId: Types.ObjectId,
   ) {
+  
     await this.userSkillService.updateUserSkill(
-      omit(payload, NOT_ALLOW_SELF_UPDATE_FIELDS) as any,
+      payload,
       skillName,
-      currentUser.id,
+      userId,
     );
   }
 
-  @Get('user/self/skill')
+  @Get('user/:userId/skill')
   @HttpCode(HttpStatus.OK)
-  async getSelfSkill(@CurrentJwt() currentUser: JwtAccessTokenPayloadDto, @Query() query: SearchUserSkillByUserDto) {
-    const {userSkills, total, pageNumber, pageSize} = await this.userSkillService.getUserSkills(currentUser.id, query);
-    return new Pagination(userSkills.map((userSkill) => new UserSkillDto(userSkill).toSelfResponse()), pageSize, pageNumber, total);
+  async getSelfSkill(@Param('userId', ParseObjectIdPipe) userId: Types.ObjectId, @Query() query: SearchUserSkillByUserDto) {
+  
+    const {userSkills, total, pageNumber, pageSize} = await this.userSkillService.getUserSkills(userId, query);
+    return new Pagination(userSkills.map((userSkill) => new UserSkillDto(userSkill).toAdminResponse()), pageSize, pageNumber, total);
   }
 
-  @Get('user/:userId/skill')
-  async getUserSkill(@Param('userId', ParseObjectIdPipe) userId: Types.ObjectId, @Query() query: SearchUserSkillByUserDto) {
- 
-    const {userSkills, total, pageNumber, pageSize} = await this.userSkillService.getUserSkills(userId, query);
-    return new Pagination(userSkills.map((userSkill) => new UserSkillDto(userSkill).toPublicResponse()), pageSize, pageNumber, total)
-  }
+
 }

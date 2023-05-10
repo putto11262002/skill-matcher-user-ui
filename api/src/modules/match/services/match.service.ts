@@ -1,313 +1,264 @@
 import {
-  BadRequestException,
-  Inject,
+  ConflictException,
   Injectable,
   NotFoundException,
-  forwardRef,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Match } from '../schemas/match.schema';
-import mongoose, { FilterQuery, Model } from 'mongoose';
+import mongoose from 'mongoose';
+import { MatchRequest } from '../schemas/match-request.schema';
 import { UserService } from '../../user/services/user.service';
-import { User } from '../../user/schemas/user.schema';
-import { MATCH_STATUS, MATCH_USER_STATUS } from '../constants/match.constant';
-import { Types } from 'mongoose';
-import { SearchMatchQueryDto } from '../dto/requests/search-match-query.dto';
-import { SearchUserDto } from '../../user/dtos/requests/search-user.dto';
 
 @Injectable()
 export class MatchService {
   constructor(
-    @InjectModel(Match.name) private readonly matchModel: Model<Match>,
-    @Inject(forwardRef(() => UserService))
+    @InjectModel(Match.name) private readonly matchModel: mongoose.Model<Match>,
+    @InjectModel(MatchRequest.name)
+    private readonly matchReqeuestModel: mongoose.Model<MatchRequest>,
     private readonly userService: UserService,
   ) {}
 
-  async createMatch(
-    user1: User,
-    user1Status: string,
-    user2: User,
-    user2Status: string,
+  /**
+   * Create match request
+   * @param fromId The user that want to request match
+   * @param toId The target user
+   */
+  async requestMatch(
+    fromId: mongoose.Types.ObjectId,
+    toId: mongoose.Types.ObjectId,
   ) {
-    const existingMatch = await this.matchModel.findOne({
-      $and: [
-        {
-          users: {
-            $elemMatch: {
-              userId: user1._id,
-            },
-          },
-        },
-        {
-          users: {
-            $elemMatch: {
-              userId: user2._id,
-            },
-          },
-        },
-      ],
-    });
+    // check if a match between the two user already exist
+    const existingMatch = await this.matchExists(fromId, toId);
 
+    // cannot create request if match already exist
     if (existingMatch) {
-      // if the match is already exist do not continue
-      if (existingMatch.status === MATCH_STATUS.ACTIVE) {
-        throw new BadRequestException('Match already exist');
-      }
-
-      // if matchs is not active delete match and create a new one
-      await this.matchModel.deleteOne({ _id: existingMatch._id });
+      throw new ConflictException('Match already exist');
     }
 
-    const createMatch = await this.matchModel.create({
-      users: [
-        {
-          userId: user1._id,
-          status:
-            user1Status === MATCH_USER_STATUS.ACCEPTED
-              ? user1Status
-              : MATCH_USER_STATUS.PENDING,
-        },
-        {
-          userId: user2._id,
-          status:
-            user2Status === MATCH_USER_STATUS.ACCEPTED
-              ? user2Status
-              : MATCH_USER_STATUS.PENDING,
-        },
-      ],
-      status:
-        user1Status === MATCH_USER_STATUS.ACCEPTED &&
-        user2Status === MATCH_USER_STATUS.ACCEPTED
-          ? MATCH_STATUS.ACTIVE
-          : MATCH_STATUS.PENDING,
-    });
+    // check if a request from 'to' user exist
+    const requestFromTo = await this.reuquestExist(toId, fromId);
 
-    // may have to add some notification email? - new match from ....
+    // if request from 'to' exist delete the reqeust and create a match
+    if (requestFromTo) {
+      await this.matchReqeuestModel.deleteOne({ _id: requestFromTo._id });
 
-    return createMatch;
-  }
-
-  async getMatch(id: Types.ObjectId, userId: Types.ObjectId) {
-    const match = await this.matchModel.findOne({
-      _id: id,
-      'users.userId': userId,
-    });
-    if (!match) {
-      throw new NotFoundException('Match not found');
+      const createdMatch = await this.createMatch(fromId, toId);
+      return createdMatch;
     }
-    return match;
+
+    // check if user have already have a request
+    const existingRequest = await this.reuquestExist(fromId, toId);
+
+    if (existingRequest) return existingRequest;
+
+    // otherwise create a new request
+    const [_fromId, _toId] = await Promise.all([
+      this.userService.existById(fromId),
+      this.userService.existById(toId),
+    ]);
+
+    if (!_fromId) {
+      throw new NotFoundException(`User with id ${fromId} does not exist`);
+    }
+    if (!_toId) {
+      throw new NotFoundException(`User with id ${toId} does not exist`);
+    }
+
+    const createdRequest = await this.matchReqeuestModel.create({
+      to: _toId._id,
+      from: _fromId._id,
+    });
+
+    return createdRequest;
   }
 
-  async getMatchByUsers(userId1: Types.ObjectId, userId2: Types.ObjectId) {
-    const match = await this.matchModel.findOne({
+  /**
+   * Check if a match request exist between the two users, 'to' and 'from'
+   * @param fromId
+   * @param toId
+   * @returns Return request if it exist, otherwise return null
+   */
+  async reuquestExist(
+    fromId: mongoose.Types.ObjectId,
+    toId: mongoose.Types.ObjectId,
+  ) {
+    const request = await this.matchReqeuestModel.exists({
+      to: toId,
+      from: fromId,
+    });
+    return request;
+  }
+
+  /**
+   * Check if a match exist between the two users
+   * @param user1Id
+   * @param user2Id
+   * @returns Return match if it exist, otherwise return null
+   */
+  async matchExists(
+    user1Id: mongoose.Types.ObjectId,
+    user2Id: mongoose.Types.ObjectId,
+  ) {
+    const existingMatch = await this.matchModel.exists({
       $and: [
         {
           users: {
             $elemMatch: {
-              userId: userId1,
+              userId: user1Id,
             },
           },
         },
         {
           users: {
             $elemMatch: {
-              userId: userId2,
+              userId: user2Id,
             },
           },
         },
       ],
     });
-    if (!match) {
+    return existingMatch;
+  }
+
+  /**
+   * Create a match between two users
+   * @param user1Id
+   * @param user2Id
+   * @returns Created match
+   */
+  private async createMatch(
+    user1Id: mongoose.Types.ObjectId,
+    user2Id: mongoose.Types.ObjectId,
+  ) {
+    const createdMatch = await this.matchModel.create({
+      users: [user1Id, user2Id],
+    });
+    return createdMatch;
+  }
+
+  /**
+   * Reject a match request given the user that send the request and taget user
+   * @param fromTo
+   * @param toId
+   */
+  async rejectRequest(
+    fromTo: mongoose.Types.ObjectId,
+    toId: mongoose.Types.ObjectId,
+  ) {
+    const request = await this.reuquestExist(fromTo, toId);
+    if (!request) {
+      throw new NotFoundException('Request does not exist');
+    }
+    await this.matchReqeuestModel.deleteOne({ _id: request._id });
+  }
+
+  /**
+   * Accept match request and create a match
+   * @param fromId
+   * @param toId
+   * TODO - use transaction
+   */
+  async acceptRequestAndMatch(
+    fromId: mongoose.Types.ObjectId,
+    toId: mongoose.Types.ObjectId,
+  ) {
+    const request = await this.reuquestExist(fromId, toId);
+    if (!request) {
+      throw new NotFoundException('Request does not exist');
+    }
+    await this.matchReqeuestModel.deleteOne({ _id: request._id });
+    const createdMatch = await this.createMatch(fromId, toId);
+    return createdMatch;
+  }
+
+  /**
+   * Unmatch users
+   * @param user1Id
+   * @param user2Id
+   */
+  async unmatch(
+    user1Id: mongoose.Types.ObjectId,
+    user2Id: mongoose.Types.ObjectId,
+  ) {
+    const match = await this.matchExists(user1Id, user2Id);
+    if (match) {
       throw new NotFoundException('Match does not exist');
     }
-    return match;
+    await this.matchModel.deleteOne({ _id: match._id });
   }
 
-  async getMatchByUser(userId: Types.ObjectId) {
-    const filter = {
-      users: {
-        $elemMatch: {
-          userId,
-        },
-      },
-    };
+  /**
+   * Get all the request the user received
+   * @param userId
+   * @param pageSize
+   * @param pageNumber
+   * @returns A list of requests, total number of requests
+   */
+  async getReceivedRequests(
+    userId: mongoose.Types.ObjectId,
+    pageSize?: number,
+    pageNumber?: number,
+  ) {
+    const filter: mongoose.FilterQuery<MatchRequest> = { to: userId };
+    const [requests, total] = await Promise.all([
+      this.matchReqeuestModel
+        .find(filter)
+        .skip(pageSize * pageNumber)
+        .limit(pageSize),
+      this.matchReqeuestModel.countDocuments(filter),
+    ]);
+    return { requests, total };
+  }
 
+  /**
+   * Get all the match of the supplied user
+   * @param userId
+   * @param pageSize
+   * @param pageNumber
+   * @returns A list of matches, total number of matches
+   */
+  async getMatch(
+    userId: mongoose.Types.ObjectId,
+    pageSize?: number,
+    pageNumber?: number,
+  ) {
+    const filter: mongoose.FilterQuery<Match> = {
+      users: { $elemMatch: { $eq: userId._id } },
+    };
     const [matches, total] = await Promise.all([
-      this.matchModel.find(filter),
+      this.matchModel
+        .find(filter)
+        .skip(pageSize * pageNumber)
+        .limit(pageSize),
       this.matchModel.countDocuments(filter),
     ]);
     return { matches, total };
   }
 
-  async deleteMatch(id: Types.ObjectId, userId: Types.ObjectId) {
-    const _id = await this.matchModel.exists({
-      _id: id,
-      users: { $elemMatch: { userId } },
-    });
-    if (!_id) {
-      throw new NotFoundException('Math does not exist');
-    }
-    await this.matchModel.deleteOne({ _id });
-  }
-
-  async acceptMatch(selfId: Types.ObjectId, otherId: Types.ObjectId) {
-    const match = await this.matchModel.findOne({
-      $and: [
-        {
-          users: {
-            $elemMatch: {
-              userId: selfId,
-            },
-          },
-        },
-        {
-          users: {
-            $elemMatch: {
-              userId: otherId,
-            },
-          },
-        },
-      ],
-    });
-
-    if (!match) {
-      throw new NotFoundException('Match does not exist');
-    }
-
-    match.users = match.users.map((user) =>
-      user.userId.equals(selfId)
-        ? { ...user, status: MATCH_USER_STATUS.ACCEPTED }
-        : user,
-    );
-    const bothAccepted = match.users.every(
-      (user) => user.status === MATCH_USER_STATUS.ACCEPTED,
-    );
-    match.status = bothAccepted ? MATCH_STATUS.ACTIVE : match.status;
-    await this.matchModel.updateOne({
-      $and: [
-        {
-          users: {
-            $elemMatch: {
-              userId: selfId,
-            },
-          },
-        },
-        {
-          users: {
-            $elemMatch: {
-              userId: otherId,
-            },
-          },
-        },
-      ],
-    }, match);
-  }
-
-  async declineMatch(selfId: Types.ObjectId, otherId: Types.ObjectId) {
-    const match = await this.matchModel.findOne({
-      $and: [
-        {
-          users: {
-            $elemMatch: {
-              userId: selfId,
-            },
-          },
-        },
-        {
-          users: {
-            $elemMatch: {
-              userId: otherId,
-            },
-          },
-        },
-      ],
-    });
-    if (!match) {
-      throw new NotFoundException('Match does not exist');
-    }
-    if (match.status === MATCH_STATUS.ACTIVE) {
-      throw new BadRequestException('Cannot modify active match');
-    }
-    await this.matchModel.deleteOne({
-      $and: [
-        {
-          users: {
-            $elemMatch: {
-              userId: selfId,
-            },
-          },
-        },
-        {
-          users: {
-            $elemMatch: {
-              userId: otherId,
-            },
-          },
-        },
-      ],
-    });
-  }
-
-  async searchMatches(
-    query?: SearchMatchQueryDto,
-   
+  /**
+   * Get all the match request the supplied user have sent
+   * @param userIdId
+   * @param pageSize
+   * @param pageNumber
+   * @returns a list of request, total number of request
+   */
+  async getSentRequest(
+    userIdId: mongoose.Types.ObjectId,
+    pageSize?: number,
+    pageNumber?: number,
   ) {
-    const filter: mongoose.FilterQuery<Match> = {};
-
-    if(query.includeIds){
-      if(!filter.$and) filter.$and = [];
-      filter.$and.push({_id: {'$in': query.includeIds}});
-    }
-
-    if(query.status){
-      if(!filter.$and) filter.$and = [];
-      filter.$and.push({status: query.status});
-    }
-
-    const [matches, total] = await Promise.all([
-      this.matchModel
+    const filter: mongoose.FilterQuery<MatchRequest> = { from: userIdId._id };
+    const [requests, total] = await Promise.all([
+      this.matchReqeuestModel
         .find(filter)
-        .sort(query.sort)
-        .skip(query.pageSize * query.pageNumber)
-        .limit(query.pageSize),
-      this.matchModel.countDocuments(filter),
+        .skip(pageSize * pageNumber)
+        .limit(pageSize),
+      this.matchReqeuestModel.countDocuments(filter),
     ]);
-
-    return {
-      matches,
-      total,
-      pageNumber: query.pageNumber,
-      pageSize: query.pageSize,
-    };
+    return { requests, total };
   }
 
-  async advanceSearch(pipe: mongoose.PipelineStage[]){
+  async advanceSearch(pipe: mongoose.PipelineStage[]) {
     return this.matchModel.aggregate(pipe);
-  }
-
-  async matchExists(
-    userId1: Types.ObjectId,
-    userId2: Types.ObjectId,
-  ): Promise<string> {
-    const match = await this.matchModel.findOne({
-      $and: [
-        {
-          users: {
-            $elemMatch: {
-              userId: userId1,
-            },
-          },
-        },
-        {
-          users: {
-            $elemMatch: {
-              userId: userId2,
-            },
-          },
-        },
-      ],
-    });
-
-    return match?.status;
   }
 }

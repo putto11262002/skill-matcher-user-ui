@@ -37,7 +37,13 @@ export class UserService {
     private readonly imageService: ImageService,
   ) {}
 
+  /**
+   * Create a suer
+   * @param user
+   * @returns The created user
+   */
   async create(user: CreateUserDto): Promise<User> {
+    // check if user with username and email already exist
     const [usernameExist, emailExist] = await Promise.all([
       this.userModel.findOne({ username: user.username }),
       this.userModel.findOne({ email: user.email }),
@@ -69,7 +75,7 @@ export class UserService {
     return createdUser;
   }
 
-  async updateById(id: Types.ObjectId, user: UpdateUserDto): Promise<User> {
+  async updateById(id: Types.ObjectId, user: UpdateUserDto): Promise<void> {
     const exist = await this.userModel.exists({ _id: id });
     if (!exist) {
       throw new HttpException(
@@ -79,12 +85,9 @@ export class UserService {
     }
     omit(user, NOT_ALLOWED_UPDATE);
 
-    const updatedUser = await this.userModel.findOneAndUpdate(
-      { _id: id },
-      user,
-      { new: true },
-    ).populate('avatar');
-    return updatedUser;
+    await this.userModel
+      .updateOne({ _id: id }, user)
+     
   }
 
   async deleteById(id: Types.ObjectId): Promise<void> {
@@ -98,12 +101,12 @@ export class UserService {
     await this.userModel.deleteOne({ _id: id });
   }
 
-  async deleteByUsername(username: string): Promise<void> {
-    const exist = await this.userModel.exists({ username });
-    if (!exist) {
-      throw new NotFoundException('User with this username does not exist');
-    }
-  }
+  // async deleteByUsername(username: string): Promise<void> {
+  //   const exist = await this.userModel.exists({ username });
+  //   if (!exist) {
+  //     throw new NotFoundException('User with this username does not exist');
+  //   }
+  // }
 
   async getById(id: Types.ObjectId): Promise<User | null> {
     const user = await this.userModel.findOne({ _id: id }).populate('avatar');
@@ -132,19 +135,46 @@ export class UserService {
     return user;
   }
 
-  async existByUsername(username: string): Promise<boolean> {
+  async getByIdOrThow(id: Types.ObjectId): Promise<User | null> {
+    const user = await this.userModel.findOne({ _id: id }).populate('avatar');
+    if (!user) {
+      throw new HttpException("User with this id does not exist.", HttpStatus.NOT_FOUND);
+     
+    }
+    return user;
+  }
+
+  async getByEmailOrThrow(email: string): Promise<User | null> {
+    const user = await this.userModel.findOne({ email }).populate('avatar');
+    if (!user) {
+      throw new HttpException("User with is email does not exist.", HttpStatus.NOT_FOUND)
+  
+    }
+    return user;
+  }
+
+  async getByUsernameOrThrow(username: string): Promise<User | null> {
+    const user = await this.userModel.findOne({ username }).populate('avatar');
+    if (!user) {
+      throw new HttpException("User with this username does not exist.", HttpStatus.NOT_FOUND);
+      
+    }
+    return user;
+  }
+
+  async existByUsername(username: string) {
     const id = await this.userModel.exists({ username });
-    return id ? true : false;
+    return id ;
   }
 
-  async existById(id: Types.ObjectId): Promise<boolean> {
-    const _id = await this.userModel.exists({_id: id})
-    return _id ? true : false;
+  async existById(id: Types.ObjectId) {
+    const _id = await this.userModel.exists({ _id: id });
+    return _id ;
   }
 
-  async existByEmail(email: string): Promise<boolean> {
+  async existByEmail(email: string) {
     const id = await this.userModel.exists({ email });
-    return id ? true : false;
+    return id ;
   }
 
   async updateRefreshToken(
@@ -154,50 +184,56 @@ export class UserService {
     await this.userModel.updateOne({ _id: id }, { refreshToken });
   }
 
-  async search(
-    query: SearchUserDto,
-  ): Promise<{ total: number; users: User[], pageSize: number, pageNumber: number }> {
-    
-    const filer: FilterQuery<User> = {}
-    if(query.q){
+  async search(query: SearchUserDto): Promise<{
+    total: number;
+    users: User[];
+    pageSize: number;
+    pageNumber: number;
+  }> {
+    const filer: FilterQuery<User> = {};
+    if (query.q) {
       filer.$or = [
-        {'profile.firstName': {'$regex': query.q, "$options": "i"}},
-        {'profile.lastName': {'$regex': query.q, "$options": "i"}},
-        {'username': {'$regex': query.q, "$options": "i"}}
-      ]
+        { 'profile.firstName': { $regex: query.q, $options: 'i' } },
+        { 'profile.lastName': { $regex: query.q, $options: 'i' } },
+        { username: { $regex: query.q, $options: 'i' } },
+      ];
     }
 
-    if(query.status){
-      if(!filer.$and) filer.$and = [];
-      filer.$and.push({status: query.status})
+    if (query.status) {
+      if (!filer.$and) filer.$and = [];
+      filer.$and.push({ status: query.status });
     }
 
-    if(query.includeIds){
-      if(!filer.$and) filer.$and = [];
-      filer.$and.push({_id: {'$in': query.includeIds}})
+    if (query.includeIds) {
+      if (!filer.$and) filer.$and = [];
+      filer.$and.push({ _id: { $in: query.includeIds } });
     }
 
-    if(query.excludeIds){
-      if(!filer.$and) filer.$and = [];
-      filer.$and.push({_id: {'$nin': query.excludeIds}})
+    if (query.excludeIds) {
+      if (!filer.$and) filer.$and = [];
+      filer.$and.push({ _id: { $nin: query.excludeIds } });
     }
 
-    if(query.roles){
-      if(!filer.$and) filer.$and = [];
-      filer.$and.push({role: {'$in': query.roles}})
+    if (query.roles) {
+      if (!filer.$and) filer.$and = [];
+      filer.$and.push({ role: { $in: query.roles } });
     }
-
 
     const [users, total] = await Promise.all([
       this.userModel
         .find(filer)
         .populate('avatar')
         .sort(query.sort)
-        .skip(query?.pageNumber * query?.pageSize )
+        .skip(query?.pageNumber * query?.pageSize)
         .limit(query?.pageSize),
       this.userModel.find(filer).countDocuments(),
     ]);
-    return { users, total, pageSize: query.pageSize, pageNumber: query.pageNumber };
+    return {
+      users,
+      total,
+      pageSize: query.pageSize,
+      pageNumber: query.pageNumber,
+    };
   }
 
   async createRootUser() {
@@ -230,7 +266,7 @@ export class UserService {
     });
   }
 
-  async advanceSearch(pipe: mongoose.PipelineStage[]){
+  async advanceSearch(pipe: mongoose.PipelineStage[]) {
     return this.userModel.aggregate(pipe);
   }
 
@@ -260,5 +296,4 @@ export class UserService {
     await this.userModel.updateOne({ _id: id }, { avatar: createdFile._id });
     return createdFile;
   }
-
 }

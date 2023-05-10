@@ -89,10 +89,7 @@ export class UserController {
       currentUser._id,
       user._id,
     );
-
-    return status === MATCH_STATUS.ACTIVE
-      ? new UserDto(user, MATCH_STATUS.ACTIVE).toMatchedUserResponse()
-      : new UserDto(user, status).toPublicResponse();
+    return user;
   }
 
   @UseGuards(AuthGuard)
@@ -114,20 +111,14 @@ export class UserController {
       ) as SearchUserDto,
     );
 
-    const { matches } = await this.matchService.getMatchByUser(currentUser._id);
-    const matchedUser = new Map<string, string>();
-    matches.forEach((match) => {
-      const u = match.users.find((u) => !u.userId.equals(currentUser._id));
-      matchedUser.set(u.userId.toHexString(), match.status);
-    });
+  
 
     return new Pagination(
       users.map((user) =>
-        matchedUser.get(user._id.toHexString()) === MATCH_STATUS.ACTIVE
-          ? new UserDto(user, MATCH_STATUS.ACTIVE).toMatchedUserResponse()
-          : new UserDto(
+      
+           new UserDto(
               user,
-              matchedUser.get(user._id.toHexString()),
+             
             ).toPublicResponse(),
       ),
       query.pageSize,
@@ -155,4 +146,6 @@ export class UserController {
     const file = await this.userService.updateAvatar(currentUser.id, avatar);
     return new FileDto(file);
   }
+
+  
 }

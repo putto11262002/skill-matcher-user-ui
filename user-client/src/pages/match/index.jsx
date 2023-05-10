@@ -10,6 +10,7 @@ import { enqueueSnackbar } from "notistack";
 import MatchGrid from "../../components/match/MatchGrid";
 import SearchInput from "../../components/common/form/SearchInput";
 import { MATCH_PAGE_SIZE, MATCH_STATUS } from "@/constants/match.constant";
+import userService from "../../services/user.service";
 
 const BrowseUserPage = () => {
   useAuth();
@@ -28,11 +29,11 @@ const BrowseUserPage = () => {
   } = useQuery(
     ["feed", "matched", page, query],
     () =>
-      feedService.search({
+      userService.searchMatchedUsers({
         ...query,
         pageSize: MATCH_PAGE_SIZE,
         q: searchTerm,
-        match: MATCH_STATUS.ACTIVE,
+
         pageNumber: page,
       }),
     {
@@ -68,7 +69,6 @@ const BrowseUserPage = () => {
   }, [page]);
 
   return (
-    
     <Box
       sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >

@@ -8,6 +8,7 @@ import useAuth from "@/hooks/useAuth";
 import matchService from "../../../services/match.service";
 import feedService, { FeedService } from "@/services/feed.service";
 import { enqueueSnackbar } from "notistack";
+import userService from "../../../services/user.service";
 
 const BrowseUserPage = () => {
   useAuth();
@@ -24,7 +25,7 @@ const BrowseUserPage = () => {
   } = useQuery(
     ["feed", "suggestion", page, query],
     () =>
-      feedService.get({
+      userService.getRankedUser({
         ...query,
         pageSize: USER_PAGE_SIZE,
         pageNumber: page,

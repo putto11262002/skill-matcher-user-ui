@@ -1,15 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Transform, Type } from "class-transformer";
 import { IsNotEmpty } from "class-validator";
-import { property } from "lodash";
-import { ObjectId } from "mongodb";
-import { Types } from "mongoose";
 import { toMongoObjectId } from "../../../../common/helpers/dto.helper";
+import mongoose from "mongoose";
 
-export class createMatchDto {
+export class RequestMatchDto {
     @ApiProperty()
     @IsNotEmpty()
-    @Type(() => Types.ObjectId)
+    @Type(() => mongoose.Types.ObjectId)
     @Transform(toMongoObjectId)
-    userId: Types.ObjectId
+    userId: mongoose.Types.ObjectId
 }

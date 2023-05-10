@@ -8,7 +8,7 @@ import { SkillModule } from './modules/skill/skill.module';
 import { MongoModule } from './common/mongo/mongo.module';
 import { MatchModule } from './modules/match/match.module';
 import { _ConfigModule } from './config/config.module';
-import { RankingSearchModule } from './modules/ranking-search/feed.module';
+
 import { EventModule } from './common/event/event.module';
 
 
@@ -21,7 +21,7 @@ import { EventModule } from './common/event/event.module';
     SkillModule,
     MongoModule,
     MatchModule,
-    RankingSearchModule
+
   ],
   controllers: [AppController],
   providers: [AppService],

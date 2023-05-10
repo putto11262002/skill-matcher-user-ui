@@ -2,16 +2,17 @@ import {
   BadRequestException,
   Inject,
   Injectable,
+  NotFoundException,
   forwardRef,
 } from '@nestjs/common';
 import mongoose, { FilterQuery, Model, ObjectId, Types } from 'mongoose';
-import { UserService } from '../../user/services/user.service';
-import { SkillService } from './skill.service';
+import { UserService } from './user.service';
+import { SkillService } from '../../skill/services/skill.service';
 import { InjectModel } from '@nestjs/mongoose';
 import { UserSkill } from '../schemas/user-skill.schema';
-import { CreateUserDto } from '../../user/dtos/requests/create-user.dto';
+import { CreateUserDto } from '../dtos/requests/create-user.dto';
 import { CreateUserSkillDto } from '../dtos/requests/create-user-skill.dot';
-import { User } from '../../user/schemas/user.schema';
+import { User } from '../schemas/user.schema';
 import { UpdateUserSkillDto } from '../dtos/requests/update-user-skill.dto';
 import {
   NOT_ALLOW_UPDATE_FIELDS,
@@ -21,7 +22,7 @@ import {
 import { omit } from 'lodash';
 import { SearchUserSkillByUserDto } from '../dtos/requests/search-user-skill-by-user.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { UserSkillDto } from '../dtos/responses/user-skill.dto';
+import { UserSkillDto } from '../../skill/dtos/responses/user-skill.dto';
 @Injectable()
 export class UserSkillService {
   constructor(
@@ -36,26 +37,40 @@ export class UserSkillService {
   // User cannot have more than 10 skills at once ?
   async addSkill(
     userSkill: CreateUserSkillDto,
-    user: User,
+    userId: mongoose.Types.ObjectId,
   ): Promise<UserSkill> {
+    // check if user exist
+    const userExist = await this.userService.existById(userId);
+    if(!userExist){
+      throw new NotFoundException('User does not exist')
+    }
+
+    // check if skill exist
     const skill = await this.skillService.getSkillByName(userSkill.skill);
-    // const exist = await this.userSkillModel.exists({userId: user._id, skill: skill.name});
+
+    
     const existingUserSkills = await this.userSkillModel.find({
-      userId: user._id,
+      userId
     });
+
+    // Only allow users to have limited number of skills at once
     if (existingUserSkills.length === USER_SKILL_LIMIT) {
       throw new BadRequestException(
         'You have exceeded the limit on the skills you can have on your profile at once',
       );
     }
+     // check if user already have the skill that is going to be added 
     const exist = existingUserSkills.find((us) => us.skill === userSkill.skill);
+
     if (exist) {
       throw new BadRequestException(
         'You have already added this skill to your profile',
       );
     }
+
+    // otherwise add skill
     const createdUserSkill = await this.userSkillModel.create({
-      userId: user._id,
+      userId,
       skill: skill.name,
       proficiency: userSkill.proficiency,
       role: userSkill.role,
@@ -69,7 +84,7 @@ export class UserSkillService {
   async removeSkill(skill: string, userId: Types.ObjectId): Promise<void> {
     const exist = await this.userSkillModel.exists({ userId: userId, skill });
     if (!exist) {
-      throw new BadRequestException('Cannot remove skill that you do not have');
+      throw new BadRequestException('Skill does not exist');
     }
     await this.userSkillModel.deleteOne({ userId: userId, skill });
     await this.eventEmitter.emitAsync(USER_SKILL_EVENT.REMOVED, {userId: userId, skill} as UserSkill)
@@ -105,6 +120,11 @@ export class UserSkillService {
     if (query.role) {
       filter.role = query.role;
     }
+
+    if(query.skills){
+      filter.skill = {$in: query.skills}
+    }
+    
     const [userSkills, total] = await Promise.all([
       this.userSkillModel
         .find(filter)
