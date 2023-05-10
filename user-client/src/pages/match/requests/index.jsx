@@ -18,7 +18,7 @@ const RequestsPage = () => {
 
   const [query, setQuery] = useState({});
   const [page, setPage] = useState(0);
-  const [feed, setFeed] = useState([]);
+  const [users, setUsers] = useState([]);
   const [hasMore, setHasMore] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [updatedSearchTerm, setUpdateSearchTerm] = useState(true);
@@ -45,31 +45,29 @@ const RequestsPage = () => {
         if (updatedSearchTerm) {
           newFeed = res?.data?.data;
         } else {
-          newFeed = [...feed, ...res?.data?.data];
+          newFeed = [...users, ...res?.data?.data];
         }
 
         setHasMore(newFeed.length < res?.data?.total);
-        setFeed(newFeed);
+        setUsers(newFeed);
       },
     }
   );
 
-  const { mutate: matchUser } = useMutation(matchService.sendMatchRequest, {
-    onSuccess: (res) =>
-      enqueueSnackbar("Match request has been sent", { variant: "success" }),
-    onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
-  });
-
 
   const { mutate: declineRequest } = useMutation(matchService.declineRequest, {
-    onSuccess: (res) =>
-      enqueueSnackbar("Match request has been declined", { variant: "success" }),
+    onSuccess: (res, {userId}) =>
+      {enqueueSnackbar("Match request has been declined", { variant: "success" })
+      setUsers(prevUsers => prevUsers.filter(u => u._id !== userId))
+    },
     onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
   });
 
   const { mutate: acceptRequest } = useMutation(matchService.acceptMatchRequest, {
-    onSuccess: (res) =>
-      enqueueSnackbar("Match request has been accepted", { variant: "success" }),
+    onSuccess: (res, {userId}) =>{
+      enqueueSnackbar("Match request has been accepted", { variant: "success" })
+      setUsers(prevUsers => prevUsers.filter(u => u._id !== userId))
+    },
     onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
   });
 
@@ -91,7 +89,7 @@ const RequestsPage = () => {
   }
 
 
-  console.log(feed)
+  console.log(users)
   return (
     
     <Box
@@ -115,7 +113,7 @@ const RequestsPage = () => {
           onNext={() => setPage((prevPage) => prevPage + 1)}
           onDecline={handleDecline}
           onAccept ={handleAccept}
-          users={feed}
+          users={users}
           loading={isLoadingUsers}
           error={error}
 

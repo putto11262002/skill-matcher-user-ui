@@ -69,7 +69,12 @@ const navLinks = [
     label: "Requests Notifications",
     path: "/match/requests",
     visibility: "auth",
-    icon: (props) => <NotificationsIcon {...props} />,
+    icon: (props) => (
+      <Badge badgeContent={3} color="secondary">
+        <NotificationsIcon {...props} />
+      </Badge>
+    ),
+
   },
   // {
   //   label: "Dashboard",

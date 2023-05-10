@@ -40,7 +40,7 @@ const UserProfileCard = ({ user, onMatch }) => {
     <Card>
       <CardHeader
         avatar={<Avatar src={user?.avatar?.url || "/images/no-avatar.jpg"} />}
-        subheader={`${user.email}`}
+        subheader={`${user.username}`}
         title={`${user?.profile?.firstName} ${user?.profile?.lastName}`}
       />
       <CardContent sx={{ paddingY: 1 }}>
