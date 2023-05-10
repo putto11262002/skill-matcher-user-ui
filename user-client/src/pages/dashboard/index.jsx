@@ -57,13 +57,17 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         margin: 'auto',
     },
-    projectLink: {
-        color: '#222',
-        textDecoration: 'none',
-        '&:hover': {
-            textDecoration: 'underline',
-        },
+    avatar: {
+        width: '100px',
+        height: '100px'
     },
+    projectLink: {
+    color: '#222',
+    textDecoration: 'none',
+    '&:hover': {
+        textDecoration: 'underline',
+    },
+},
 }));
 
 const Dashboard = () => {
@@ -137,24 +141,24 @@ const Dashboard = () => {
                     <Container className={classes.container}>
                         <Box textAlign="center" display="flex" justifyContent="center" alignItems="center">
                             {/* <AccountCircleIcon sx={{ fontSize: 70 }} /> */}
-                            <Avatar sizes='md' src={user?.avatar?.url}/>
+                            <Avatar className={classes.avatar} src={user?.avatar?.url} />
                         </Box>
                         <Box className={classes.center}>
-                        <Typography align='center' variant="h2">
-                           {firstName} {lastName}
-                           </Typography>
+                            <Typography align='center' variant="h2">
+                                {firstName} {lastName}
+                            </Typography>
                         </Box>
                         <Box className={classes.center}>
                             <Typography align='center' variant="body1">
                                 Software Engineer
                             </Typography>
                         </Box>
- 
+
                         <Box marginTop={2} /> {/* Adds vertical space */}
                         <Typography variant="body1">
- 
+
                         </Typography>
- 
+
                         <Box marginTop={5} display="flex" justifyContent="center">
                             <Box display="flex" flexDirection="column" alignItems="center">
                                 <Typography variant="h3" className={classes.center}>
@@ -168,7 +172,7 @@ const Dashboard = () => {
                             <Box marginRight={15} /> {/* Adds vertical space */}
                             <Box display="flex" flexDirection="column" alignItems="center">
                                 <Typography variant="h3" className={classes.center}>
-                                    <StarRateIcon sx={{ fontSize: 40, marginRight: "0.08rem" }} style={{ fill: "orange" }} />
+                                    <StarRateIcon sx={{ fontSize: 43, marginRight: "0.08rem" }} style={{ fill: "orange" }} />
                                     3.5
                                 </Typography>
                                 <Typography variant="subtitle1" color="textSecondary" className={classes.center}>
@@ -178,11 +182,11 @@ const Dashboard = () => {
                         </Box>
                         <Box marginTop={2} /> {/* Adds vertical space */}
                         <Link href="/user/edit-profile" underline="none">
-                        <Button variant="outlined">Edit Profile </Button>
+                            <Button variant="outlined">Edit Profile </Button>
                         </Link>
                     </Container>
                 </Grid>
- 
+
                 <Grid item xs={13} md={4}>
                     <Container className={classes.container}>
                         <Typography variant="h3" className={classes.sectionTitle} style={{ textAlign: 'center' }}>
@@ -190,7 +194,7 @@ const Dashboard = () => {
                         </Typography>
                         <ul>
                             <li>
-                            <Box marginTop={4} /> {/* Adds vertical space */}
+                                <Box marginTop={4} /> {/* Adds vertical space */}
                                 <Box display="flex" alignItems="center" justifyContent="space-between">
                                     <Box display="flex" alignItems="center">
                                         <Avatar className={classes.orangeAvatar}>N</Avatar>
@@ -201,10 +205,10 @@ const Dashboard = () => {
                                     <DeleteIcon />
                                 </Box>
                             </li>
- 
+
                             <li>
-                            <Box marginTop={3} /> {/* Adds vertical space */}
-                            <Box display="flex" alignItems="center" justifyContent="space-between">
+                                <Box marginTop={3} /> {/* Adds vertical space */}
+                                <Box display="flex" alignItems="center" justifyContent="space-between">
                                     <Box display="flex" alignItems="center">
                                         <Avatar className={classes.orangeAvatar}>N</Avatar>
                                         <Typography variant="subtitle1" className={classes.personName} style={{ marginLeft: '8px' }}>
@@ -215,8 +219,8 @@ const Dashboard = () => {
                                 </Box>
                             </li>
                             <li>
-                            <Box marginTop={3} /> {/* Adds vertical space */}
-                            <Box display="flex" alignItems="center" justifyContent="space-between">
+                                <Box marginTop={3} /> {/* Adds vertical space */}
+                                <Box display="flex" alignItems="center" justifyContent="space-between">
                                     <Box display="flex" alignItems="center">
                                         <Avatar className={classes.orangeAvatar}>N</Avatar>
                                         <Typography variant="subtitle1" className={classes.personName} style={{ marginLeft: '8px' }}>
@@ -227,8 +231,8 @@ const Dashboard = () => {
                                 </Box>
                             </li>
                             <li>
-                            <Box marginTop={3} /> {/* Adds vertical space */}
-                            <Box display="flex" alignItems="center" justifyContent="space-between">
+                                <Box marginTop={3} /> {/* Adds vertical space */}
+                                <Box display="flex" alignItems="center" justifyContent="space-between">
                                     <Box display="flex" alignItems="center">
                                         <Avatar className={classes.orangeAvatar}>N</Avatar>
                                         <Typography variant="subtitle1" className={classes.personName} style={{ marginLeft: '8px' }}>
@@ -239,14 +243,14 @@ const Dashboard = () => {
                                 </Box>
                                 <Box marginBottom={5} /> {/* Adds vertical space */}
                                 <Link href="/match" underline="none">
-                                <Button variant="outlined">See All</Button>
+                                    <Button variant="outlined">See All</Button>
                                 </Link>
                             </li>
                         </ul>
                     </Container>
                 </Grid>
- 
- 
+
+
                 <Grid item xs={12} md={4}>
                     <Container className={classes.container}>
                         <Typography variant="h3" className={classes.sectionTitle} style={{ textAlign: 'center' }}>
@@ -287,13 +291,13 @@ const Dashboard = () => {
                                 </Typography>
                                 <Box marginBottom={3} /> {/* Adds vertical space */}
                                 <Link href="/profile-creation" underline="none">
-                                <Button variant="outlined">See All</Button>
+                                    <Button variant="outlined">See All</Button>
                                 </Link>
                             </li>
                         </ul>
                     </Container>
                 </Grid>
- 
+
                 <Grid item xs={12} md={4}>
                     <Container className={classes.container}>
                         <Stack spacing={2} sx={{ maxWidth: 600 }}>
@@ -301,17 +305,17 @@ const Dashboard = () => {
                                 Notifications
                             </Typography>
                             {/* <SnackbarContent sx={{ background: theme => theme.palette.background.paper, color: "black" }} message="I love snacks." action={action} /> */}
-                            <SnackbarContent sx={{ background: theme => theme.palette.background.paper, color: "black" }} 
+                            <SnackbarContent sx={{ background: theme => theme.palette.background.paper, color: "black" }}
                                 message={
                                     'Reece wants to match with you'
                                 }
                                 action={action}
                             />
-                            <SnackbarContent sx={{ background: theme => theme.palette.background.paper, color: "black" }} 
+                            <SnackbarContent sx={{ background: theme => theme.palette.background.paper, color: "black" }}
                                 message="Maggie has accepted your request"
                                 action={action}
                             />
-                            <SnackbarContent sx={{ background: theme => theme.palette.background.paper, color: "black" }} 
+                            <SnackbarContent sx={{ background: theme => theme.palette.background.paper, color: "black" }}
                                 message={
                                     'Nathan has accepted your request'
                                 }
@@ -320,12 +324,12 @@ const Dashboard = () => {
                         </Stack>
                         <Box marginBottom={2} /> {/* Adds vertical space */}
                         <Link href="/match/requests" underline="none">
-                        <Button variant="outlined">See All</Button>
+                            <Button variant="outlined">See All</Button>
                         </Link>
                     </Container>
                 </Grid>
- 
- 
+
+
                 <Grid item xs={12}>
                     <Typography variant="body2" align="center">
                         &copy; 2023 John Doe
@@ -335,5 +339,5 @@ const Dashboard = () => {
         </Container>
     );
 }
- 
+
 export default Dashboard;
