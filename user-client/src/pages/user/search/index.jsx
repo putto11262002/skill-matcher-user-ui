@@ -57,9 +57,9 @@ const SearchUsers = () => {
     refetch: handleSearchFeed,
     error: searchFeedError,
   } = useQuery(
-    ["feed", "search"],
+    ["user", "search"],
     () =>
-      feedService.search({
+      userService.searchRankedUser({
         ...query,
         pageSize: USER_PAGE_SIZE,
         pageNumber: page,

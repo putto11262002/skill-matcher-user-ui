@@ -66,6 +66,10 @@ export class UserService {
     return api.get("/user/self/rank", { params: query });
   }
 
+  async searchRankedUser(query){
+    return api.get("/user/self/rank/search", {params: query})
+  }
+
   async searchMatchedUsers(query) {
     return api.get("/user/self/match/user", { params: query });
   }
