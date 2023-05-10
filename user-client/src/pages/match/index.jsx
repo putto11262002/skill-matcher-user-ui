@@ -63,6 +63,21 @@ const BrowseUserPage = () => {
     matchUser({ userId: user._id });
   };
 
+  const handleUnmatch = async (user) => {
+    try {
+      await matchService.unmatchRequest({ userId: user._id });
+      // show success message to user
+      enqueueSnackbar("Unmatched successfully", { variant: "success" });
+      // refresh feed
+      refetch();
+    } catch (error) {
+      // show error message to user
+      enqueueSnackbar(error.message, { variant: "error" });
+    }
+  };
+  
+
+
   useEffect(() => {
     setUpdateSearchTerm(false);
     refetch();
@@ -89,6 +104,7 @@ const BrowseUserPage = () => {
           hasMore={hasMore}
           onNext={() => setPage((prevPage) => prevPage + 1)}
           onMatch={handleMatch}
+          onUnmatch={handleUnmatch}
           users={feed}
           loading={isLoadingUsers}
           error={error}
