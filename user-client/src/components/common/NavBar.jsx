@@ -66,7 +66,7 @@ const navLinks = [
     icon: (props) => <StarIcon {...props} />,
   },
   {
-    label: "Reqests Notifications",
+    label: "Requests Notifications",
     path: "/match/requests",
     visibility: "auth",
     icon: (props) => <NotificationsIcon {...props} />,
