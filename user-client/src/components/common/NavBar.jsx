@@ -65,6 +65,12 @@ const navLinks = [
     visibility: "auth",
     icon: (props) => <StarIcon {...props} />,
   },
+  {
+    label: "Reqests Notifications",
+    path: "/match/requests",
+    visibility: "auth",
+    icon: (props) => <NotificationsIcon {...props} />,
+  },
   // {
   //   label: "Dashboard",
   //   path: "/dashboard",
@@ -77,6 +83,7 @@ const navLinks = [
     visibility: "auth",
     icon: (props) => <PersonIcon {...props} />,
   },
+
 ];
 
 const NavBar = ({ }) => {
