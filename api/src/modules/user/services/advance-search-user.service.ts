@@ -52,7 +52,7 @@ export class AdvanceSearchUserService {
     query: AdvanceSearchDto,
   ) {
     const { requests } = await this.matchService.getReceivedRequests(userId);
-    const requestingUsersIds = requests.map((r) => r.to);
+    const requestingUsersIds = requests.map((r) => r.from);
     return this.search(userId, { $in: requestingUsersIds }, query);
   }
 

@@ -53,7 +53,7 @@ const BrowseUserPage = () => {
     }
   );
 
-  const { mutate: matchUser } = useMutation(matchService.match, {
+  const { mutate: matchUser } = useMutation(matchService.sendMatchRequest, {
     onSuccess: (res) =>
       enqueueSnackbar("Match request has been sent", { variant: "success" }),
     onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),

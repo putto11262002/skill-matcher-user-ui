@@ -1,18 +1,18 @@
 import api from "./api";
 
 export class MatchService {
-    async match({userId}){
-        return api.post('/user/self/match', {userId})
-    }
+  async sendMatchRequest({ userId }) {
+    return api.post("/match-request", { userId });
+  }
 
-    async acceptRequest(id) {
-        return api.put(`/user/self/match/${id}/accept`)
-    }
+  async acceptMatchRequest({ userId }) {
+    return api.put(`/match-request/accept`, { userId });
+  }
 
-    async declineRequest(id) {
-        return api.delete(`/user/self/match/${id}/decline`)
-    }
+  async declineRequest({ userId }) {
+    return api.put(`/match-request/reject`, { userId });
+  }
 }
 
-const matchService =  new MatchService()
-export default matchService
+const matchService = new MatchService();
+export default matchService;

@@ -54,7 +54,7 @@ const RequestsPage = () => {
     }
   );
 
-  const { mutate: matchUser } = useMutation(matchService.match, {
+  const { mutate: matchUser } = useMutation(matchService.sendMatchRequest, {
     onSuccess: (res) =>
       enqueueSnackbar("Match request has been sent", { variant: "success" }),
     onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
@@ -67,7 +67,7 @@ const RequestsPage = () => {
     onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
   });
 
-  const { mutate: acceptRequest } = useMutation(matchService.acceptRequest, {
+  const { mutate: acceptRequest } = useMutation(matchService.acceptMatchRequest, {
     onSuccess: (res) =>
       enqueueSnackbar("Match request has been accepted", { variant: "success" }),
     onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
@@ -80,13 +80,13 @@ const RequestsPage = () => {
   }, [page]);
 
   const handleDecline = (user) => {
-    declineRequest(user._id);
+    declineRequest({userId: user._id});
     // setFeed(prevFeed => prevFeed.filter(u => u._id !== user._id))
   }
 
   const handleAccept = (user) =>{
     console.log(user)
-    acceptRequest(user._id);
+    acceptRequest({userId: user._id});
     
   }
 
