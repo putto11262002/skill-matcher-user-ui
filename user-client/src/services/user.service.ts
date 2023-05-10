@@ -27,6 +27,10 @@ export class UserService {
     return api.get(`/user/${id}`);
   }
 
+  async getUserProfileById(id) {
+    return api.get(`/user/${id}/profile`);
+  }
+
   // not implemented yet
   async updateAvatar(file) {
     const formData = new FormData();

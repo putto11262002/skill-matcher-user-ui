@@ -6,6 +6,7 @@ import { FileDto } from '../../../file/dto/file.dto';
 import { omit } from 'lodash';
 import { PUBLIC_RESPONSE_OMIT_FIELDS } from '../../constants/user.constant';
 import { MATCH_STATUS } from '../../../match/constants/match.constant';
+import { UserSkill } from '../../schemas/user-skill.schema';
 
 class ProfileDto {
   @ApiProperty()
@@ -13,7 +14,7 @@ class ProfileDto {
 
   @ApiProperty()
   lastName: string;
-  
+
   @ApiProperty()
   gender: string;
 
@@ -39,7 +40,7 @@ class ProfileDto {
   contactEmail: string;
 
   @ApiProperty()
-  skills: string[]
+  skills: string[];
 
   constructor(profile: Profile) {
     this.firstName = profile.firstName;
@@ -52,13 +53,13 @@ class ProfileDto {
     this.whatsapp = profile.whatsapp;
     this.aboutMe = profile.aboutMe;
     this.gender = profile.gender;
-    this.skills = profile.skills ? profile.skills : []
+    this.skills = profile.skills ? profile.skills : [];
   }
 }
 
 export class UserDto {
   @ApiProperty()
-  _id: string ;
+  _id: string;
 
   @ApiProperty()
   username: string;
@@ -81,39 +82,51 @@ export class UserDto {
   @ApiProperty()
   matchStatus: string;
 
-
   constructor(user: UserDocument | User) {
     this._id = user._id.toHexString();
     this.username = user.username;
     this.email = user.email;
     this.status = user.status;
     this.role = user.role;
-    this.profile = user.profile ?  new ProfileDto(user.profile) : null;
+    this.profile = user.profile ? new ProfileDto(user.profile) : null;
     this.avatar = user.avatar ? new FileDto(user.avatar) : null;
-   
+  }
+
+  toProfileResponse(skills: UserSkill[], matchStatus: string) {
+    return {
+      ...this,
+      matchStatus,
+      profile: {
+        ...this.profile,
+        skills,
+
+      },
+    };
   }
 
   // TODO - implement
   toPublicResponse(): Partial<UserDto> {
-    return omit({
-      ...this,
-      matched: false
+    return omit(
+      {
+        ...this,
       
-    }, PUBLIC_RESPONSE_OMIT_FIELDS)
+      },
+      PUBLIC_RESPONSE_OMIT_FIELDS,
+    );
   }
 
   // TOD - implement
   toMatchedUserResponse(): Partial<UserDto> {
     return {
       ...this,
-      matched: true
+   
     };
   }
 
   toAdminUserResponse(): Partial<UserDto> {
     return {
-      ...this
-    }
+      ...this,
+    };
   }
 
   toSelfResponse(): Partial<UserDto> {

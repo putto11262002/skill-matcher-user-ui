@@ -7,7 +7,7 @@ import useAuth from "@/hooks/useAuth";
 import matchService from "@/services/match.service";
 import feedService, { FeedService } from "@/services/feed.service";
 import { enqueueSnackbar } from "notistack";
-import MatchCardRequest from "@/components/match/MatchCardRequest";
+import MatchCardRequest from "@/components/match/MatchRequestCard";
 import SearchInput from "@/components/common/form/SearchInput";
 import { MATCH_PAGE_SIZE, MATCH_STATUS } from "@/constants/match.constant";
 import MatchGridRequest from "@/components/match/MatchGridRequest";

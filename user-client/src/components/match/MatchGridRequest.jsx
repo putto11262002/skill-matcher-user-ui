@@ -4,7 +4,7 @@ import Loader from "../common/Loader";
 import Error from "../common/Error";
 import dynamic from "next/dynamic";
 import InfiniteScroll from "react-infinite-scroll-component";
-import MatchCardRequest from "./MatchCardRequest";
+import MatchCardRequest from "./MatchRequestCard";
 import Button from '@mui/material/Button';
 
 const MatchGridRequest = ({

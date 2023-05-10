@@ -35,7 +35,7 @@ import { CreateUserDto } from '../dtos/requests/create-user.dto';
 import { SearchUserDto } from '../dtos/requests/search-user.dto';
 import { Pagination } from '../../../common/dtos/responses/pagination.dto';
 import { ParseObjectIdPipe } from '../../../common/pipes/pase-object-id.pipe';
-import { Types } from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileDto } from '../../file/dto/file.dto';
 import { ImageValidator } from '../../file/validators/image.validator';
@@ -43,12 +43,14 @@ import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { MatchService } from '../../match/services/match.service';
 import { User } from '../schemas/user.schema';
 import { MATCH_STATUS } from '../../match/constants/match.constant';
+import { UserProfileService } from '../services/user-profile.service';
 @ApiTags('User')
 @Controller('user')
 export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly matchService: MatchService,
+    private readonly userProfileService: UserProfileService
   ) {}
 
   @UseGuards(AuthGuard)
@@ -93,6 +95,17 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard)
+  @Get(':id/profile')
+  @HttpCode(HttpStatus.OK)
+  async getUserProfileById(
+    @Param('id', ParseObjectIdPipe) id: mongoose.Types.ObjectId,
+    @CurrentUser() currentUser: User
+  ){
+    const {user, userSkills, matchStatus} = await this.userProfileService.getUserProfile(currentUser._id, id);
+    return new UserDto(user).toProfileResponse(userSkills, matchStatus)
+  }
+
+  @UseGuards(AuthGuard)
   @Get('')
   @HttpCode(HttpStatus.OK)
   async searchUser(
@@ -126,6 +139,8 @@ export class UserController {
       total,
     );
   }
+
+
 
   @UseGuards(AuthGuard)
   @Put('self/avatar')

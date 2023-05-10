@@ -117,19 +117,19 @@ export class UserSkillService {
   ) {
     const filter: FilterQuery<UserSkill> = { userId };
 
-    if (query.role) {
+    if (query?.role) {
       filter.role = query.role;
     }
 
-    if(query.skills){
+    if(query?.skills){
       filter.skill = {$in: query.skills}
     }
     
     const [userSkills, total] = await Promise.all([
       this.userSkillModel
         .find(filter)
-        .skip(query.pageNumber * query.pageSize)
-        .limit(query.pageSize),
+        .skip(query?.pageNumber * query?.pageSize)
+        .limit(query?.pageSize),
       this.userSkillModel.countDocuments(filter),
     ]);
 
