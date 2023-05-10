@@ -19,13 +19,13 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import HandshakeIcon from "@mui/icons-material/Handshake";
+import CloseIcon from "@mui/icons-material/Close";
 import { truncate } from "lodash";
 import Link from "next/link";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import { grey } from "@mui/material/colors";
 
-const MatchCard = ({ user, onMatch }) => {
+const MatchCard = ({ user, onMatch, onUnmatch }) => {
   const [matched, setMatched] = useState(false);
 
   return (
@@ -48,35 +48,9 @@ const MatchCard = ({ user, onMatch }) => {
           gap: 2,
         }}
       >
-        {/* {!matched && (
-          <Box
-            sx={{
-              background: grey[100],
-              width: "2.5rem",
-              height: "2.5rem",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: "50%",
-            }}
-          >
-            <Tooltip title={`Match with ${user.profile.firstName}`}>
-              <IconButton
-                onClick={() => {
-                  setMatched(true);
-                  onMatch(user);
-                }}
-              >
-                <PersonRemoveIcon
-                  sx={{ color: (theme) => theme.palette.primary.main }}
-                />
-              </IconButton>
-            </Tooltip>
-          </Box>
-        )} */}
         <Box
           sx={{
-            background:grey[100],
+            background: grey[100],
             width: "2.5rem",
             height: "2.5rem",
             display: "flex",
@@ -96,8 +70,31 @@ const MatchCard = ({ user, onMatch }) => {
             </Link>
           </Tooltip>
         </Box>
+
+        <Box
+          sx={{
+            background: grey[100],
+            width: "2.5rem",
+            height: "2.5rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: "50%",
+          }}
+        >
+          {" "}
+          <Tooltip title="Unmatch with user">
+            <IconButton onClick={() => onUnmatch(user)}
+              sx={{ width: "100%", height: "100%" }}>
+              <CloseIcon
+                sx={{ color: (theme) => theme.palette.secondary.main }}
+              />
+            </IconButton>
+          </Tooltip>
+        </Box>
       </CardActions>
-    </Card>
+    </Card >
+
   );
 };
 
