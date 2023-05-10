@@ -66,14 +66,27 @@ const navLinks = [
     icon: (props) => <StarIcon {...props} />,
   },
   {
+    label: "Requests Notifications",
+    path: "/match/requests",
+    visibility: "auth",
+    icon: (props) => <NotificationsIcon {...props} />,
+  },
+  // {
+  //   label: "Dashboard",
+  //   path: "/dashboard",
+  //   visibility: "auth",
+  //   icon: (props) => <PersonIcon {...props} />,
+  // },
+  {
     label: "My Profile",
     path: "/user/edit-profile",
     visibility: "auth",
     icon: (props) => <PersonIcon {...props} />,
   },
+
 ];
 
-const NavBar = ({  }) => {
+const NavBar = ({ }) => {
   const { isLoggedIn, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -82,7 +95,7 @@ const NavBar = ({  }) => {
   const router = useRouter();
 
 
- 
+
   const handleToggleMobileNav = () => {
     setOpenMobileNav(!openMobileNav);
   }
@@ -90,14 +103,14 @@ const NavBar = ({  }) => {
     setAnchorElUser(event.currentTarget);
   };
 
- 
+
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
 
   const handleEditProfile = () => {
     handleCloseUserMenu();
-    router.push('/user/edit-profile')
+    router.push('/dashboard')
   }
 
   const handleLogout = () => {
@@ -175,58 +188,58 @@ const NavBar = ({  }) => {
           </Typography>
 
           <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 },   display: { xs: 'block', sm: 'none' }, }}
-        aria-label="mailbox folders"
-      >
-          <Drawer
-          container={container}
-          variant="temporary"
-          open={openMobileNav}
-          onClose={handleToggleMobileNav}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-          
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, },
-          }}
-        >
-        <Toolbar>
-          <Typography variant="3" component="h3">Menu</Typography>
-        </Toolbar>
-         
-          <List disablePadding>
-            {navLinks.map(link => (
-           
-              <ListItem   sx={{width: '100%', color: theme => router.pathname === link.path ? theme.palette.primary.main : theme.palette.text.secondary}}  disablePadding key={link.path}>
-               <Link style={{display: 'block'}} href={link.path}>
-               <ListItemButton sx={{width: '100%'}} >
-                  <ListItemIcon >
-                    {link.icon({sx: {color: theme => router.pathname === link.path ? theme.palette.primary.main : theme.palette.text.secondary}})}
-                  </ListItemIcon>
-                  <ListItemText  primary={link.label}/>
-                </ListItemButton>
-               </Link>
-              </ListItem>
-            
-              
-            ))}
-          </List>
-        </Drawer>
-        </Box>
+            component="nav"
+            sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 }, display: { xs: 'block', sm: 'none' }, }}
+            aria-label="mailbox folders"
+          >
+            <Drawer
+              container={container}
+              variant="temporary"
+              open={openMobileNav}
+              onClose={handleToggleMobileNav}
+              ModalProps={{
+                keepMounted: true, // Better open performance on mobile.
+              }}
+              sx={{
 
-        <Box sx={{  alignItems: "center", flexGrow: 0,  display: { xs: "flex", md: "none" } }}>
-                <Tooltip title={`Settings`}>
-                  <IconButton onClick={handleOpenUserMenu}>
-                    <Avatar
-                      sx={{ width: 30, height: 30 }}
-                      src={user?.avatar?.url || "/images/no-avatar.jpg"}
-                      sizes="s"
-                    />
-                  </IconButton>
-                </Tooltip>
-              </Box>
+                '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, },
+              }}
+            >
+              <Toolbar>
+                <Typography variant="3" component="h3">Menu</Typography>
+              </Toolbar>
+
+              <List disablePadding>
+                {navLinks.map(link => (
+
+                  <ListItem sx={{ width: '100%', color: theme => router.pathname === link.path ? theme.palette.primary.main : theme.palette.text.secondary }} disablePadding key={link.path}>
+                    <Link style={{ display: 'block' }} href={link.path}>
+                      <ListItemButton sx={{ width: '100%' }} >
+                        <ListItemIcon >
+                          {link.icon({ sx: { color: theme => router.pathname === link.path ? theme.palette.primary.main : theme.palette.text.secondary } })}
+                        </ListItemIcon>
+                        <ListItemText primary={link.label} />
+                      </ListItemButton>
+                    </Link>
+                  </ListItem>
+
+
+                ))}
+              </List>
+            </Drawer>
+          </Box>
+
+          <Box sx={{ alignItems: "center", flexGrow: 0, display: { xs: "flex", md: "none" } }}>
+            <Tooltip title={`Settings`}>
+              <IconButton onClick={handleOpenUserMenu}>
+                <Avatar
+                  sx={{ width: 30, height: 30 }}
+                  src={user?.avatar?.url || "/images/no-avatar.jpg"}
+                  sizes="s"
+                />
+              </IconButton>
+            </Tooltip>
+          </Box>
           {/* ---------------------------------------------------------- */}
           {/* Tablet and Desktop nav bar */}
           <Grid sx={{ display: { xs: "none", md: "flex" } }} container>
@@ -280,7 +293,7 @@ const NavBar = ({  }) => {
                   </Badge>
                 </IconButton>
               </Box> */}
-              <Box sx={{  alignItems: "center",  display: { xs: "none", md: "flex" }}}>
+              <Box sx={{ alignItems: "center", display: { xs: "none", md: "flex" } }}>
                 <Tooltip title={`Settings`}>
                   <IconButton onClick={handleOpenUserMenu}>
                     <Avatar
@@ -291,40 +304,40 @@ const NavBar = ({  }) => {
                   </IconButton>
                 </Tooltip>
               </Box>
-            
+
             </Grid>
           </Grid>
 
           {/* Used in both mobile and desktop/tablet */}
 
           <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                <MenuItem onClick={handleLogout}>
-                  <Typography textAlign="center">Log out</Typography>
-                </MenuItem>
-                <MenuItem onClick={handleEditProfile}>
-                  <Typography textAlign="center">Edit profile</Typography>
-                </MenuItem>
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">Change password</Typography>
-                </MenuItem>
-              </Menu>
+            sx={{ mt: "45px" }}
+            id="menu-appbar"
+            anchorEl={anchorElUser}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            open={Boolean(anchorElUser)}
+            onClose={handleCloseUserMenu}
+          >
+            <MenuItem onClick={handleLogout}>
+              <Typography textAlign="center">Log out</Typography>
+            </MenuItem>
+            <MenuItem onClick={handleEditProfile}>
+              <Typography textAlign="center">Dashboard</Typography>
+            </MenuItem>
+            <MenuItem onClick={handleCloseUserMenu}>
+              <Typography textAlign="center">Change password</Typography>
+            </MenuItem>
+          </Menu>
 
-        
+
         </Toolbar>
       </AppBar>
     </Box>
