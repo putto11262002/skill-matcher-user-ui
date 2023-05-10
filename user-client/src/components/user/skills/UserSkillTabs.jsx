@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { useState } from "react";
 import PropTypes from "prop-types";
@@ -6,7 +5,14 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { Dialog, DialogContent, DialogTitle, IconButton, Stack, Tooltip } from "@mui/material";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Stack,
+  Tooltip,
+} from "@mui/material";
 import Loader from "@/components/common/Loader";
 import UserSkill from "@/components/user/skills/UserSkill";
 import Error from "@/components/common/Error";
@@ -24,8 +30,8 @@ const TabPanel = (props) => {
       {...other}
     >
       {value === index && (
-        <Box component='div' sx={{ p: 3 }}>
-          <Typography component='div'>{children}</Typography>
+        <Box component="div" sx={{ p: 3 }}>
+          <Typography component="div">{children}</Typography>
         </Box>
       )}
     </div>
@@ -48,7 +54,10 @@ const a11yProps = (index) => {
 const UserSkillDialog = ({ open, onClose, userSkill }) => {
   return (
     <Dialog maxWidth="sm" fullWidth open={open} onClose={onClose}>
-      <DialogTitle component='div' sx={{ display: "flex", justifyContent: "space-between" }}>
+      <DialogTitle
+        component="div"
+        sx={{ display: "flex", justifyContent: "space-between" }}
+      >
         {upperFirst(userSkill?.skill)}{" "}
         <IconButton onClick={onClose} sx={{}}>
           <CloseIcon />
@@ -56,13 +65,21 @@ const UserSkillDialog = ({ open, onClose, userSkill }) => {
       </DialogTitle>
       <DialogContent>
         <Stack spacing={3}>
-          <UserSkill label={<Typography variant="4" component='h4'>Proficiency</Typography>} value={userSkill} />
+          <UserSkill
+            label={
+              <Typography variant="4" component="h4">
+                Proficiency
+              </Typography>
+            }
+            value={userSkill}
+          />
           <Stack spacing={0.5}>
-            <Typography variant="4" component='h4'>About</Typography>
+            <Typography variant="4" component="h4">
+              About
+            </Typography>
             {!userSkill?.about && <Typography>{userSkill?.about}</Typography>}
           </Stack>
         </Stack>
-
       </DialogContent>
     </Dialog>
   );
@@ -100,7 +117,7 @@ const UserSkillTabs = ({
           variant="fullWidth"
           centered
           aria-label="basic tabs example"
-          component='div'
+          component="div"
         >
           <Tooltip title="Skills they are learning">
             <Tab disableTouchRipple label="Learner" {...a11yProps(0)} />
@@ -112,12 +129,12 @@ const UserSkillTabs = ({
       </Box>
       <TabPanel value={value} index={0}>
         <Stack spacing={3}>
-          {isLoadingTutorSkills ? (
+          {isLoadingLearningSkills ? (
             <Typography>sdfsd</Typography>
-          ) : errorTutorSkills ? (
+          ) : errorLearningSkills ? (
             <Typography>SDfs</Typography>
           ) : (
-            tutorSkills?.map((skill) => (
+            learningSkills?.map((skill) => (
               <UserSkill
                 key={skill.skill}
                 onClick={handleOpenModal}
@@ -129,12 +146,12 @@ const UserSkillTabs = ({
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Stack spacing={3}>
-          {isLoadingLearningSkills ? (
+          {isLoadingTutorSkills ? (
             <Loader />
-          ) : errorLearningSkills ? (
+          ) : errorTutorSkills ? (
             <Error />
           ) : (
-            learningSkills?.map((skill) => (
+            tutorSkills?.map((skill) => (
               <UserSkill
                 onClick={handleOpenModal}
                 key={skill.skill}

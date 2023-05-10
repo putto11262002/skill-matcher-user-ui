@@ -104,19 +104,20 @@ export class MatchService {
         {
           users: {
             $elemMatch: {
-              userId: user1Id,
+              $eq: user1Id,
             },
           },
         },
         {
           users: {
             $elemMatch: {
-              userId: user2Id,
+              $eq: user2Id,
             },
           },
         },
       ],
     });
+
     return existingMatch;
   }
 
@@ -181,7 +182,7 @@ export class MatchService {
     user2Id: mongoose.Types.ObjectId,
   ) {
     const match = await this.matchExists(user1Id, user2Id);
-    if (match) {
+    if (!match) {
       throw new NotFoundException('Match does not exist');
     }
     await this.matchModel.deleteOne({ _id: match._id });

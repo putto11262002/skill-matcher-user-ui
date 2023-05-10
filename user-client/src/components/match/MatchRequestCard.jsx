@@ -24,9 +24,11 @@ import { truncate } from "lodash";
 import Link from "next/link";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import { grey } from "@mui/material/colors";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useRouter } from "next/router";
 
-const MatchCardRequests = ({ user, onDecline, onAccept }) => {
-  const [matched, setMatched] = useState(false);
+const MatchRequestCard = ({ user, onDecline, onAccept }) => {
+  const router = useRouter();
 
   return (
     <Card>
@@ -82,7 +84,31 @@ const MatchCardRequests = ({ user, onDecline, onAccept }) => {
             borderRadius: "50%",
           }}
         >
-          {" "}
+
+          <Tooltip title="View profile">
+            <IconButton
+            onClick={() => router.push(`/user/profile/${user._id}`)}
+              
+              sx={{ width: "100%", height: "100%" }}
+            >
+              <VisibilityIcon
+                sx={{ color: (theme) => theme.palette.secondary.main }}
+              />
+            </IconButton>
+          </Tooltip>
+        </Box>
+        <Box
+          sx={{
+            background: grey[100],
+            width: "2.5rem",
+            height: "2.5rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: "50%",
+          }}
+        >
+
           <Tooltip title="Decline Match">
             <IconButton
               onClick={() => onDecline(user)}
@@ -99,6 +125,6 @@ const MatchCardRequests = ({ user, onDecline, onAccept }) => {
   );
 };
 
-export default dynamic(() => Promise.resolve(MatchCardRequests), {
+export default dynamic(() => Promise.resolve(MatchRequestCard), {
   ssr: false,
 });
