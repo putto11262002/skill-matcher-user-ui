@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 //import './hi.module.css';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Box } from '@mui/material';
+import TextField from '@mui/material';
 import Avatar from '@material-ui/core/Avatar';
 import StarRateIcon from '@mui/icons-material/StarRate';
 //import './style.js'
@@ -13,13 +14,19 @@ import SnackbarContent from '@mui/material/SnackbarContent';
 import Rating from '@mui/material/Rating';
 import DeleteIcon from '@mui/icons-material/Delete';
 import userService from "@/services/user.service";
- 
+import { useRouter } from "next/router";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useDispatch, useSelector } from "react-redux"
+import { useState, useEffect } from 'react';;
+
+
+
 const action = (
     <Button color="primary" size="small">
         open
     </Button>
 );
- 
+
 const useStyles = makeStyles((theme) => ({
     container: {
         backgroundColor: '#ffff',
@@ -58,11 +65,66 @@ const useStyles = makeStyles((theme) => ({
         },
     },
 }));
- 
-function Dashboard() {
+
+const Dashboard = () => {
     const classes = useStyles();
-    
- 
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [user, setUser] = useState(undefined)
+    const [errors, setErrors] = useState({});
+    const { isLoggedIn } = useSelector((state) => state.auth);
+    const router = useRouter();
+
+
+    useEffect(() => {
+        if (!isLoggedIn) {
+            router.push('/login');
+        } else {
+            userService.getSelf().then((response) => {
+                const user = response.data;
+                setUser(user)
+                setFirstName(user.profile.firstName);
+                setLastName(user.profile.lastName);
+                setEmail(user.email);
+            }).catch((error) => {
+                console.log('Error fetching user data', error);
+            });
+        }
+    }, []);
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        setErrors({});
+        userService.updateUser({ firstName, lastName, email }).then(() => {
+            router.push('/profile');
+        }).catch((error) => {
+            console.log('Error updating user data', error);
+            setErrors(error.response.data);
+        });
+    };
+
+    // const router = useRouter();
+    // // const { id } = router.query;
+    // const { user: authUser } = useSelector((state) => state.auth);
+    // const [user, setUser] = useState(null);
+    // const dispatch = useDispatch()
+
+    // const { refetch: fetchUser } = useQuery(
+    //     ["user", authUser?._id],
+    //     userService.getSelf,
+    //     {
+    //         onSuccess: (res) => {
+    //             reset(res.data)
+    //             setUser(res.data)
+    //         }, enabled: false
+    //     }
+    // );
+
+
+
+
+
     return (
         <Container style={{ backgroundColor: '#e1f5fe' }} maxWidth="lg">
             <Grid container spacing={4}>
@@ -74,15 +136,16 @@ function Dashboard() {
                 <Grid item xs={12} md={20}>
                     <Container className={classes.container}>
                         <Box textAlign="center" display="flex" justifyContent="center" alignItems="center">
-                            <AccountCircleIcon sx={{ fontSize: 70 }} />
+                            {/* <AccountCircleIcon sx={{ fontSize: 70 }} /> */}
+                            <Avatar sizes='md' src={user?.avatar?.url}/>
                         </Box>
                         <Box className={classes.center}>
-                            <Typography variant="h3" className={classes.sectionTitle}>
-                                Harry Styles
-                            </Typography>
+                        <Typography align='center' variant="h2">
+                           {firstName} {lastName}
+                           </Typography>
                         </Box>
                         <Box className={classes.center}>
-                            <Typography variant="body1">
+                            <Typography align='center' variant="body1">
                                 Software Engineer
                             </Typography>
                         </Box>
