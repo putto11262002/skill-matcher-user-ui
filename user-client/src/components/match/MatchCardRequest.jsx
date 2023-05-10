@@ -18,17 +18,15 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import DoneIcon from '@mui/icons-material/Done';
-import CloseIcon from '@mui/icons-material/Close';
+import DoneIcon from "@mui/icons-material/Done";
+import CloseIcon from "@mui/icons-material/Close";
 import { truncate } from "lodash";
 import Link from "next/link";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import { grey } from "@mui/material/colors";
 
-const MatchCardRequests = ({ user, onDecline, onAccept  }) => {
+const MatchCardRequests = ({ user, onDecline, onAccept }) => {
   const [matched, setMatched] = useState(false);
-
-  console.log(user)
 
   return (
     <Card>
@@ -52,7 +50,7 @@ const MatchCardRequests = ({ user, onDecline, onAccept  }) => {
       >
         <Box
           sx={{
-            background:grey[100],
+            background: grey[100],
             width: "2.5rem",
             height: "2.5rem",
             display: "flex",
@@ -63,16 +61,19 @@ const MatchCardRequests = ({ user, onDecline, onAccept  }) => {
         >
           {" "}
           <Tooltip title="Accept Match">
-              <IconButton onClick={() => onAccept(user)} sx={{ width: "100%", height: "100%" }}>
-                <DoneIcon
-                  sx={{ color: (theme) => theme.palette.secondary.main }}
-                />
-              </IconButton>
+            <IconButton
+              onClick={() => onAccept(user)}
+              sx={{ width: "100%", height: "100%" }}
+            >
+              <DoneIcon
+                sx={{ color: (theme) => theme.palette.success.main }}
+              />
+            </IconButton>
           </Tooltip>
         </Box>
         <Box
           sx={{
-            background:grey[100],
+            background: grey[100],
             width: "2.5rem",
             height: "2.5rem",
             display: "flex",
@@ -83,11 +84,14 @@ const MatchCardRequests = ({ user, onDecline, onAccept  }) => {
         >
           {" "}
           <Tooltip title="Decline Match">
-              <IconButton onClick={() => onDecline(user)} sx={{ width: "100%", height: "100%" }}>
-                <CloseIcon
-                  sx={{ color: (theme) => theme.palette.secondary.main }}
-                />
-              </IconButton>
+            <IconButton
+              onClick={() => onDecline(user)}
+              sx={{ width: "100%", height: "100%" }}
+            >
+              <CloseIcon
+                sx={{ color: (theme) => theme.palette.error.main }}
+              />
+            </IconButton>
           </Tooltip>
         </Box>
       </CardActions>
