@@ -4,9 +4,9 @@ import { blue, grey, lightBlue, red } from "@mui/material/colors";
 export const theme = createTheme({
     palette: {
         primary: {
-            dark: blue.A700,
+           
             main: blue.A400,
-            light: blue.A200
+         
         },
         secondary: {
             main: '#f9c013'
@@ -16,17 +16,27 @@ export const theme = createTheme({
     MuiIconButton: {
         styleOverrides: {
             root: {
-                width: 'auto'
+                width: 'auto',
+                
             }
-        }
+        },
+        
     },
     MuiButton: {
         styleOverrides: {
-            // root: {
-            //     // Some CSS
-            //     borderRadius: 10
-            // }
-        }
+            root: {
+                // Some CSS
+               
+            }
+        },
+        variants: [
+            {
+              props: { variant: 'round' },
+              style: {
+               borderRadius: 8
+              },
+            },
+        ]
     }
   }
 

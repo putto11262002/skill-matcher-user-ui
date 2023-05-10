@@ -19,13 +19,22 @@ import Link from "next/link";
 import UserSkillTabs from "@/components/user/skills/UserSkillTabs";
 import useAuth from "@/hooks/useAuth";
 import HandshakeIcon from "@mui/icons-material/Handshake";
-import { yellow } from "@mui/material/colors";
+import { amber, blue, green, red, yellow } from "@mui/material/colors";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
-import { MATCH_STATUS } from "@/constants/match.constant";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import CloseIcon from "@mui/icons-material/Close";
+import DoneIcon from "@mui/icons-material/Done";
+import AddIcon from "@mui/icons-material/Add";
+import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
+import TextIconButton from "../../../../components/common/buttons/TextIconButton";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import { useTheme } from "@material-ui/core";
+import matchService from "../../../../services/match.service";
+import { enqueueSnackbar } from "notistack";
 const UserHomePage = () => {
   useAuth();
   const router = useRouter();
@@ -33,89 +42,70 @@ const UserHomePage = () => {
   const [user, setUser] = useState(undefined);
   const [userTutorSkills, setUserTutorSkills] = useState([]);
   const [userLearningSkills, setUserLearningSkills] = useState([]);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [aboutMe, setAboutMe] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [email, setEmail] = useState("");
-  const [instagram, setInstagram] = useState("");
-  const [snapchat, setSnapchat] = useState("");
-  const [facebook, setFacebook] = useState("");
-  const [whatsapp, setWhatsapp] = useState("");
-  const [matched, setMatched] = useState(false);
+  const [matchStatus, setMatchStatus] = useState(false);
+  const theme = useTheme();
 
   // fetching user profile
   const {
     isLoading: isLoadingUser,
     error,
     refetch: fetchUser,
-  } = useQuery(["user", id], () => userService.getUserById(id), {
+  } = useQuery(["user", id], () => userService.getUserProfileById(id), {
     onSuccess: (res) => {
       setUser(res.data);
-      setMatched(res?.data?.matchStatus);
+      setMatchStatus(res?.data?.matchStatus);
     },
     enabled: false,
   });
 
-  
+  const matched = matchStatus === "matched";
+  const requested = matchStatus === "requested";
+  const requesting = matchStatus === "requesting";
 
-  const {
-    isLoading: isLoadingUserTutorSkills,
-    refetch: fetchUserTutorSkills,
-    error: errorUserTutorSkills,
-  } = useQuery(
-    ["user", id, "skills", "tutor"],
-    () =>
-      userService.getUserSkills({
-        userId: user._id,
-        query: { role: "tutor" },
-      }),
-    { enabled: false, onSuccess: (res) => setUserTutorSkills(res.data.data) }
-  );
+  const {mutate: handleSendMatchRequest} = useMutation(matchService.sendMatchRequest, {
+    onSuccess: () => {
+      setMatchStatus("requested");
+      enqueueSnackbar("Match request has been sent", { variant: "success" });
+    },
+    onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
+  });
 
-  // fetching user skills (learner)
-  const {
-    isLoading: isLoadingUserLearningSkills,
-    refetch: fetchUserLearningSkills,
-    error: errorUserLearningSkills,
-  } = useQuery(
-    ["user", id, "skills", "learner"],
-    () =>
-      userService.getUserSkills({
-        userId: user._id,
-        query: { role: "learner" },
-      }),
-    { enabled: false, onSuccess: (res) => setUserLearningSkills(res.data.data) }
-  );
+  const {mutate: handleAcceptRequest} = useMutation(matchService.acceptMatchRequest, {
+    onSuccess: () => {
+      setMatchStatus("matched");
+      enqueueSnackbar("Match accepted", { variant: "success" });
+    },
+    onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
 
+  })
+
+
+  const {mutate: handleRejectRequest} = useMutation(matchService.acceptMatchRequest, {
+    onSuccess: () => {
+      setMatchStatus("not_matched");
+      enqueueSnackbar("Match rejected", { variant: "success" });
+    },
+    onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
+
+  })
+
+
+  const {mutate: handleUnmatch} = useMutation(matchService.unMatch, {
+    onSuccess: () => {
+      setMatchStatus("not_matched");
+      enqueueSnackbar("Unmatched", { variant: "success" });
+    },
+    onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
+
+  })
+
+
+  // fetch user when id is available
   useEffect(() => {
     if (id) {
       fetchUser();
     }
   }, [id]);
-
-  useEffect(() => {
-    if (user) {
-      fetchUserTutorSkills();
-      fetchUserLearningSkills();
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (user) {
-      fetchUserTutorSkills();
-      fetchUserLearningSkills();
-      setFirstName(user?.profile?.firstName || "");
-      setLastName(user?.profile?.lastName || "");
-      setAboutMe(user?.aboutMe || "");
-      setPhoneNumber(user?.phoneNumber || "");
-      setEmail(user?.email || "");
-      setInstagram(user?.instagram || "");
-      setSnapchat(user?.snapchat || "");
-      setFacebook(user?.facebook || "");
-      setWhatsapp(user?.whatsapp || "");
-    }
-  }, [user, fetchUserTutorSkills, fetchUserLearningSkills]);
 
   if (isLoadingUser) {
     return <Loader />;
@@ -126,7 +116,7 @@ const UserHomePage = () => {
       sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
       <Box maxWidth={600} width="100%">
-        <Stack alignItems="center" sx={{ width: "100%" }} spacing={2}>
+        <Stack alignItems="center" sx={{ width: "100%" }} spacing={4}>
           <Box sx={{ width: "100%" }}>
             <Box sx={{ flexGrow: 1, display: "flex" }}>
               <Tooltip title="Go back">
@@ -140,82 +130,148 @@ const UserHomePage = () => {
             src={user?.avatar?.url || "/images/no-avatar.jpg"}
             sx={{ width: 130, height: 130 }}
           />
-          <Stack
-            alignItems="center"
-            sx={{ width: "100%", textAlign: "left" }}
-            spacing={2}
-          >
-            <Typography sx={{}}>
-              {user?.profile?.firstName} {user?.profile?.lastName}
-            </Typography>
 
-            <Typography sx={{ textAlign: "center" }}>
-              {user?.profile?.aboutMe}
-            </Typography>
-            <Grid sx={{ justifyContent: "center" }} gap={2} container>
-              <InfoBadge
-                display={matched === MATCH_STATUS.ACTIVE}
-                label={<EmailIcon />}
-                value={user?.profile?.email || user?.email}
-              />
-              <InfoBadge
-                display={matched === MATCH_STATUS.ACTIVE}
-                label={<PhoneIcon />}
-                value={user?.profile?.phoneNumber}
-              />
+          <Typography sx={{}}>
+            {user?.profile?.firstName} {user?.profile?.lastName}
+          </Typography>
 
-              <InfoBadge
-                display={matched === MATCH_STATUS.ACTIVE && user?.profile?.facebook}
-                label={<FacebookIcon />}
-                value={user?.profile?.facebook}
-              />
-              <InfoBadge
-                display={matched === MATCH_STATUS.ACTIVE && user?.profile?.instagram}
-                label={<InstagramIcon />}
-                value={user?.profile?.instagram}
-              />
-              <InfoBadge
-                display={matched === MATCH_STATUS.ACTIVE && user?.profile?.whatsapp}
-                label={<WhatsAppIcon />}
-                value={user?.profile?.whatsapp}
-              />
+          <Typography sx={{ textAlign: "center" }}>
+            {user?.profile?.aboutMe}
+          </Typography>
 
-              {/* {user?.matched &&   <Typography sx={{ mb: 6, marginLeft: 0  }}>About me: {aboutMe}</Typography>}
-     
-          {user?.matched &&   <Typography sx={{ mb: 8, marginLeft: 0  }}>Instagram: {instagram}</Typography>}
-         {user?.matched &&   <Typography sx={{ mb: 9, marginLeft: 0  }}>Snapchat: {snapchat}</Typography>}
-           {user?.matched &&  <Typography sx={{ mb: 10, marginLeft: 0  }}>Whatsapp: {whatsapp}</Typography>}  */}
-            </Grid>
-            {!matched && (
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                {" "}
-                <Button
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    gap: 1,
-                  }}
-                  variant="contained"
-                >
-                  <HandshakeIcon /> <Typography>Match</Typography>
-                </Button>
-              </Box>
+          <Grid sx={{ justifyContent: "center" }} gap={2} container>
+            {/* <InfoBadge
+              display={matched}
+              label={<EmailIcon />}
+              value={user?.profile?.email || user?.email}
+            /> */}
+
+            {matched && (user?.profile?.email || user?.email) && (
+              <Grid item>
+                <TextIconButton
+                  variant="round"
+                  icon={<EmailIcon />}
+                  text={user?.profile?.email || user?.email}
+                  color={theme.palette.text.main}
+                  bg={amber[300]}
+                />
+              </Grid>
             )}
-          </Stack>
+
+            {matched && user?.profile?.phoneNumber && (
+              <Grid item>
+                <TextIconButton
+                  variant="round"
+                  icon={<PhoneIcon />}
+                  text={user?.profile?.phoneNumber}
+                  color={theme.palette.text.main}
+                  bg={amber[300]}
+                />
+              </Grid>
+            )}
+
+            {matched && user?.profile?.facebook && (
+              <Grid item>
+                <TextIconButton
+                  variant="round"
+                  icon={<FacebookIcon />}
+                  text={user?.profile?.facebook}
+                  color={theme.palette.text.main}
+                  bg={amber[300]}
+                />
+              </Grid>
+            )}
+
+            {matched && user?.profile?.instagram && (
+              <Grid item>
+                <TextIconButton
+                  variant="round"
+                  icon={<InstagramIcon />}
+                  text={user?.profile?.instagram}
+                  color={theme.palette.text.main}
+                  bg={amber[300]}
+                />
+              </Grid>
+            )}
+
+            {matched && user?.profile?.whatsapp && (
+              <Grid item>
+                <TextIconButton
+                  variant="round"
+                  icon={<WhatsAppIcon />}
+                  text={user?.profile?.whatsapp}
+                  color={theme.palette.text.main}
+                  bg={amber[300]}
+                />
+              </Grid>
+            )}
+          </Grid>
+
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              columnGap: 2,
+            }}
+          >
+            {!(matched || requested || requesting) && (
+              <TextIconButton
+                icon={<PersonAddIcon />}
+                text="Request match"
+                color={theme.palette.primary.main}
+                bg={blue[50]}
+                onClick={() => handleSendMatchRequest({userId: user._id})}
+              />
+            )}
+            {requested && (
+              <TextIconButton
+                icon={<AccessTimeFilledIcon />}
+                text="Pending"
+                color={yellow[700]}
+                bg={yellow[50]}
+              />
+            )}
+
+            {requesting && (
+              <TextIconButton
+                icon={<DoneIcon />}
+                color={green[700]}
+                bg={green[50]}
+                text="Accept"
+                onClick={() => handleAcceptRequest({userId: user._id})}
+              />
+            )}
+            {requesting && (
+              <TextIconButton
+                text="Reject"
+                icon={<CloseIcon />}
+                bg={red[50]}
+                color={red[700]}
+                onClick={() => handleRejectRequest({userId: user._id})}
+              />
+            )}
+            {matched && (
+              <TextIconButton
+                icon={<PersonRemoveIcon />}
+                bg={red[50]}
+                color={red[700]}
+                text="Unmatch"
+                onClick={() => handleUnmatch({userId: user._id})}
+              />
+            )}
+          </Box>
           <UserSkillTabs
-            tutorSkills={userTutorSkills}
-            isLoadingTutorSkills={isLoadingUserTutorSkills}
-            errorTutorSkills={errorUserTutorSkills}
-            learningSkills={userLearningSkills}
-            isLoadingLearningSkills={isLoadingUserLearningSkills}
-            errorLearningSkills={errorUserLearningSkills}
+            tutorSkills={user?.profile?.skills?.filter(
+              (s) => s.role === "tutor"
+            )}
+            isLoadingTutorSkills={isLoadingUser}
+            errorTutorSkills={error}
+            learningSkills={user?.profile?.skills?.filter(
+              (s) => s.role === "learner"
+            )}
+            isLoadingLearningSkills={isLoadingUser}
+            errorLearningSkills={error}
           />
         </Stack>
       </Box>
@@ -226,20 +282,23 @@ const UserHomePage = () => {
 const InfoBadge = ({ display, label, value }) => {
   if (!display) return null;
   return (
-    <Grid
-      sx={{
-        background: (theme) => theme.palette.secondary.main,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        paddingY: 1,
-        paddingX: 2,
-        borderRadius: 2,
-        gap: 1,
-      }}
-      item
-    >
-      {label} <Typography> {value}</Typography>
+    <Grid item>
+      <Button
+        disableElevation
+        sx={{
+          background: (theme) => theme.palette.secondary.main,
+          ":hover": {
+            background: (theme) => theme.palette.secondary.main,
+          },
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 1,
+        }}
+        variant="round"
+      >
+        {label} {value}
+      </Button>
     </Grid>
   );
 };

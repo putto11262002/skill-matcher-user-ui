@@ -1,5 +1,5 @@
 import userService from "@/services/user.service";
-import { Circle, Star } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
 import dynamic from "next/dynamic";
 import {
   Avatar,
@@ -26,7 +26,10 @@ import HandshakeIcon from "@mui/icons-material/Handshake";
 import { truncate } from "lodash";
 import Link from "next/link";
 import { grey } from "@mui/material/colors";
+import CircularIconButton from "../common/buttons/CircularIconButton";
+import { useRouter } from "next/router";
 const UserProfileCard = ({ user, onMatch }) => {
+  const router = useRouter()
   const [matched, setMatched] = useState(false);
   // const {
   //   isLoading: isLoadingSkill,
@@ -64,12 +67,12 @@ const UserProfileCard = ({ user, onMatch }) => {
                 <Button
                   disableElevation
                   sx={{
-                    background: (theme) => theme.palette.secondary.main,
+                    background: grey[200],
                     ":hover": {
-                      background: (theme) => theme.palette.secondary.main,
+                      background: grey[200],
                     },
                   }}
-                  variant="info"
+                  variant="round"
                 >
                   {skill}
                 </Button>
@@ -88,32 +91,18 @@ const UserProfileCard = ({ user, onMatch }) => {
         }}
       >
         {!matched && (
-          <Box
-            sx={{
-              background: (theme) => theme.palette.primary.main,
-              width: "2rem",
-              height: "2rem",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: "50%",
+          <CircularIconButton
+          
+            icon={<AddIcon color="primary"/>}
+            tooltip="Request match"
+            onClick={() => {
+              setMatched(true);
+              onMatch(user);
             }}
-          >
-            <Tooltip title={`Match with ${user.profile.firstName}`}>
-              <IconButton
-                onClick={() => {
-                  setMatched(true);
-                  onMatch(user);
-                }}
-              >
-                <HandshakeIcon
-                  sx={{ color: (theme) => theme.palette.common.white }}
-                />
-              </IconButton>
-            </Tooltip>
-          </Box>
+          />
         )}
-        <Box
+
+        {/* <Box
           sx={{
             background: (theme) => theme.palette.grey[400],
             width: "2rem",
@@ -134,7 +123,9 @@ const UserProfileCard = ({ user, onMatch }) => {
               </IconButton>
             </Link>
           </Tooltip>
-        </Box>
+        </Box> */}
+
+        <CircularIconButton icon={<VisibilityIcon color="secondary"/>} onClick={() => router.push(`/user/profile/${user._id}`)} tooltip="View profile"/>
       </CardActions>
     </Card>
   );

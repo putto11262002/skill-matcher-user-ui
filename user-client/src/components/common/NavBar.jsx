@@ -9,7 +9,6 @@ import {
   Drawer,
   Box,
   IconButton,
-  Badge,
   Avatar,
   Grid,
   Tooltip,
@@ -69,13 +68,8 @@ const navLinks = [
     label: "Requests Notifications",
     path: "/match/requests",
     visibility: "auth",
-    icon: (props) => (
-      <Badge badgeContent={3} color="secondary">
-        <NotificationsIcon {...props} />
-      </Badge>
-    ),
-
-  },
+    icon: (props) =><NotificationsIcon {...props} />
+    },
   // {
   //   label: "Dashboard",
   //   path: "/dashboard",

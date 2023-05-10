@@ -40,9 +40,13 @@ export class RankedSearchUserService {
 
     const { matches } = await this.matchService.getMatch(userId);
 
+    const { requests } = await this.matchService.getSentRequest(userId);
+
     const matchedUsersIds = matches.map((m) =>
       m.users.find((u) => !u.equals(userId)),
     );
+
+    const requestUserIds = requests.map((r) => r.to);
 
     let skillFilter;
     let userFilter;
@@ -91,7 +95,7 @@ export class RankedSearchUserService {
               userId: { $ne: userId },
             },
             {
-              userId: { $nin: matchedUsersIds },
+              userId: { $nin: [...matchedUsersIds, ...requestUserIds] },
             },
           ],
         },

@@ -7,6 +7,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import MatchCard from "./MatchCard";
 import Button from '@mui/material/Button';
 import Link from '@mui/material';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 
 const MatchGrid = ({
   // loading,
@@ -17,6 +18,7 @@ const MatchGrid = ({
   // page,
   // onPageChange,
   onMatch,
+  onUnmatch,
   onNext,
   hasMore
 }) => {
@@ -25,7 +27,6 @@ const MatchGrid = ({
   if (error) return <Error />;
   // if(users?.length < 1) return <Typography sx={{textAlign: 'center'}}>No more users</Typography>
 
-  
   return (
    
       <InfiniteScroll
@@ -41,7 +42,7 @@ const MatchGrid = ({
       <Grid rowSpacing={3} container>
         {users.map((user) => (
           <Grid key={user._id} xs={12} item>
-            <MatchCard onMatch={onMatch} user={user} />
+            <MatchCard onMatch={onMatch} onUnmatch={onUnmatch} user={user} />
             </Grid>
         ))}
       </Grid>
@@ -56,3 +57,4 @@ const MatchGrid = ({
 export default dynamic(() => Promise.resolve(MatchGrid), {
   ssr: false
 })
+
