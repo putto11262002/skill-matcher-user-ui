@@ -15,30 +15,26 @@ const UserProfileGrid = ({
   // onPageChange,
   onMatch,
   onNext,
-  hasMore
+  hasMore,
+  initialLoading
 }) => {
-
-  // if (loading) return <Loader />;
+  if (initialLoading) return <Loader />;
   if (error) return <Error />;
   // if(users?.length < 1) return <Typography sx={{textAlign: 'center'}}>No more users</Typography>
-
-  
   return (
    
       <InfiniteScroll
-      dataLength={users.length}
+      dataLength={users?.length || 0}
       next={onNext}
       hasMore={hasMore}
       scrollThreshold={1}
       loader={<Box sx={{marginTop: 3}}><Loader/></Box>}
       style={{ overflow: "unset" }}
-      
-      
       >
       <Grid rowSpacing={3} container>
-        {users.map((user) => (
-          <Grid key={user._id} xs={12} item>
-            <UserProfileCard onMatch={onMatch} user={user} />
+        {users?.map((user, i) => (
+          <Grid key={i} xs={12} item>
+            <UserProfileCard  onMatch={onMatch} user={user} />
           </Grid>
         ))}
       </Grid>

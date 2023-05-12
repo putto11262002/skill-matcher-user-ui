@@ -1,45 +1,51 @@
 import React, { useEffect, useState } from "react";
 
 import UserProfileGrid from "@/components/user/UserProfileGrid";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { USER_PAGE_SIZE } from "@/constants/user.constant";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import useAuth from "@/hooks/useAuth";
 import matchService from "../../../services/match.service";
 import feedService, { FeedService } from "@/services/feed.service";
 import { enqueueSnackbar } from "notistack";
 import userService from "../../../services/user.service";
+import Loader from "@/components/common/Loader";
+
+/**
+ * Note:
+ *  Use this to only refetch first page
+ *  refetch({ refetchPage: (page, index) => index === 0 })}
+ */
 
 const BrowseUserPage = () => {
   useAuth();
 
-  const [query, setQuery] = useState({});
   const [page, setPage] = useState(0);
-  const [feed, setFeed] = useState([]);
-  const [hasMore, setHasMore] = useState(false);
-  const {
-    isLoading: isLoadingUsers,
 
-    error,
-    refetch,
-  } = useQuery(
-    ["feed", "suggestion", page, query],
-    () =>
-      userService.getRankedUser({
-        ...query,
-        pageSize: USER_PAGE_SIZE,
-        pageNumber: page,
-      }),
-    {
-      refetchOnWindowFocus: false,
-      enabled: false,
-      onSuccess: (res) => {
-        const newFeed = [...feed, ...res?.data?.data];
-        setHasMore(newFeed.length < res?.data?.total);
-        setFeed(newFeed);
+  const { isLoading, data, fetchNextPage, error, hasNextPage, refetch } =
+    useInfiniteQuery(
+      ["user", "rank"],
+      async ({ pageParam = 0 }) => {
+        const res = await userService.getRankedUser({
+          pageSize: USER_PAGE_SIZE,
+          pageNumber: pageParam,
+        });
+
+        return res?.data?.data;
       },
-    }
-  );
+      {
+        refetchOnWindowFocus: false,
+        getPreviousPageParam: (firstPage) => console.log(firstPage),
+        getNextPageParam: (lastPage, allPages) => {
+          // only refetch first page on remount
+          if (page === 0) return 0;
+          const nextPage =
+            lastPage.length === USER_PAGE_SIZE ? allPages.length : undefined;
+          setPage(allPages.length);
+          return nextPage;
+        },
+      }
+    );
 
   const { mutate: matchUser } = useMutation(matchService.sendMatchRequest, {
     onSuccess: (res) =>
@@ -51,33 +57,19 @@ const BrowseUserPage = () => {
     matchUser({ userId: user._id });
   };
 
-  useEffect(() => {
-    refetch();
-  }, [page]);
   return (
     <Box
       sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
       <Box maxWidth={600} sx={{ width: "100%" }}>
-        {/* <SkillSlider  skills={['computer science', 'java', 'python', 'machine learning', 'amazon web services', 'google cloud', 'go', 'rust']}/> */}
-
-        {/* <Typography
-          variant="2"
-          textAlign="center"
-          component="h2"
-          color={(theme) => theme.palette.primary.main}
-        >
-          Feed
-        </Typography> */}
-        {/* <SearchUserSection /> */}
-        {/* <Typography variant="5" component='h5' marginBottom={2}>Suggested users</Typography> */}
         <UserProfileGrid
-          hasMore={hasMore}
-          onNext={() => setPage((prevPage) => prevPage + 1)}
+          hasMore={hasNextPage}
+          onNext={() => fetchNextPage()}
           onMatch={handleMatch}
-          users={feed}
-          loading={isLoadingUsers}
+          users={data?.pages?.flat()}
+          loading={isLoading}
           error={error}
+          initialLoading={isLoading && page === 0 ? true : false}
         />
       </Box>
     </Box>
