@@ -46,7 +46,7 @@ const navLinks = [
   },
   {
     label: "Suggestions",
-    path: "/user/browse",
+    path: "/user/suggestion",
     visibility: "auth",
     icon: (props) => <ReorderIcon {...props} />,
   },
