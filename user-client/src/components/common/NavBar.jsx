@@ -68,8 +68,8 @@ const navLinks = [
     label: "Requests Notifications",
     path: "/match/requests",
     visibility: "auth",
-    icon: (props) =><NotificationsIcon {...props} />
-    },
+    icon: (props) => <NotificationsIcon {...props} />
+  },
   // {
   //   label: "Dashboard",
   //   path: "/dashboard",
@@ -173,6 +173,11 @@ const NavBar = ({ }) => {
               <MenuIcon />
             </IconButton>
           </Box>
+          {/* Logo icon */}
+          <Box sx={{ flexGrow: 0 }}>
+            <img src="/images/logoIcon.png" alt="Logo" style={{ height: "40px" }} />
+          </Box>
+
           <Typography
             variant="3"
             component="h3"
