@@ -20,9 +20,9 @@ import Loader from "@/components/common/Loader";
 const BrowseUserPage = () => {
   useAuth();
 
-  const [page, setPage] = useState(0);
+ 
 
-  const { isLoading, data, fetchNextPage, error, hasNextPage, refetch } =
+  const { isLoading, data, fetchNextPage, error, hasNextPage, isInitialLoading } =
     useInfiniteQuery(
       ["user", "rank"],
       async ({ pageParam = 0 }) => {
@@ -35,15 +35,13 @@ const BrowseUserPage = () => {
       },
       {
         refetchOnWindowFocus: false,
-        getPreviousPageParam: (firstPage) => console.log(firstPage),
+        // getPreviousPageParam: (firstPage) => console.log(firstPage),
         getNextPageParam: (lastPage, allPages) => {
-          // only refetch first page on remount
-          if (page === 0) return 0;
           const nextPage =
             lastPage.length === USER_PAGE_SIZE ? allPages.length : undefined;
-          setPage(allPages.length);
-          return nextPage;
-        },
+  
+          return nextPage
+        }
       }
     );
 
@@ -69,7 +67,7 @@ const BrowseUserPage = () => {
           users={data?.pages?.flat()}
           loading={isLoading}
           error={error}
-          initialLoading={isLoading && page === 0 ? true : false}
+          initialLoading={isInitialLoading}
         />
       </Box>
     </Box>

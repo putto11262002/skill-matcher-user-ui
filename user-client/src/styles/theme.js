@@ -1,5 +1,6 @@
-import { createTheme } from "@mui/material";
+import { createTheme, } from "@mui/material";
 import { blue, grey, lightBlue, red } from "@mui/material/colors";
+
 
 export const theme = createTheme({
     palette: {
@@ -30,11 +31,18 @@ export const theme = createTheme({
             }
         },
         variants: [
-            {
-              props: { variant: 'round' },
-              style: {
-               borderRadius: 8
-              },
+             {
+              props: { rounded: true},
+              
+              style:  {
+                
+             
+                borderRadius: 8,
+               
+               
+              
+              }
+              
             },
         ]
     }

@@ -1,0 +1,1 @@
+export const MATCH_REQUEST_SUCCESS = "Match request has been sent"

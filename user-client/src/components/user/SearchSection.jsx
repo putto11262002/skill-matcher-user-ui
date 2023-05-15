@@ -15,45 +15,42 @@ import SearchIcon from "@mui/icons-material/Search";
 import { CheckBox } from "@mui/icons-material";
 import SearchInput from "../common/form/SearchInput";
 
-
 const RoleFilterSection = ({ onChange }) => {
   const [selectedRole, setSelectedRole] = useState(undefined);
   useEffect(() => {
     onChange(selectedRole);
   }, [selectedRole]);
   return (
-   
-      <Stack rowGap={1}>
-        <Typography
-          variant="subtitle1"
-          //   fontWeight={(theme) => theme.typography.fontWeightBold}
-          color={(theme) => theme.palette.text.secondary}
-        >
-          Filter by
-        </Typography>
-        <Stack direction="row" rowGap={3}>
-          <FormControlLabel
-            control={<Checkbox name="learner" />}
-            label="Learn"
-            checked={selectedRole === "learner"}
-            onChange={(e) => {
-              if (selectedRole === "learner") return setSelectedRole(undefined);
-              setSelectedRole("learner");
-            }}
-          />
+    <Stack rowGap={1}>
+      <Typography
+        variant="subtitle1"
+        //   fontWeight={(theme) => theme.typography.fontWeightBold}
+        color={(theme) => theme.palette.text.secondary}
+      >
+        Filter by
+      </Typography>
+      <Stack direction="row" rowGap={3}>
+        <FormControlLabel
+          control={<Checkbox name="learner" />}
+          label="Learn"
+          checked={selectedRole === "learner"}
+          onChange={(e) => {
+            if (selectedRole === "learner") return setSelectedRole(undefined);
+            setSelectedRole("learner");
+          }}
+        />
 
-          <FormControlLabel
-            control={<Checkbox name="tutor" />}
-            label="Teach"
-            checked={selectedRole === "tutor"}
-            onChange={(e) => {
-              if (selectedRole === "tutor") return setSelectedRole(undefined);
-              setSelectedRole("tutor");
-            }}
-          />
-        </Stack>
+        <FormControlLabel
+          control={<Checkbox name="tutor" />}
+          label="Teach"
+          checked={selectedRole === "tutor"}
+          onChange={(e) => {
+            if (selectedRole === "tutor") return setSelectedRole(undefined);
+            setSelectedRole("tutor");
+          }}
+        />
       </Stack>
-   
+    </Stack>
   );
 };
 
@@ -63,49 +60,50 @@ const SkillFilterSection = ({ skills, onChange }) => {
     onChange(selectedSkills);
   }, [selectedSkills]);
   return (
-    
-      <Stack rowGap={1}>
-        <Typography
-          variant="subtitle1"
-          //   fontWeight={(theme) => theme.typography.fontWeightBold}
-          color={(theme) => theme.palette.text.secondary}
-        >
-          Skills
-        </Typography>
-        <Stack gap={3} sx={{flexWrap: 'wrap'}} direction="row">
-          {skills?.length > 1 &&
-            skills?.map((skill) => (
-              <FormControlLabel
-                key={skill.skill}
-                control={<Checkbox name={skill.skill} />}
-                label={skill.skill}
-                onChange={(event) => {
-                  if (event.target.checked) {
-                    setSelectedSkills([...selectedSkills, event.target.name]);
-                  } else {
-                    setSelectedSkills(
-                      selectedSkills.filter(
-                        (skill) => skill !== event.target.name
-                      )
-                    );
-                  }
-                }}
-              />
-            ))}
-        </Stack>
+    <Stack rowGap={1}>
+      <Typography
+        variant="subtitle1"
+        //   fontWeight={(theme) => theme.typography.fontWeightBold}
+        color={(theme) => theme.palette.text.secondary}
+      >
+        Skills
+      </Typography>
+      <Stack gap={3} sx={{ flexWrap: "wrap" }} direction="row">
+        {skills?.length > 1 &&
+          skills?.map((skill) => (
+            <FormControlLabel
+              key={skill.skill}
+              control={<Checkbox name={skill.skill} />}
+              label={skill.skill}
+              onChange={(event) => {
+                if (event.target.checked) {
+                  setSelectedSkills([...selectedSkills, event.target.name]);
+                } else {
+                  setSelectedSkills(
+                    selectedSkills.filter(
+                      (skill) => skill !== event.target.name
+                    )
+                  );
+                }
+              }}
+            />
+          ))}
       </Stack>
-   
+    </Stack>
   );
 };
 
-const SearchSection = ({ skills, onSubmit, loading}) => {
+const SearchSection = ({ skills, onSubmit, loading }) => {
   const [query, setQuery] = useState({ matched: false });
   const handleSearchTermChange = (q) => {
     setQuery({ ...query, q });
   };
 
   const handleSkillChange = (skills) => {
-    setQuery({ ...query, skills: skills?.length > 0 ?  skills?.join(',') : undefined});
+    setQuery({
+      ...query,
+      skills: skills?.length > 0 ? skills?.join(",") : undefined,
+    });
   };
 
   const handleRoleChange = (role) => {
@@ -116,17 +114,27 @@ const SearchSection = ({ skills, onSubmit, loading}) => {
     <Box
       onSubmit={(e) => {
         e.preventDefault();
-        if(loading) return 
-        onSubmit(query)
+        if (loading) return;
+        onSubmit(query);
       }}
       component="form"
     >
       <Stack spacing={3}>
         <SearchInput onChange={handleSearchTermChange} />
-        <Paper sx={{paddingX: 3, paddingY: 2}}>
-        <RoleFilterSection onChange={handleRoleChange} />
-        <SkillFilterSection skills={skills} onChange={handleSkillChange} />
+        <Paper sx={{ paddingX: 3, paddingY: 2 }}>
+          {/* <RoleFilterSection onChange={handleRoleChange} /> */}
+          <SkillFilterSection skills={skills} onChange={handleSkillChange} />
         </Paper>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <Button
+            type="submit"
+            sx={{ width: "auto" }}
+            rounded
+            variant="contained"
+          >
+            Search
+          </Button>
+        </Box>
       </Stack>
     </Box>
   );
