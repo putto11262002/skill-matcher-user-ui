@@ -9,7 +9,7 @@ import { ParseObjectIdPipe } from "../../../common/pipes/pase-object-id.pipe";
 import { ApiTags } from "@nestjs/swagger";
 
 @ApiTags('Admin')
-@Roles('admin')
+@Roles('admin', 'root')
 @UseGuards(RoleGuard)
 @Controller('admin/report')
 export class AdminReportController {
