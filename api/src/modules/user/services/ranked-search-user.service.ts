@@ -9,6 +9,7 @@ import { User } from '../schemas/user.schema';
 import { RankedSearchDto } from '../dtos/requests/ranked-search.dto';
 import { SearchUserDto } from '../dtos/requests/search-user.dto';
 import { USER_SKILL_ROLE } from '../constants/user-skill.constant';
+import { USER_STATUS } from '../constants/user.constant';
 
 @Injectable()
 export class RankedSearchUserService {
@@ -41,6 +42,10 @@ export class RankedSearchUserService {
     const { matches } = await this.matchService.getMatch(userId);
 
     const { requests } = await this.matchService.getSentRequest(userId);
+
+    const {users: blockedUsers} = await this.userService.search({status: USER_STATUS.BLOCKED});
+
+    const blockUserIds = blockedUsers.map(u => u._id);
 
     const matchedUsersIds = matches.map((m) =>
       m.users.find((u) => !u.equals(userId)),
@@ -95,7 +100,7 @@ export class RankedSearchUserService {
               userId: { $ne: userId },
             },
             {
-              userId: { $nin: [...matchedUsersIds, ...requestUserIds] },
+              userId: { $nin: [...matchedUsersIds, ...requestUserIds, ...blockUserIds] },
             },
           ],
         },

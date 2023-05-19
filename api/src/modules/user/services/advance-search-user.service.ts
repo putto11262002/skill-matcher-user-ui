@@ -7,6 +7,7 @@ import { SearchUserDto } from '../dtos/requests/search-user.dto';
 import { SearchUserSkillByUserDto } from '../dtos/requests/search-user-skill-by-user.dto';
 import { AdvanceSearchDto } from '../dtos/requests/advance-search-user.dto';
 import { User } from '../schemas/user.schema';
+import { USER_STATUS } from '../constants/user.constant';
 
 @Injectable()
 export class AdvanceSearchUserService {
@@ -35,7 +36,8 @@ export class AdvanceSearchUserService {
     const matchedUsersIds = matches.map((m) =>
       m.users.find((u) => !u.equals(userId)),
     );
-    return this.search(userId, { $nin: matchedUsersIds }, query);
+
+    return this.search(userId, { $nin: [...matchedUsersIds] }, query);
   }
 
   async searchRequestedUsers(
@@ -58,7 +60,7 @@ export class AdvanceSearchUserService {
 
   private async search(
     userId: mongoose.Types.ObjectId,
-    matchUserIdFilter:
+    userIdFilter:
       | { [key in '$nin']: mongoose.Types.ObjectId[] }
       | { [key in '$in']: mongoose.Types.ObjectId[] },
     query: AdvanceSearchDto,
@@ -76,11 +78,16 @@ export class AdvanceSearchUserService {
       } as SearchUserDto);
       userIdsBySearchUser = users.map((u) => u._id);
     }
+
+    const {users: blockedUsers} = await this.userService.search({status: USER_STATUS.BLOCKED});
+    const blockedUserIds = blockedUsers.map(u => u._id);
+
     const pipe: mongoose.PipelineStage[] = [
       {
         $match: {
           $and: [
-            { userId: matchUserIdFilter },
+            { userId: userIdFilter },
+            {userId: {$nin: blockedUserIds}},
             ...(userIdsBySearchUser ? [{ userId: userIdsBySearchUser }] : []),
             ...(query.skillRole ? [{ role: query.skillRole }] : []),
             ...(query.skills ? [{ skill: { $in: query.skills } }] : []),

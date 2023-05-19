@@ -38,5 +38,5 @@ export class SearchUserDto extends SearchDto {
   @IsArray()
   @IsIn(Object.values(USER_ROLE), {each: true})
   @Transform(({value}) => value.split(','))
-  roles: Array<String>;
+  roles?: Array<String>;
 }
