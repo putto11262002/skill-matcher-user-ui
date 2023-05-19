@@ -17,6 +17,7 @@ import {
   NOT_ALLOWED_UPDATE,
   USER_AVATAR_HEIGHT,
   USER_AVATAR_WIDTH,
+  USER_EVENT,
   USER_ROLE,
   USER_STATUS,
 } from '../constants/user.constant';
@@ -26,6 +27,8 @@ import { ConfigService } from '@nestjs/config';
 import { FileService } from '../../file/services/file.service';
 import { ImageService } from '../../file/services/image.service';
 import { DEFAULT_IMAGE_FORMAT } from '../../file/constants/image.constant';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { UserDto } from '../dtos/responses/user.dto';
 
 @Injectable()
 export class UserService {
@@ -36,6 +39,7 @@ export class UserService {
     private readonly configService: ConfigService,
     private readonly fileService: FileService,
     private readonly imageService: ImageService,
+    private readonly eventEmitter: EventEmitter2
   ) {}
 
   /**
@@ -106,6 +110,9 @@ export class UserService {
     }
 
     await this.userModel.deleteOne({ _id: id });
+
+    // emit event so that listeners can clean up user resources
+    this.eventEmitter.emit(USER_EVENT.DELETED, new UserDto(user))
   }
 
   // async deleteByUsername(username: string): Promise<void> {

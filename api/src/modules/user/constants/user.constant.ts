@@ -13,8 +13,7 @@ export const ONLY_ADMIN_SEARCH_FIELDS = [];
 
 export const USER_STATUS = {
   ACTIVE: 'active',
-  BAND: 'band',
-  PENDING_EMAIL_VERIFICATION: 'pending-email-verification',
+  BLOCKED: 'blocked',
 };
 
 export const USER_ROLE = {
@@ -40,3 +39,8 @@ export const PUBLIC_RESPONSE_OMIT_FIELDS = [
   'profile.contactEmail',
   'profile.phoneNumber'
 ];
+
+
+export const USER_EVENT = {
+  DELETED: 'user_deleted'
+}

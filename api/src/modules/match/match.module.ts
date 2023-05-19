@@ -5,6 +5,7 @@ import { UserModule } from '../user/user.module';
 import { MatchController } from './controllers/match.controller';
 import { MatchService } from './services/match.service';
 import { MatchRequest, matchRequestSchema } from './schemas/match-request.schema';
+import { UserDeletedListener } from './listeners/user-deleted.listener';
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { MatchRequest, matchRequestSchema } from './schemas/match-request.schema
     forwardRef(() => UserModule),
   ],
   controllers: [MatchController],
-  providers: [MatchService],
+  providers: [MatchService, UserDeletedListener],
   exports: [MatchService],
 })
 export class MatchModule {}

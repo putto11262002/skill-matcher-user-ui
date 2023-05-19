@@ -8,7 +8,7 @@ import { UserController } from './controllers/user.controller';
 import { User, userSchema } from './schemas/user.schema';
 import { UserService } from './services/user.service';
 import { FileModule } from '../file/file.module';
-import { UserSkillListener } from './listeners/user-skill.listener';
+import { UserSkillAddedAndRemovedListener } from './listeners/user-skill.listener';
 import { MatchModule } from '../match/match.module';
 import { UserSkill, userSkillSchema } from './schemas/user-skill.schema';
 import { UserSkillService } from './services/user-skill.service';
@@ -20,6 +20,7 @@ import { RankedSearchUserService } from './services/ranked-search-user.service';
 import { UserProfileService } from './services/user-profile.service';
 import { RankedSearchUserController } from './controllers/ranked-search-user.controller';
 import { AdvanceSearchUserController } from './controllers/advance-search-user.controller';
+import { UserDletedListener } from './listeners/user-deleted.listener';
 
 @Module({
   imports: [
@@ -42,11 +43,12 @@ import { AdvanceSearchUserController } from './controllers/advance-search-user.c
   ],
   providers: [
     UserService,
-    UserSkillListener,
+    UserSkillAddedAndRemovedListener,
     UserSkillService,
     AdvanceSearchUserService,
     RankedSearchUserService,
     UserProfileService,
+    UserDletedListener
   ],
   exports: [UserService, UserSkillService],
 })

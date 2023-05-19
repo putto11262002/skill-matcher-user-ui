@@ -8,7 +8,7 @@ import { Model } from "mongoose";
 import { UserSkillDto } from "../../skill/dtos/responses/user-skill.dto";
 
 @Injectable()
-export class UserSkillListener {
+export class UserSkillAddedAndRemovedListener {
 
     constructor(@InjectModel(User.name) private readonly userModel: Model<User>){}
 
