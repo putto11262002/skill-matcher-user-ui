@@ -10,6 +10,7 @@ import { ROLES_KEY } from '../decorators/roles.decorator';
 import { Request } from 'express';
 import { AuthService } from '../services/auth.service';
 import { ConfigService } from '@nestjs/config';
+import { USER_STATUS } from '../../user/constants/user.constant';
 
 @Injectable()
 export class RoleGuard implements CanActivate {
@@ -40,6 +41,11 @@ export class RoleGuard implements CanActivate {
     if (requiredRoles && !requiredRoles.includes(user.role)) {
       throw new ForbiddenException();
     }
+
+    if(user.status === USER_STATUS.BLOCKED){
+      throw new ForbiddenException();
+    }
+    
     req['user'] = user;
     req['jwt-payload'] = payload
 

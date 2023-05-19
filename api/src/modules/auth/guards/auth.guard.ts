@@ -1,5 +1,6 @@
 import {
   ExecutionContext,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -7,6 +8,7 @@ import { CanActivate } from '@nestjs/common';
 import { Request } from 'express';
 import { AuthService } from '../services/auth.service';
 import { ConfigService } from '@nestjs/config';
+import { USER_STATUS } from '../../user/constants/user.constant';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -28,6 +30,10 @@ export class AuthGuard implements CanActivate {
     }
 
     const { payload, user } = await this.authService.verifyAccessToken(token);
+
+    if(user.status === USER_STATUS.BLOCKED){
+      throw new ForbiddenException();
+    }
 
     req['user'] = user;
     req['jwt-payload'] = payload
