@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   forwardRef,
   HttpException,
   HttpStatus,
@@ -91,13 +92,19 @@ export class UserService {
   }
 
   async deleteById(id: Types.ObjectId): Promise<void> {
-    const exist = await this.userModel.exists({ _id: id });
-    if (!exist) {
+    const user = await this.userModel.findOne({ _id: id });
+    if (!user) {
       throw new HttpException(
         'User with this id does not exist',
         HttpStatus.NOT_FOUND,
       );
     }
+    
+    // do not allow deleting root user
+    if(user.role === USER_ROLE.ROOT){
+      throw new ForbiddenException();
+    }
+
     await this.userModel.deleteOne({ _id: id });
   }
 

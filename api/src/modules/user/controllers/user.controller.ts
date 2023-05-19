@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   FileTypeValidator,
   Get,
   HttpCode,
@@ -103,6 +104,13 @@ export class UserController {
   ){
     const {user, userSkills, matchStatus} = await this.userProfileService.getUserProfile(currentUser._id, id);
     return new UserDto(user).toProfileResponse(userSkills, matchStatus)
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete("self")
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteSelf(@CurrentUser() currentUser: User){
+    this.userService.deleteById(currentUser._id);
   }
 
   @UseGuards(AuthGuard)
