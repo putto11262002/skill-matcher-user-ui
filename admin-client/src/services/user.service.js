@@ -53,6 +53,10 @@ export class UserService {
     formData.append('avatar', file)
     return api.putForm(`/admin/user/${id}/avatar`, formData)
   }
+
+  async deleteUser(id){
+    return api.delete(`admin/user/${id}`)
+  }
 }
 
 
