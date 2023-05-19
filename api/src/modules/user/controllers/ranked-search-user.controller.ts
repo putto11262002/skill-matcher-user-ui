@@ -14,7 +14,9 @@ import { User } from '../schemas/user.schema';
 import { RankedSearchDto } from '../dtos/requests/ranked-search.dto';
 import { Pagination } from '../../../common/dtos/responses/pagination.dto';
 import { UserDto } from '../dtos/responses/user.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('User')
 @UseGuards(AuthGuard)
 @Controller('user/self/rank')
 export class RankedSearchUserController {

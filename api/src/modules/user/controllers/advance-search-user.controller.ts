@@ -13,7 +13,9 @@ import { AdvanceSearchDto } from '../dtos/requests/advance-search-user.dto';
 import { Pagination } from '../../../common/dtos/responses/pagination.dto';
 import { UserDto } from '../dtos/responses/user.dto';
 import { AuthGuard } from '../../auth/guards/auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('User')
 @UseGuards(AuthGuard)
 @Controller('user/self')
 export class AdvanceSearchUserController {

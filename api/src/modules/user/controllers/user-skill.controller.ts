@@ -27,7 +27,9 @@ import { ParseObjectIdPipe } from '../../../common/pipes/pase-object-id.pipe';
 import { Types } from 'mongoose';
 import { SearchUserSkillByUserDto } from '../dtos/requests/search-user-skill-by-user.dto';
 import { Pagination } from '../../../common/dtos/responses/pagination.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('User')
 @UseGuards(AuthGuard)
 @Controller()
 export class UserSkillController {

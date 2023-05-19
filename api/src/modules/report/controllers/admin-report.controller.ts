@@ -6,7 +6,9 @@ import { ReportService } from "../services/report.service";
 import { ReportDto } from "../dtos/response/report.dto";
 import mongoose from "mongoose";
 import { ParseObjectIdPipe } from "../../../common/pipes/pase-object-id.pipe";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags('Admin')
 @Roles('admin')
 @UseGuards(RoleGuard)
 @Controller('admin/report')

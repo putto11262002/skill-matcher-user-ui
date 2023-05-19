@@ -4,7 +4,9 @@ import { CreateReportDto } from "../dtos/request/create-report.dto";
 import { CurrentUser } from "../../auth/decorators/current-user.decorator";
 import { User } from "../../user/schemas/user.schema";
 import { ReportService } from "../services/report.service";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags('Report')
 @UseGuards(AuthGuard)
 @Controller('report')
 export class ReportController {
