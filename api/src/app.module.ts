@@ -10,6 +10,7 @@ import { MatchModule } from './modules/match/match.module';
 import { _ConfigModule } from './config/config.module';
 
 import { EventModule } from './common/event/event.module';
+import { ReportModule } from './modules/report/report.module';
 
 
 @Module({
@@ -21,7 +22,7 @@ import { EventModule } from './common/event/event.module';
     SkillModule,
     MongoModule,
     MatchModule,
-
+    ReportModule
   ],
   controllers: [AppController],
   providers: [AppService],
