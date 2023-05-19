@@ -21,7 +21,7 @@ export class SearchDto {
   @IsOptional()
   @IsArray()
   @Transform(({value}) => value.split(',').map(sortValues => toMongoSort({value: sortValues, key: undefined})))
-  sort: [string, mongoose.SortOrder][]
+  sort?: [string, mongoose.SortOrder][]
   constructor(pageNumber?: number, pageSize?: number) {
     this.pageNumber = pageNumber? pageNumber : 0;
     this.pageSize = pageSize ? pageSize : 20;

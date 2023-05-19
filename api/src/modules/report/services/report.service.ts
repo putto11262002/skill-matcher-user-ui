@@ -30,6 +30,7 @@ export class ReportService {
     }
     const createdReport = await this.reportModel.create({
       ...report,
+      source,
       category: !report.category ? REPORT_CATEGORY.OTHER : report.category,
     });
     return createdReport;
