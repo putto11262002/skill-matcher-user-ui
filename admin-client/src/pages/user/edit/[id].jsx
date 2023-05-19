@@ -9,6 +9,8 @@ import skillService from '../../../services/skill.service';
 import { useSnackbar } from 'notistack';
 import UserAvatarForm from '../../../components/user/UserAvatarForm';
 import useAuth from '@/hooks/useAuth';
+import UpdateUserStatusForm from '../../../components/user/UpdateUserStatusForm';
+import Loader from '../../../components/common/Loader';
 
 // TODO - add error messages
 const EditUserPage = () => {
@@ -139,6 +141,11 @@ const EditUserPage = () => {
     }
   }, [skillSearchTerm]);
 
+
+  if(isLoadingUser){
+    return <Loader/>
+  }
+
   return (
     <Stack spacing={6}>
       <EditUserProfileForm
@@ -146,6 +153,7 @@ const EditUserPage = () => {
         onSubmit={(user) => handleUpdateUserProfile({ id: user._id, payload: user })}
         isLoadingSubmitting={isLoadingUpdateUserProfile}
       />
+      <UpdateUserStatusForm onUpdateStatus={(status) => handleUpdateUserProfile({id, payload: {...user, status}})} currentStatus={user.status}/>
       <UserAvatarForm
         avatar={user?.avatar}
         onUpload={(file) => handleUploadAvatar({ id: user._id, file })}
