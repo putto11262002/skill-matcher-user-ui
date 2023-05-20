@@ -112,9 +112,16 @@ const NavBar = ({ }) => {
     router.push('/user/edit-profile')
   }
 
-  const handleLogout = () => {
-    dispatch(signOut({}));
-    handleCloseUserMenu();
+  const handleLogout = async () => {
+    try {
+      dispatch(signOut({}));
+      handleCloseUserMenu();
+
+      // Redirect the user to "/landing" after logout
+      router.push('/landing');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const renderNav = () => {
@@ -339,6 +346,7 @@ const NavBar = ({ }) => {
             <MenuItem onClick={handleCloseUserMenu}>
               <Typography textAlign="center">Change password</Typography>
             </MenuItem>
+
           </Menu>
 
 
