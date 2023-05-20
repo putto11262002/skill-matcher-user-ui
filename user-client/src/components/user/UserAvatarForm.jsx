@@ -7,7 +7,7 @@ const UserAvatarForm = ({ onUpload, avatar, loading, error }) => {
   return (
     <Stack justifyContent='center'>
       <Typography textAlign='center' variant='2' component='h2'>
-        User Avatar
+        Profile Image
       </Typography>
 
       <SingleFileUpload
