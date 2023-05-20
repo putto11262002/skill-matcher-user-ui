@@ -40,14 +40,7 @@ const SignUpPage = () => {
 
   const handleSignUp = (formData, e) => {
     e.preventDefault();
-    // if (password === confirmPassword) {
-    //   mutate({ username: email, password, firstName, lastName, email });
-    // } else {
-    //   setErrorMessage("Passwords do not match");
-    //   setAlertOpen(true);
-    // }
     mutate(formData);
-    // console.log(formData)
   };
 
   useEffect(() => {
