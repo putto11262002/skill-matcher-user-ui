@@ -19,12 +19,6 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Divider,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import dynamic from "next/dynamic";
@@ -57,8 +51,7 @@ const navLinks = [
     visibility: "auth",
     icon: (props) => <ReorderIcon {...props} />,
   },
-  // { label: "About Us", path: "/about-us", visibility: "both" },
-  // { label: "Contact Us", path: "/contact-us", visibility: "both" },
+
   {
     label: "Search Users",
     path: "/user/search",
@@ -77,12 +70,7 @@ const navLinks = [
     visibility: "auth",
     icon: (props) => <NotificationsIcon {...props} />
   },
-  // {
-  //   label: "Dashboard",
-  //   path: "/dashboard",
-  //   visibility: "auth",
-  //   icon: (props) => <PersonIcon {...props} />,
-  // },
+
   {
     label: "My Profile",
     path: "/dashboard",
@@ -97,10 +85,6 @@ const NavBar = ({ }) => {
   const dispatch = useDispatch();
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [openMobileNav, setOpenMobileNav] = React.useState(false);
-  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
-  //const [password, setPassword] = React.useState('');
-  //const [confirmPassword, setConfirmPassword] = React.useState('');
-  const { enqueueSnackbar } = useSnackbar();
 
   const router = useRouter();
 
@@ -124,30 +108,10 @@ const NavBar = ({ }) => {
     try {
       dispatch(signOut({}));
       handleCloseUserMenu();
-      // Redirect the user to "/landing" after logout
       router.push('/landing');
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const handleDeleteConfirmation = () => {
-    setOpenDeleteDialog(true);
-  };
-
-  const handleDeleteAccount = async () => {
-    try {
-      await userService.deleteSelf();
-      enqueueSnackbar('User deleted', { variant: 'success' });
-      router.push('/landing');
-    } catch (error) {
-      console.error('Error deleting user:', error);
-      enqueueSnackbar('Error deleting user', { variant: 'error' });
-    }
-  };
-
-  const handleCancelDelete = () => {
-    setOpenDeleteDialog(false);
   };
 
   const renderNav = () => {
@@ -189,6 +153,18 @@ const NavBar = ({ }) => {
         </Link>
       );
     });
+  };
+
+  const renderUserName = () => {
+    if (isLoggedIn) {
+      return (
+        <Typography variant="body2" sx={{color: (theme) => theme.palette.primary.main,
+          flexGrow: 1, display: 'flex', alignItems: 'center',paddingLeft: '8px' }}>
+          {user?.profile?.firstName} {user?.profile?.lastName}
+        </Typography>
+      );
+    }
+    return null;
   };
 
   const container = window !== undefined ? () => window.document.body : undefined;
@@ -331,6 +307,7 @@ const NavBar = ({ }) => {
                 </IconButton>
               </Box> */}
               <Box sx={{ alignItems: "center", display: { xs: "none", md: "flex" } }}>
+              {renderUserName()}
                 <Tooltip title={`Settings`}>
                   <IconButton onClick={handleOpenUserMenu}>
                     <Avatar
@@ -372,37 +349,7 @@ const NavBar = ({ }) => {
             <MenuItem onClick={handleCloseUserMenu}>
               <Typography textAlign="center">Change password</Typography>
             </MenuItem>
-            <MenuItem onClick={handleDeleteConfirmation}>
-              <Typography textAlign="center">Delete Account</Typography>
-            </MenuItem>
-          </Menu>
-          {/* Delete Account Dialog */}
-          <Dialog open={openDeleteDialog} onClose={handleCancelDelete}>
-            <DialogTitle>Delete Account</DialogTitle>
-            <DialogContent>
-              <Typography variant="body1">
-                Are you sure you want to delete your account?
-              </Typography>
-              <Typography variant="body2">
-                This action cannot be undone.
-              </Typography>
-              {/*} <TextField
-                margin="normal"
-                label="Password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-               />*/}
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleCancelDelete} color="primary">
-                Cancel
-              </Button>
-              <Button onClick={handleDeleteAccount} color="primary" variant="contained">
-                Delete
-              </Button>
-            </DialogActions>
-          </Dialog>
+          </Menu>  
         </Toolbar>
       </AppBar>
     </Box>
