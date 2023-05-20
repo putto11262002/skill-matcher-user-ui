@@ -20,6 +20,11 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import dynamic from "next/dynamic";
@@ -36,6 +41,8 @@ import { theme } from "@/styles/theme";
 import authService from "@/services/auth.service";
 import { signOut } from "@/redux/thunks/user.thunk";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useSnackbar } from 'notistack';
+
 const drawerWidth = 240;
 const navLinks = [
   {
@@ -90,10 +97,12 @@ const NavBar = ({ }) => {
   const dispatch = useDispatch();
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [openMobileNav, setOpenMobileNav] = React.useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+  //const [password, setPassword] = React.useState('');
+  //const [confirmPassword, setConfirmPassword] = React.useState('');
+  const { enqueueSnackbar } = useSnackbar();
 
   const router = useRouter();
-
-
 
   const handleToggleMobileNav = () => {
     setOpenMobileNav(!openMobileNav);
@@ -101,7 +110,6 @@ const NavBar = ({ }) => {
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
@@ -116,12 +124,30 @@ const NavBar = ({ }) => {
     try {
       dispatch(signOut({}));
       handleCloseUserMenu();
-
       // Redirect the user to "/landing" after logout
       router.push('/landing');
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleDeleteConfirmation = () => {
+    setOpenDeleteDialog(true);
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      await userService.deleteSelf();
+      enqueueSnackbar('User deleted', { variant: 'success' });
+      router.push('/landing');
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      enqueueSnackbar('Error deleting user', { variant: 'error' });
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setOpenDeleteDialog(false);
   };
 
   const renderNav = () => {
@@ -346,10 +372,37 @@ const NavBar = ({ }) => {
             <MenuItem onClick={handleCloseUserMenu}>
               <Typography textAlign="center">Change password</Typography>
             </MenuItem>
-
+            <MenuItem onClick={handleDeleteConfirmation}>
+              <Typography textAlign="center">Delete Account</Typography>
+            </MenuItem>
           </Menu>
-
-
+          {/* Delete Account Dialog */}
+          <Dialog open={openDeleteDialog} onClose={handleCancelDelete}>
+            <DialogTitle>Delete Account</DialogTitle>
+            <DialogContent>
+              <Typography variant="body1">
+                Are you sure you want to delete your account?
+              </Typography>
+              <Typography variant="body2">
+                This action cannot be undone.
+              </Typography>
+              {/*} <TextField
+                margin="normal"
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+               />*/}
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCancelDelete} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={handleDeleteAccount} color="primary" variant="contained">
+                Delete
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Toolbar>
       </AppBar>
     </Box>
