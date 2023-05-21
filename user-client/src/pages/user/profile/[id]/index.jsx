@@ -1,24 +1,17 @@
 import dynamic from "next/dynamic";
-import Image from "next/image";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { Button, Grid, IconButton, Stack, Tooltip } from "@mui/material";
+import { Button, Grid, IconButton, Stack, Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, Select } from "@mui/material";
 import { Avatar } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useRouter } from "next/router";
 import userService from "@/services/user.service";
 import Loader from "@/components/common/Loader";
-import UserSkill from "@/components/user/skills/UserSkill";
-import Link from "next/link";
 import UserSkillTabs from "@/components/user/skills/UserSkillTabs";
 import useAuth from "@/hooks/useAuth";
-import HandshakeIcon from "@mui/icons-material/Handshake";
 import { amber, blue, green, red, yellow } from "@mui/material/colors";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
@@ -28,7 +21,6 @@ import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
-import AddIcon from "@mui/icons-material/Add";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 import TextIconButton from "../../../../components/common/buttons/TextIconButton";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
@@ -36,6 +28,8 @@ import { useTheme } from "@material-ui/core";
 import matchService from "../../../../services/match.service";
 import FlagIcon from '@mui/icons-material/Flag';
 import { enqueueSnackbar } from "notistack";
+
+
 const UserHomePage = () => {
   useAuth();
   const router = useRouter();
@@ -45,6 +39,9 @@ const UserHomePage = () => {
   const [userLearningSkills, setUserLearningSkills] = useState([]);
   const [matchStatus, setMatchStatus] = useState(false);
   const theme = useTheme();
+  const [reportDialogOpen, setReportDialogOpen] = useState(false);
+  const [reportCategory, setReportCategory] = useState('');
+  const [reportReason, setReportReason] = useState('');
 
   // fetching user profile
   const {
@@ -77,7 +74,6 @@ const UserHomePage = () => {
       enqueueSnackbar("Match accepted", { variant: "success" });
     },
     onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
-
   })
 
 
@@ -87,7 +83,6 @@ const UserHomePage = () => {
       enqueueSnackbar("Match rejected", { variant: "success" });
     },
     onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
-
   })
 
 
@@ -97,9 +92,30 @@ const UserHomePage = () => {
       enqueueSnackbar("Unmatched", { variant: "success" });
     },
     onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
-
   })
 
+  const handleReportConfirmation = () => {
+    setReportDialogOpen(true);
+  };
+
+  const handleReportAccount = async () => {
+    try {
+      // Perform the delete account operation
+      enqueueSnackbar('User has been reported', { variant: 'success' });
+      setReportDialogOpen(false);
+    } catch (error) {
+      console.error('Error reporting user:', error);
+      enqueueSnackbar('Error reporting user, contact us for more information', { variant: 'error' });
+    }
+  };
+
+  const handleCancelReport = () => {
+    setReportDialogOpen(false);
+  };
+
+  const handleCategoryChange = (event) => {
+    setReportCategory(event.target.value);
+  };
 
   // fetch user when id is available
   useEffect(() => {
@@ -236,7 +252,6 @@ const UserHomePage = () => {
                   bg={yellow[50]}
                 />
               )}
-
               {requesting && (
                 <TextIconButton
                   icon={<DoneIcon />}
@@ -265,14 +280,49 @@ const UserHomePage = () => {
                 />
               )}
               {matched && (
-            <TextIconButton
-              icon={<FlagIcon />}
-              bg={red[50]}
-              color={red[700]}
-              text="Report"
-              onClick={() => handleReportUser({ userId: user._id })}
-            />
-          )}
+                <TextIconButton
+                  icon={<FlagIcon />}
+                  bg={red[50]}
+                  color={red[700]}
+                  text="Report"
+                  onClick={handleReportConfirmation}
+                />
+              )}
+              <Dialog open={reportDialogOpen} onClose={handleCancelReport}>
+                <DialogTitle fontWeight="bold"> Report User </DialogTitle>
+                <DialogContent sx={{ width: 400, height: 200 }}>
+                  <Select
+                    value={reportCategory}
+                    onChange={handleCategoryChange}
+                    fullWidth
+                    displayEmpty
+                    renderValue={(selected) => (selected ? selected : 'Select a Category')}
+                  >
+                    <MenuItem value="Harassment or Bullying">Harassment or Bullying</MenuItem>
+                    <MenuItem value="Inappropriate Content">Inappropriate Content</MenuItem>
+                    <MenuItem value="Hate Speech or Discrimination">Hate Speech or Discrimination</MenuItem>
+                    <MenuItem value="Spam or Scam">Spam or Scam</MenuItem>
+                    <MenuItem value="Privacy Violation">Privacy Violation</MenuItem>
+                    <MenuItem value="Other">Other</MenuItem>
+                  </Select>
+                  <Box mt={2}>
+                    <TextField
+                      label="Reason"
+                      value={reportReason}
+                      onChange={(e) => setReportReason(e.target.value)}
+                      fullWidth
+                      multiline
+                      rows={4}
+                    />
+                  </Box>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleCancelReport}>Cancel</Button>
+                  <Button onClick={handleReportAccount} variant="contained" color="primary">
+                    Submit
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </Box>
             <UserSkillTabs
               tutorSkills={user?.profile?.skills?.filter(
