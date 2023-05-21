@@ -77,7 +77,7 @@ const UserHomePage = () => {
   })
 
 
-  const { mutate: handleRejectRequest } = useMutation(matchService.acceptMatchRequest, {
+  const { mutate: handleRejectRequest } = useMutation(matchService.declineRequest, {
     onSuccess: () => {
       setMatchStatus("not_matched");
       enqueueSnackbar("Match rejected", { variant: "success" });
@@ -86,7 +86,7 @@ const UserHomePage = () => {
   })
 
 
-  const { mutate: handleUnmatch } = useMutation(matchService.unMatch, {
+  const { mutate: handleUnmatch } = useMutation(matchService.unmatchRequest, {
     onSuccess: () => {
       setMatchStatus("not_matched");
       enqueueSnackbar("Unmatched", { variant: "success" });
