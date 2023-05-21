@@ -33,7 +33,7 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import Link from "next/link";
 import { enqueueSnackbar } from "notistack";
-import UserSkillForm from "@/components/user/skills/UserSkillForm";
+import UserSkillForm from "@/components/user/skill/UserSkillForm";
 import UserAvatarForm from "@/components/user/UserAvatarForm";
 import { updateUser } from "@/redux/slices/auth.slice";
 function valuetext(value) {

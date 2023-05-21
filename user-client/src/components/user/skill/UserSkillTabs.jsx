@@ -14,7 +14,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import Loader from "@/components/common/Loader";
-import UserSkill from "@/components/user/skills/UserSkill";
+import UserSkill from "@/components/user/skill/UserSkill";
 import Error from "@/components/common/Error";
 import CloseIcon from "@mui/icons-material/Close";
 import { upperFirst } from "lodash";

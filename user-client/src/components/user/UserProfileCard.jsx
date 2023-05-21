@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import UserSkill from "./skills/UserSkill";
+import UserSkill from "./skill/UserSkill";
 import Loader from "../common/Loader";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import HandshakeIcon from "@mui/icons-material/Handshake";
