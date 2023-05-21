@@ -20,7 +20,7 @@ const UserPage = () => {
 
   useEffect(() => {
     refetch()
-  }, [query])
+  }, [query, page])
   return (
     <>
       <Stack spacing={3}>
