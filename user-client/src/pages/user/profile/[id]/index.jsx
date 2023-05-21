@@ -297,7 +297,9 @@ const UserHomePage = () => {
                     fullWidth
                     displayEmpty
                     renderValue={(selected) => (selected ? selected : 'Select a Category')}
-                  >
+                  ><MenuItem value="" disabled>
+                      Select a Category
+                    </MenuItem>
                     <MenuItem value="Harassment or Bullying">Harassment or Bullying</MenuItem>
                     <MenuItem value="Inappropriate Content">Inappropriate Content</MenuItem>
                     <MenuItem value="Hate Speech or Discrimination">Hate Speech or Discrimination</MenuItem>
