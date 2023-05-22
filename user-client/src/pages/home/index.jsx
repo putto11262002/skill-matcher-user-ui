@@ -2,6 +2,9 @@ import Head from 'next/head';
 import { Box, Container, Typography, Button, Link, Grid } from '@mui/material';
 import useAuth from '@/hooks/useAuth';
 import ConstructionIcon from '@mui/icons-material/Construction';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import ForumIcon from '@mui/icons-material/Forum';
 
 const HomePage = () => {
   useAuth()
@@ -53,6 +56,7 @@ const HomePage = () => {
           our platform provides the perfect one-stop solution. Join our community today and
           start unlocking your full potential!
         </Typography>
+
         <Box marginTop={5} /> {/* Adds vertical space */}
         <Grid container spacing={2}>
         <Grid item xs={8} md={3}>
@@ -65,57 +69,73 @@ const HomePage = () => {
               </Typography>
               <Box marginTop={2} /> {/* Adds vertical space */}
               <Typography variant="subtitle1" align="center" style={{ fontStyle: 'italic' }}>
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+             Add skills to your profile showcase your unique expertise and stand out from the crowd. 
               </Typography>
+              <Box marginTop={2} /> {/* Adds vertical space */}
+            <Link href="/user/edit-profile" underline="none">
+                            <Button variant="outlined">Add Skills </Button>
+                        </Link>
             </Container>
           </Grid>
         
           <Grid item xs={8} md={3}>
           <Container className="container">
             <Box className="iconContainer">
-              <ConstructionIcon style={{ fontSize: 150, color: 'orange' }} />
+              <PeopleAltIcon style={{ fontSize: 150, color: 'orange' }} />
             </Box>
             <Typography variant="h4" align="center">
-              Skills
+              Suggestions
             </Typography>
             <Box marginTop={2} /> {/* Adds vertical space */}
             <Typography variant="subtitle1" align="center" style={{ fontStyle: 'italic' }}>
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            Find like-minded individuals to share and expand your knowledge with!
             </Typography>
+            <Box marginTop={2} /> {/* Adds vertical space */}
+            <Link href="/user/edit-profile" underline="none">
+                            <Button variant="outlined">Edit Profile </Button>
+                        </Link>
           </Container>
         </Grid>
 
         <Grid item xs={8} md={3}>
           <Container className="container">
             <Box className="iconContainer">
-              <ConstructionIcon style={{ fontSize: 150, color: 'orange' }} />
+              <AddCircleOutlineIcon style={{ fontSize: 150, color: 'orange' }} />
             </Box>
             <Typography variant="h4" align="center">
-              Skills
+              Match
             </Typography>
             <Box marginTop={2} /> {/* Adds vertical space */}
             <Typography variant="subtitle1" align="center" style={{ fontStyle: 'italic' }}>
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            Match with with like-minded individuals who are eager to learn and grow!
             </Typography>
+            <Box marginTop={2} /> {/* Adds vertical space */}
+            <Link href="/user/edit-profile" underline="none">
+                            <Button variant="outlined">Edit Profile </Button>
+                        </Link>
           </Container>
         </Grid>
 
         <Grid item xs={8} md={3}>
           <Container className="container">
             <Box className="iconContainer">
-              <ConstructionIcon style={{ fontSize: 150, color: 'orange' }} />
+              <ForumIcon style={{ fontSize: 150, color: 'orange' }} />
             </Box>
             <Typography variant="h4" align="center">
-              Skills
+              Communicate
             </Typography>
             <Box marginTop={2} /> {/* Adds vertical space */}
             <Typography variant="subtitle1" align="center" style={{ fontStyle: 'italic' }}>
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            "Connect with your passionate and knowledgeable matches and share your expertise!"
             </Typography>
+            <Box marginTop={2} /> {/* Adds vertical space */}
+            <Link href="/user/edit-profile" underline="none">
+                            <Button variant="outlined">Edit Profile </Button>
+                        </Link>
           </Container>
         </Grid>
         </Grid>
-
+{/* 
 
 
 
@@ -136,7 +156,7 @@ const HomePage = () => {
           }}>
             Check out your feed
           </Button>
-        </Link>
+        </Link> */}
       </Box>
     </>
   );
