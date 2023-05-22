@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from 'react';
 import SearchInput from "@/components/common/form/SearchInput";
 import { MATCH_PAGE_SIZE, MATCH_STATUS } from "@/constants/match.constant";
-import MatchGridRequest from "@/components/match/MatchGridRequest";
+import MatchDashboard from "@/components/match/MatchDashboard";
 import matchService from "@/services/match.service";
 
 
@@ -137,7 +137,7 @@ const Dashboard = () => {
     const {
         isLoading: isLoadingUsers,
         error,
-        refetch,
+       data: requestingUsersRes
     } = useQuery(
         ["feed", "matched", page, query],
         () =>
@@ -149,21 +149,10 @@ const Dashboard = () => {
                 pageNumber: page,
             }),
         {
-            refetchOnWindowFocus: false,
-            enabled: false,
-            onSuccess: (res) => {
-                let newFeed = [];
-                if (updatedSearchTerm) {
-                    newFeed = res?.data?.data;
-                } else {
-                    newFeed = [...users, ...res?.data?.data];
-                }
-
-                setHasMore(newFeed.length < res?.data?.total);
-                setUsers(newFeed);
-            },
+            
         }
     );
+
     const handleMatch = (user) => {
         matchUser({ userId: user._id });
     };
@@ -185,11 +174,6 @@ const Dashboard = () => {
         onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
     });
 
-
-    useEffect(() => {
-        setUpdateSearchTerm(false);
-        refetch();
-    }, [page]);
 
     const handleDecline = (user) => {
         declineRequest({ userId: user._id });
@@ -297,16 +281,16 @@ const Dashboard = () => {
                         </Typography>
                         <ul>
 
-                            <MatchGridRequest
+                          {requestingUsersRes?.data?.data?.map(user =>  <MatchDashboard
                                 hasMore={hasMore}
                                 onNext={() => setPage((prevPage) => prevPage + 1)}
-                                users={users}
+                                user={user}
                                 onDecline={handleDecline}
                                 onAccept ={handleAccept}
                                 loading={isLoadingUsers}
                                 error={error}
-                            />
-
+                            />) 
+}
                             <li>
                                 <Box marginTop={3} /> {/* Adds vertical space */}
                                 <Box display="flex" alignItems="center" justifyContent="space-between">
