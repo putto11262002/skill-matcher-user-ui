@@ -1,7 +1,7 @@
 import api from "./api";
 
 export class ReportService {
-  sendReport = async (reportData) => {
+  async sendReport(reportData) {
     return api.post('/report', reportData);
   }
 }
