@@ -6,20 +6,23 @@ import { Transform, Type } from "class-transformer";
 import { toMongoObjectId } from "../../../../common/helpers/dto.helper";
 
 export class CreateReviewDto{
-    @ApiProperty()
+    @ApiProperty({type: String, description: 'Id of the target user'})
     @IsNotEmpty()
     @Type(() => mongoose.Types.ObjectId)
     @Transform(toMongoObjectId)
     target: mongoose.Types.ObjectId;
 
+    @ApiProperty()
     @IsNotEmpty()
     @IsNumber()
     score: number;
 
+    @ApiProperty()
     @IsNotEmpty()
     @IsString()
     message: string;
 
+    @ApiProperty()
     @IsNotEmpty()
     @IsIn(Object.values(REVIEW_STATUS))
     status: string = REVIEW_STATUS.PUBLIC;
