@@ -30,6 +30,7 @@ import { useTheme } from "@material-ui/core";
 import matchService from "../../../../services/match.service";
 import FlagIcon from '@mui/icons-material/Flag';
 import { enqueueSnackbar } from "notistack";
+import { reportService } from "../../../../services/report.service";
 
 
 const UserHomePage = () => {
@@ -102,7 +103,14 @@ const UserHomePage = () => {
 
   const handleReportAccount = async () => {
     try {
-      // Perform the delete account operation
+      const reportData = {
+        target: user._id, // Replace with the actual target
+        category: reportCategory,
+        message: reportReason
+      };
+
+      await reportService.sendReport(reportData);
+
       enqueueSnackbar('User has been reported', { variant: 'success' });
       setReportDialogOpen(false);
     } catch (error) {
@@ -302,11 +310,21 @@ const UserHomePage = () => {
                   ><MenuItem value="" disabled>
                       Select a Category
                     </MenuItem>
+                    {/* 
+    export const REPORT_CATEGORY = {
+    HARASSMENT: 'harassment',
+    HATE_SPEECH: 'hate_speech',
+    INAPPROPRIATE_CONTENT: 'inappropriate_content',
+    SCAM: 'scam',
+    BUG: 'bug',
+    OTHER: 'other'
+}*/}
+
                     <MenuItem value="Harassment or Bullying">Harassment or Bullying</MenuItem>
-                    <MenuItem value="Inappropriate Content">Inappropriate Content</MenuItem>
                     <MenuItem value="Hate Speech or Discrimination">Hate Speech or Discrimination</MenuItem>
+                    <MenuItem value="Inappropriate Content">Inappropriate Content</MenuItem>
                     <MenuItem value="Spam or Scam">Spam or Scam</MenuItem>
-                    <MenuItem value="Privacy Violation">Privacy Violation</MenuItem>
+                    <MenuItem value="Bug">Bug</MenuItem>
                     <MenuItem value="Other">Other</MenuItem>
                   </Select>
                   <Box mt={2}>
