@@ -52,6 +52,15 @@ const HomePage = () => {
           our platform provides the perfect one-stop solution. Join our community today and
           start unlocking your full potential!
         </Typography>
+
+        {/*
+          1) Add skills to your profile 
+          2) Check out your suggestions 
+          3) Search for other users 
+          4) Match! 
+          5) Connect with matches 
+        */}
+
         <Link href="/profile-creation" underline="none">
           <Button variant="contained" color="primary" sx={{
             my: 4,
