@@ -16,9 +16,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import userService from "@/services/user.service";
 import { useRouter } from "next/router";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useDispatch, useSelector } from "react-redux"
-import { useState, useEffect } from 'react';;
-
+import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from 'react';
+import SearchInput from "@/components/common/form/SearchInput";
+import { MATCH_PAGE_SIZE, MATCH_STATUS } from "@/constants/match.constant";
+import MatchGridRequest from "@/components/match/MatchGridRequest";
+import matchService from "@/services/match.service";
 
 
 const action = (
@@ -62,12 +65,12 @@ const useStyles = makeStyles((theme) => ({
         height: '100px'
     },
     projectLink: {
-    color: '#222',
-    textDecoration: 'none',
-    '&:hover': {
-        textDecoration: 'underline',
+        color: '#222',
+        textDecoration: 'none',
+        '&:hover': {
+            textDecoration: 'underline',
+        },
     },
-},
 }));
 
 const Dashboard = () => {
@@ -79,6 +82,12 @@ const Dashboard = () => {
     const [errors, setErrors] = useState({});
     const { isLoggedIn } = useSelector((state) => state.auth);
     const router = useRouter();
+    const [page, setPage] = useState(0);
+    const [query, setQuery] = useState({});
+    const [users, setUsers] = useState([]);
+    const [hasMore, setHasMore] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [updatedSearchTerm, setUpdateSearchTerm] = useState(true);
 
 
     useEffect(() => {
@@ -125,8 +134,76 @@ const Dashboard = () => {
     //     }
     // );
 
+    const {
+        isLoading: isLoadingUsers,
+        error,
+        refetch,
+    } = useQuery(
+        ["feed", "matched", page, query],
+        () =>
+            userService.getRequestedUsers({
+                ...query,
+                pageSize: MATCH_PAGE_SIZE,
+                q: searchTerm,
+                match: MATCH_STATUS.PENDING,
+                pageNumber: page,
+            }),
+        {
+            refetchOnWindowFocus: false,
+            enabled: false,
+            onSuccess: (res) => {
+                let newFeed = [];
+                if (updatedSearchTerm) {
+                    newFeed = res?.data?.data;
+                } else {
+                    newFeed = [...users, ...res?.data?.data];
+                }
+
+                setHasMore(newFeed.length < res?.data?.total);
+                setUsers(newFeed);
+            },
+        }
+    );
+    const handleMatch = (user) => {
+        matchUser({ userId: user._id });
+    };
 
 
+    const { mutate: declineRequest } = useMutation(matchService.declineRequest, {
+        onSuccess: (res, { userId }) => {
+            enqueueSnackbar("Match request has been declined", { variant: "success" })
+            setUsers(prevUsers => prevUsers.filter(u => u._id !== userId))
+        },
+        onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
+    });
+
+    const { mutate: acceptRequest } = useMutation(matchService.acceptMatchRequest, {
+        onSuccess: (res, { userId }) => {
+            enqueueSnackbar("Match request has been accepted", { variant: "success" })
+            setUsers(prevUsers => prevUsers.filter(u => u._id !== userId))
+        },
+        onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
+    });
+
+
+    useEffect(() => {
+        setUpdateSearchTerm(false);
+        refetch();
+    }, [page]);
+
+    const handleDecline = (user) => {
+        declineRequest({ userId: user._id });
+        // setFeed(prevFeed => prevFeed.filter(u => u._id !== user._id))
+    }
+
+    const handleAccept = (user) => {
+        console.log(user)
+        acceptRequest({ userId: user._id });
+
+    }
+
+
+    console.log(users)
 
 
     return (
@@ -148,11 +225,11 @@ const Dashboard = () => {
                                 {firstName} {lastName}
                             </Typography>
                         </Box>
-                        <Box className={classes.center}>
+                        {/* <Box className={classes.center}>
                             <Typography align='center' variant="body1">
                                 Software Engineer
                             </Typography>
-                        </Box>
+                        </Box> */}
 
                         <Box marginTop={2} /> {/* Adds vertical space */}
                         <Typography variant="body1">
@@ -162,7 +239,7 @@ const Dashboard = () => {
                         <Box marginTop={5} display="flex" justifyContent="center">
                             <Box display="flex" flexDirection="column" alignItems="center">
                                 <Typography variant="h3" className={classes.center}>
-                                    1000
+                                    10
                                 </Typography>
                                 <Typography variant="subtitle1" color="textSecondary" className={classes.center}>
                                     Matches
@@ -187,24 +264,48 @@ const Dashboard = () => {
                     </Container>
                 </Grid>
 
+                {/* <Box
+      sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
+      <Typography> Match History </Typography>
+      <Stack spacing={3} maxWidth={600} sx={{ width: "100%" }}>
+        <Box
+          onSubmit={(e) => {
+            e.preventDefault();
+            setPage(0);
+            setUpdateSearchTerm(true);
+            refetch();
+          }}
+          component="form"
+        >
+        </Box>
+        <MatchGridRequest
+          hasMore={hasMore}
+          onNext={() => setPage((prevPage) => prevPage + 1)}
+          users={users}
+          loading={isLoadingUsers}
+          error={error}
+        />
+      </Stack>
+    </Box> */}
+
+
                 <Grid item xs={13} md={4}>
                     <Container className={classes.container}>
                         <Typography variant="h3" className={classes.sectionTitle} style={{ textAlign: 'center' }}>
                             Matches
                         </Typography>
                         <ul>
-                            <li>
-                                <Box marginTop={4} /> {/* Adds vertical space */}
-                                <Box display="flex" alignItems="center" justifyContent="space-between">
-                                    <Box display="flex" alignItems="center">
-                                        <Avatar className={classes.orangeAvatar}>N</Avatar>
-                                        <Typography variant="subtitle1" className={classes.personName} style={{ marginLeft: '8px' }}>
-                                            Violet
-                                        </Typography>
-                                    </Box>
-                                    <DeleteIcon />
-                                </Box>
-                            </li>
+
+                            <MatchGridRequest
+                                hasMore={hasMore}
+                                onNext={() => setPage((prevPage) => prevPage + 1)}
+                                users={users}
+                                onDecline={handleDecline}
+                                onAccept ={handleAccept}
+                                loading={isLoadingUsers}
+                                error={error}
+                            />
 
                             <li>
                                 <Box marginTop={3} /> {/* Adds vertical space */}
@@ -249,7 +350,6 @@ const Dashboard = () => {
                         </ul>
                     </Container>
                 </Grid>
-
 
                 <Grid item xs={12} md={4}>
                     <Container className={classes.container}>
@@ -297,6 +397,7 @@ const Dashboard = () => {
                         </ul>
                     </Container>
                 </Grid>
+
 
                 <Grid item xs={12} md={4}>
                     <Container className={classes.container}>
