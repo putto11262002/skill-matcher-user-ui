@@ -25,7 +25,6 @@ const MatchGridRequest = ({
   if (error) return <Error />;
   // if(users?.length < 1) return <Typography sx={{textAlign: 'center'}}>No more users</Typography>
 
-console.log(users)
   
   return (
    
