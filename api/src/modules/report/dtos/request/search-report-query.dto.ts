@@ -22,9 +22,8 @@ export class SearchReportQueryDto extends SearchDto {
 
 
     @ApiProperty()
-    @Optional()
+    @IsOptional()
     @IsArray()
-    @IsString({each: true})
     @Transform(({value}) => value?.split(','))
     categories?: string[];
 }

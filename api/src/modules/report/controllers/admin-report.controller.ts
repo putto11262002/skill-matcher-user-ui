@@ -7,6 +7,7 @@ import { ReportDto } from "../dtos/response/report.dto";
 import mongoose from "mongoose";
 import { ParseObjectIdPipe } from "../../../common/pipes/pase-object-id.pipe";
 import { ApiTags } from "@nestjs/swagger";
+import { Pagination } from "../../../common/dtos/responses/pagination.dto";
 
 @ApiTags('Admin')
 @Roles('admin', 'root')
@@ -20,12 +21,9 @@ export class AdminReportController {
     @HttpCode(HttpStatus.OK)
     async searchReports(@Query() query: SearchReportQueryDto){
         const {total, reports, pageNumber, pageSize} = await this.reportService.searchReport(query);
-        return {
-            reports: reports.map(r => new ReportDto(r)),
-            total,
-            pageNumber,
-            pageSize
-        }
+
+        return new Pagination(reports.map(r => new ReportDto(r)), pageSize, pageNumber, total)
+       
     }
 
     @Get(':id')

@@ -27,5 +27,15 @@ export const MAIN_MENU = [
                 icon: <ViewHeadlineIcon/>
             }
         ]
+    },
+    {
+        subMenu: 'Report',
+        menu: [
+            {
+                label: 'View reports',
+                link: '/report',
+                icon: <ViewHeadlineIcon/>
+            },
+        ]
     }
 ]
