@@ -6,7 +6,9 @@ import { CurrentUser } from "../../auth/decorators/current-user.decorator";
 import { User } from "../../user/schemas/user.schema";
 import { REVIEW_STATUS } from "../constant/review.constant";
 import { ReviewDto } from "../dtos/responses/review.dto";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags('Review')
 @UseGuards(AuthGuard)
 @Controller('review')
 export class ReviewController {

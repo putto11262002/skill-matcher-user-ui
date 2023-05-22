@@ -11,6 +11,7 @@ import { _ConfigModule } from './config/config.module';
 
 import { EventModule } from './common/event/event.module';
 import { ReportModule } from './modules/report/report.module';
+import { ReviewModule } from './modules/review/review.module';
 
 
 @Module({
@@ -22,7 +23,8 @@ import { ReportModule } from './modules/report/report.module';
     SkillModule,
     MongoModule,
     MatchModule,
-    ReportModule
+    ReportModule,
+    ReviewModule
   ],
   controllers: [AppController],
   providers: [AppService],
