@@ -1,6 +1,7 @@
 import Head from 'next/head';
-import { Box, Container, Typography, Button, Link } from '@mui/material';
+import { Box, Container, Typography, Button, Link, Grid } from '@mui/material';
 import useAuth from '@/hooks/useAuth';
+import ConstructionIcon from '@mui/icons-material/Construction';
 
 const HomePage = () => {
   useAuth()
@@ -52,33 +53,71 @@ const HomePage = () => {
           our platform provides the perfect one-stop solution. Join our community today and
           start unlocking your full potential!
         </Typography>
+        <Box marginTop={5} /> {/* Adds vertical space */}
+        <Grid container spacing={2}>
+        <Grid item xs={8} md={3}>
+            <Container className="container">
+              <Box className="iconContainer">
+                <ConstructionIcon style={{ fontSize: 150, color: 'orange' }} />
+              </Box>
+              <Typography variant="h4" align="center">
+                Skills
+              </Typography>
+              <Box marginTop={2} /> {/* Adds vertical space */}
+              <Typography variant="subtitle1" align="center" style={{ fontStyle: 'italic' }}>
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+              </Typography>
+            </Container>
+          </Grid>
+        
+          <Grid item xs={8} md={3}>
+          <Container className="container">
+            <Box className="iconContainer">
+              <ConstructionIcon style={{ fontSize: 150, color: 'orange' }} />
+            </Box>
+            <Typography variant="h4" align="center">
+              Skills
+            </Typography>
+            <Box marginTop={2} /> {/* Adds vertical space */}
+            <Typography variant="subtitle1" align="center" style={{ fontStyle: 'italic' }}>
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            </Typography>
+          </Container>
+        </Grid>
 
-        {/*
-          1) Add skills to your profile 
-          2) Check out your suggestions 
-          3) Search for other users 
-          4) Match! 
-          5) Connect with matches 
-        */}
+        <Grid item xs={8} md={3}>
+          <Container className="container">
+            <Box className="iconContainer">
+              <ConstructionIcon style={{ fontSize: 150, color: 'orange' }} />
+            </Box>
+            <Typography variant="h4" align="center">
+              Skills
+            </Typography>
+            <Box marginTop={2} /> {/* Adds vertical space */}
+            <Typography variant="subtitle1" align="center" style={{ fontStyle: 'italic' }}>
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            </Typography>
+          </Container>
+        </Grid>
 
-        <Link href="/profile-creation" underline="none">
-          <Button variant="contained" color="primary" sx={{
-            my: 4,
-            background: `linear-gradient(to bottom right, #055fef, #58a6ff)`,
-            padding: 4,
-            borderRadius: 2,
-            boxShadow: 4,
-            textAlign: "center",
-            width: { xs: '100%', sm: '75%', md: '100%' }, // adjust button width for different screen sizes
-            height: { xs: '50px', sm: '60px', md: '70px' }, // adjust button height for different screen sizes
-            '&:hover': {
-              background: 'linear-gradient(45deg,#055fef, #58a6ff)',
-              boxShadow: '0px 5px 15px rgba(255, 105, 135, .5)',
-            },
-          }}>
-            Get started on your profile
-          </Button>
-        </Link>
+        <Grid item xs={8} md={3}>
+          <Container className="container">
+            <Box className="iconContainer">
+              <ConstructionIcon style={{ fontSize: 150, color: 'orange' }} />
+            </Box>
+            <Typography variant="h4" align="center">
+              Skills
+            </Typography>
+            <Box marginTop={2} /> {/* Adds vertical space */}
+            <Typography variant="subtitle1" align="center" style={{ fontStyle: 'italic' }}>
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            </Typography>
+          </Container>
+        </Grid>
+        </Grid>
+
+
+
 
         <Link href="/user/browse" underline="none">
           <Button variant="contained" color="primary" sx={{
