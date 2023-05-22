@@ -29,6 +29,10 @@ import {
   Toolbar,
   Typography,
   Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import Link from "next/link";
@@ -40,24 +44,8 @@ function valuetext(value) {
   return `${value}%`;
 }
 
-/*  updating user schema
-"username": "string",
-"status": "string",
-"profile": {
-  "firstName": "string",
-  "lastName": "string",
-  "phoneNumber": "string",
-  "contactEmail": "string",
-  "instagram": "string",
-  "snapchat": "string",
-  "facebook": "string",
-  "whatsapp": "string",
-  "aboutMe": "string"
-  */
-
 function EditSelfProfilePage() {
   const router = useRouter();
-  // const { id } = router.query;
   const { user: authUser } = useSelector((state) => state.auth);
   const [user, setUser] = useState(null);
   const dispatch = useDispatch()
@@ -68,14 +56,17 @@ function EditSelfProfilePage() {
   const [facebookLink, setFaceBookLink] = useState(undefined);
   const [instagramLink, setInstagramLink] = useState(undefined);
   const [snapchatLink, setSnapchatLink] = useState(undefined);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   const { refetch: fetchUser } = useQuery(
     ["user", authUser?._id],
     userService.getSelf,
-    { onSuccess: (res) =>{ 
-      reset(res.data)
-      setUser(res.data)
-    }, enabled: false }
+    {
+      onSuccess: (res) => {
+        reset(res.data)
+        setUser(res.data)
+      }, enabled: false
+    }
   );
 
   const handleGenerateFacebookLink = (value) => {
@@ -162,7 +153,25 @@ function EditSelfProfilePage() {
 
   const { handleSubmit, reset, control } = useForm();
 
+  const handleDeleteConfirmation = () => {
+    setOpenDeleteDialog(true);
+  };
 
+  const handleDeleteAccount = async () => {
+    try {
+      // Perform the delete account operation
+      await userService.deleteSelf();
+      enqueueSnackbar('User deleted', { variant: 'success' });
+      router.push('/landing');
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      enqueueSnackbar('Error deleting user', { variant: 'error' });
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setOpenDeleteDialog(false);
+  };
 
   const {
     mutate: handleUploadAvatar,
@@ -170,9 +179,10 @@ function EditSelfProfilePage() {
     error: updateAvatarError,
   } = useMutation(userService.updateAvatar, {
     onSuccess: (res) => {
-      dispatch(updateUser({...user, avatar: res?.data}))
-      setUser({...user, avatar: res?.data})
-      enqueueSnackbar("Image uploaded", { variant: "success" })},
+      dispatch(updateUser({ ...user, avatar: res?.data }))
+      setUser({ ...user, avatar: res?.data })
+      enqueueSnackbar("Image uploaded", { variant: "success" })
+    },
   });
 
   useEffect(() => {
@@ -183,7 +193,6 @@ function EditSelfProfilePage() {
   }, [authUser?._id]);
 
   const handleUpdateUserProfile = (data) => {
-    
     setUser(data);
     updateUserProfile(data);
   }
@@ -208,17 +217,46 @@ function EditSelfProfilePage() {
             handleUpdateUserProfile(data)
           })}
         >
-          <Typography
-            variant="2"
-            textAlign="center"
-            component="h2"
-            sx={{ marginBottom: 4 }}
-          >
-            Profile
-          </Typography>
           <Box marginTop={2} />
 
-          <Grid rowSpacing={3} columnSpacing={3} container>
+          <UserAvatarForm
+            avatar={user?.avatar}
+            onUpload={(file) => handleUploadAvatar(file)}
+            loading={isLoadingUpdateAvatar}
+            error={updateAvatarError}
+          />
+          <Grid marginTop={2}>
+            <UserSkillForm
+              skills={skills}
+              isLoadingSkills={isLoadingSkills}
+              skillSuggestions={skillSuggestions?.data?.data}
+              onSearchSkill={(searchTerm) => setSkillSearchTerm(searchTerm)}
+              onAddSkill={(formData) =>
+                handleAddSkill({ id: authUser._id, ...formData })
+              }
+              isLoadingAddSkill={isLoadingAddSkill}
+              errorLoadingSkills={errorLoadingSkills}
+              isLoadingUpdateSkill={isLoadingUpdateSkill}
+              isLoadingSearchSkill={isLoadingSearchSkill}
+              onUpdateSkill={(formData) =>
+                handleUpdateSkill({
+                  payload: formData,
+                  skill: formData.skill,
+                })
+              }
+              onDeleteSkill={(skill) => handleDeleteSkill(skill.skill)}
+            />
+          </Grid>
+          <Typography
+            variant="2"
+            textAlign="flex-start"
+            component="h2"
+            marginTop={2}
+            sx={{ marginBottom: 4 }}
+          >
+            User Details
+          </Typography>
+          <Grid rowSpacing={3} columnSpacing={3}  container>
             <Grid xs={12} item>
               <Controller
                 rules={{
@@ -393,7 +431,7 @@ function EditSelfProfilePage() {
               />
             </Grid>
 
-            <Grid display="flex" justifyContent="center" xs={12} item>
+            <Grid display="flex" justifyContent="flex-end" xs={12} item>
               <Button type="submit" variant="contained" sx={{ width: "unset" }}>
                 Save
               </Button>
@@ -401,35 +439,44 @@ function EditSelfProfilePage() {
           </Grid>
         </Box>
 
-        <UserSkillForm
-          skills={skills}
-          isLoadingSkills={isLoadingSkills}
-          skillSuggestions={skillSuggestions?.data?.data}
-          onSearchSkill={(searchTerm) => setSkillSearchTerm(searchTerm)}
-          onAddSkill={(formData) =>
-            handleAddSkill({ id: authUser._id, ...formData })
-          }
-          isLoadingAddSkill={isLoadingAddSkill}
-          errorLoadingSkills={errorLoadingSkills}
-          isLoadingUpdateSkill={isLoadingUpdateSkill}
-          isLoadingSearchSkill={isLoadingSearchSkill}
-          onUpdateSkill={(formData) =>
-            handleUpdateSkill({
-              payload: formData,
-              skill: formData.skill,
-            })
-          }
-          onDeleteSkill={(skill) => handleDeleteSkill(skill.skill)}
-        />
-
-        <UserAvatarForm
-          avatar={user?.avatar}
-          onUpload={(file) => handleUploadAvatar(file)}
-          loading={isLoadingUpdateAvatar}
-          error={updateAvatarError}
-        />
       </Stack>
-    </Box>
+      <Grid marginTop={5}>
+        <Grid item>
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <Button variant="contained" color="error" onClick={handleDeleteConfirmation}>
+              Delete Account
+            </Button>
+          </Box>
+        </Grid>
+        {/* Delete Confirmation Dialog */}
+        <Dialog open={openDeleteDialog} onClose={handleCancelDelete}>
+          <DialogTitle color="error" fontWeight="bold">Delete Account</DialogTitle>
+          <DialogContent>
+            <Typography variant="body1" fontWeight="bold">
+              Are you sure you want to delete your account?
+            </Typography>
+            <Typography variant="body2">
+              This action cannot be undone.
+            </Typography>
+            {/*} <TextField
+                margin="normal"
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+               />*/}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCancelDelete} color="error">
+              Cancel
+            </Button>
+            <Button onClick={handleDeleteAccount} color="error" variant="contained">
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Grid>
+    </Box >
   );
 }
 

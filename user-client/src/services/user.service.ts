@@ -70,8 +70,8 @@ export class UserService {
     return api.get("/user/self/rank", { params: query });
   }
 
-  async searchRankedUser(query){
-    return api.get("/user/self/rank/search", {params: query})
+  async searchRankedUser(query) {
+    return api.get("/user/self/rank/search", { params: query })
   }
 
   async searchMatchedUsers(query) {
@@ -80,6 +80,13 @@ export class UserService {
 
   async getRequestedUsers(query) {
     return api.get("/user/self/match/requesting/user", { params: query });
+  }
+
+  // delete the logged-in user
+  async deleteSelf() {
+    const res = await api.delete("/user/self");
+    authService.signOut(); // Log out the user after deleting their account
+    return res;
   }
 }
 

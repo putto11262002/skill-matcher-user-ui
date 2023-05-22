@@ -40,14 +40,7 @@ const SignUpPage = () => {
 
   const handleSignUp = (formData, e) => {
     e.preventDefault();
-    // if (password === confirmPassword) {
-    //   mutate({ username: email, password, firstName, lastName, email });
-    // } else {
-    //   setErrorMessage("Passwords do not match");
-    //   setAlertOpen(true);
-    // }
     mutate(formData);
-    // console.log(formData)
   };
 
   useEffect(() => {
@@ -64,6 +57,10 @@ const SignUpPage = () => {
 
   return (
     <>
+      {/* Logo icon */}
+      <Box sx={{ flexGrow: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <img src="/images/logoIcon.png" alt="Logo" style={{ height: "100", width: "110px" }} />
+      </Box>
       <Typography
         variant="2"
         textAlign="center"

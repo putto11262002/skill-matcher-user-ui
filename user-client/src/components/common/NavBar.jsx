@@ -19,7 +19,6 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Divider,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import dynamic from "next/dynamic";
@@ -36,6 +35,8 @@ import { theme } from "@/styles/theme";
 import authService from "@/services/auth.service";
 import { signOut } from "@/redux/thunks/user.thunk";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useSnackbar } from 'notistack';
+
 const drawerWidth = 240;
 const navLinks = [
   {
@@ -50,8 +51,7 @@ const navLinks = [
     visibility: "auth",
     icon: (props) => <ReorderIcon {...props} />,
   },
-  // { label: "About Us", path: "/about-us", visibility: "both" },
-  // { label: "Contact Us", path: "/contact-us", visibility: "both" },
+
   {
     label: "Search Users",
     path: "/user/search",
@@ -68,14 +68,9 @@ const navLinks = [
     label: "Requests Notifications",
     path: "/match/requests",
     visibility: "auth",
-    icon: (props) =><NotificationsIcon {...props} />
-    },
-  // {
-  //   label: "Dashboard",
-  //   path: "/dashboard",
-  //   visibility: "auth",
-  //   icon: (props) => <PersonIcon {...props} />,
-  // },
+    icon: (props) => <NotificationsIcon {...props} />
+  },
+
   {
     label: "My Profile",
     path: "/dashboard",
@@ -93,15 +88,12 @@ const NavBar = ({ }) => {
 
   const router = useRouter();
 
-
-
   const handleToggleMobileNav = () => {
     setOpenMobileNav(!openMobileNav);
   }
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
@@ -112,9 +104,14 @@ const NavBar = ({ }) => {
     router.push('/user/edit-profile')
   }
 
-  const handleLogout = () => {
-    dispatch(signOut({}));
-    handleCloseUserMenu();
+  const handleLogout = async () => {
+    try {
+      dispatch(signOut({}));
+      handleCloseUserMenu();
+      router.push('/landing');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const renderNav = () => {
@@ -158,6 +155,18 @@ const NavBar = ({ }) => {
     });
   };
 
+  const renderUserName = () => {
+    if (isLoggedIn) {
+      return (
+        <Typography variant="body2" sx={{color: (theme) => theme.palette.primary.main,
+          flexGrow: 1, display: 'flex', alignItems: 'center',paddingLeft: '8px' }}>
+          {user?.profile?.firstName} {user?.profile?.lastName}
+        </Typography>
+      );
+    }
+    return null;
+  };
+
   const container = window !== undefined ? () => window.document.body : undefined;
 
   return (
@@ -173,6 +182,11 @@ const NavBar = ({ }) => {
               <MenuIcon />
             </IconButton>
           </Box>
+          {/* Logo icon */}
+          <Box sx={{ flexGrow: 0 }}>
+            <img src="/images/logoIcon.png" alt="Logo" style={{ height: "40px" }} />
+          </Box>
+
           <Typography
             variant="3"
             component="h3"
@@ -293,6 +307,7 @@ const NavBar = ({ }) => {
                 </IconButton>
               </Box> */}
               <Box sx={{ alignItems: "center", display: { xs: "none", md: "flex" } }}>
+              {renderUserName()}
                 <Tooltip title={`Settings`}>
                   <IconButton onClick={handleOpenUserMenu}>
                     <Avatar
@@ -334,9 +349,7 @@ const NavBar = ({ }) => {
             <MenuItem onClick={handleCloseUserMenu}>
               <Typography textAlign="center">Change password</Typography>
             </MenuItem>
-          </Menu>
-
-
+          </Menu>  
         </Toolbar>
       </AppBar>
     </Box>

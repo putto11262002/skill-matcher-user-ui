@@ -41,20 +41,6 @@ const LoginPage = () => {
   const handleLogin = async ({ usernameOrEmail, password }, e) => {
     e.preventDefault();
     dispatch(signIn({ usernameOrEmail, password }));
-    // check if email and password are provided
-    // if (!email || !password) {
-    //   setErrorMessage("Please enter your email and password");
-    //   return;
-    // }
-    // const result = await dispatch(signIn({ email, password }));
-    // if (signIn.rejected.match(result)) {
-    //   const error = result.payload;
-    //   // dispatch an action to update the error state
-    //   dispatch(setError(error));
-    // } else {
-    //   // login successful, redirect to home page
-    //   router.push("/");
-    // }
   };
 
   useEffect(() => {
@@ -65,6 +51,10 @@ const LoginPage = () => {
 
   return (
     <>
+      {/* Logo icon */}
+      <Box sx={{ flexGrow: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <img src="/images/logoIcon.png" alt="Logo" style={{ height: "100px", width:"110px" }} />
+      </Box>
       <Typography
         variant="2"
         textAlign="center"

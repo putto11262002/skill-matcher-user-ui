@@ -15,18 +15,42 @@ import {
   ListItemIcon,
   Stack,
   Tooltip,
-  Typography,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import React, { useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CloseIcon from "@mui/icons-material/Close";
 import { truncate } from "lodash";
 import Link from "next/link";
-import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import StarIcon from '@mui/icons-material/Star';
+import ReviewsOutlinedIcon from '@mui/icons-material/ReviewsOutlined';
+import Rating from "@mui/material/Rating";
 import { grey } from "@mui/material/colors";
 
 const MatchCard = ({ user, onMatch, onUnmatch }) => {
   const [matched, setMatched] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [ratingValue, setRatingValue] = useState(0);
+  const [ratingComment, setRatingComment] = useState('');
+
+  const handleRatingSubmit = () => {
+    // Access the rating and comment values
+    const rating = ratingValue;
+    const comment = ratingComment;
+  
+    //actions with the rating and comment values
+ 
+    // Reset the state variables
+    setRatingValue(0);
+    setRatingComment('');
+  
+    // Close the dialog
+    setDialogOpen(false);
+  };
 
   return (
     <Card>
@@ -36,7 +60,6 @@ const MatchCard = ({ user, onMatch, onUnmatch }) => {
         title={`${user?.profile?.firstName} ${user?.profile?.lastName}`}
       />
       <CardContent sx={{ paddingY: 1 }}>
-        {/* <UserSkill skill='Computer science' proficiency={6}/> */}
         <Stack spacing={2}></Stack>
       </CardContent>
 
@@ -70,8 +93,7 @@ const MatchCard = ({ user, onMatch, onUnmatch }) => {
             </Link>
           </Tooltip>
         </Box>
-
-        <Box
+        {/* <Box
           sx={{
             background: grey[100],
             width: "2.5rem",
@@ -91,9 +113,61 @@ const MatchCard = ({ user, onMatch, onUnmatch }) => {
               />
             </IconButton>
           </Tooltip>
+        </Box>*/}
+
+        <Box
+          sx={{
+            background: grey[100],
+            width: "2.5rem",
+            height: "2.5rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: "50%",
+          }}
+        >
+          {" "}
+          <Tooltip title="Rate user">
+            <IconButton
+              sx={{ width: "100%", height: "100%" }}
+              onClick={() => setDialogOpen(true)}>
+              <ReviewsOutlinedIcon
+                sx={{ color: (theme) => theme.palette.secondary.main }}
+              />
+            </IconButton>
+          </Tooltip>
         </Box>
+          <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+            <DialogTitle>Rate {user?.profile?.firstName} {user?.profile?.lastName}&apos;s performance </DialogTitle>
+            <DialogContent sx={{ width: 400, height: 200 }}>
+              <Rating
+                name="user-rating"
+                value={ratingValue}
+                onChange={(event, newValue) => setRatingValue(newValue)}
+                size="large"
+              />
+              <TextField
+                id="rating-comment"
+                label="Comment"
+                multiline
+                rows={4}
+                value={ratingComment}
+                onChange={(event) => setRatingComment(event.target.value)}
+                fullWidth
+                variant="outlined"
+                margin="normal"
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setDialogOpen(false)}>Cancel</Button>
+              <Button onClick={() => handleRatingSubmit()} variant="contained" color="primary">
+                Submit
+              </Button>
+            </DialogActions>
+          </Dialog>
       </CardActions>
     </Card >
+
 
   );
 };

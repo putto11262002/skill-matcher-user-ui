@@ -106,7 +106,7 @@ const UserSkillForm = ({
         }
       />
       <Stack spacing={3}>
-        <Typography variant="2" component="h2" textAlign='center' >
+        <Typography variant="2" component="h2" textAlign='flex-start' >
           Skills
         </Typography>
 
@@ -150,7 +150,7 @@ const UserSkillForm = ({
         </Stack>
 
        
-        <Box display='flex' justifyContent='center'>
+        <Box display='flex' justifyContent='flex-end'>
           <Button
             variant="contained"
             onClick={() =>
