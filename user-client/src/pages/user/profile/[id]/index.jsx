@@ -30,7 +30,8 @@ import { useTheme } from "@material-ui/core";
 import matchService from "../../../../services/match.service";
 import FlagIcon from '@mui/icons-material/Flag';
 import { enqueueSnackbar } from "notistack";
-import { reportService } from "../../../../services/report.service";
+import  reportService  from "../../../../services/report.service";
+import { REPORT_CATEGORY } from "../../../../constants/report.constant";
 
 
 const UserHomePage = () => {
@@ -320,12 +321,8 @@ const UserHomePage = () => {
     OTHER: 'other'
 }*/}
 
-                    <MenuItem value="Harassment or Bullying">Harassment or Bullying</MenuItem>
-                    <MenuItem value="Hate Speech or Discrimination">Hate Speech or Discrimination</MenuItem>
-                    <MenuItem value="Inappropriate Content">Inappropriate Content</MenuItem>
-                    <MenuItem value="Spam or Scam">Spam or Scam</MenuItem>
-                    <MenuItem value="Bug">Bug</MenuItem>
-                    <MenuItem value="Other">Other</MenuItem>
+          
+                    {Object.values(REPORT_CATEGORY).map(category => <MenuItem value={category}>{category.replace("_", " ")}</MenuItem>)}
                   </Select>
                   <Box mt={2}>
                     <TextField
