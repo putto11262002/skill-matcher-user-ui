@@ -93,28 +93,6 @@ const MatchCard = ({ user, onMatch, onUnmatch }) => {
             </Link>
           </Tooltip>
         </Box>
-        {/* <Box
-          sx={{
-            background: grey[100],
-            width: "2.5rem",
-            height: "2.5rem",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: "50%",
-          }}
-        >
-          {" "}
-          <Tooltip title="Unmatch with user">
-            <IconButton onClick={() => onUnmatch(user)}
-              sx={{ width: "100%", height: "100%" }}>
-              <CloseIcon
-                sx={{ color: (theme) => theme.palette.secondary.main }}
-              />
-            </IconButton>
-          </Tooltip>
-        </Box>*/}
-
         <Box
           sx={{
             background: grey[100],

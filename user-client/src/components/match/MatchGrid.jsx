@@ -10,13 +10,8 @@ import Link from '@mui/material';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 
 const MatchGrid = ({
-  // loading,
   error,
   users,
-  // pageSize,
-  // total,
-  // page,
-  // onPageChange,
   onMatch,
   onUnmatch,
   onNext,

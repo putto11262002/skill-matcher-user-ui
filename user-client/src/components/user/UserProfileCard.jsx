@@ -31,13 +31,6 @@ import { useRouter } from "next/router";
 const UserProfileCard = ({ user, onMatch }) => {
   const router = useRouter()
   const [matched, setMatched] = useState(false);
-  // const {
-  //   isLoading: isLoadingSkill,
-  //   data,
-  //   error,
-  // } = useQuery(["user", user._id, "skills"], () =>
-  //   userService.getUserSkills({ userId: user._id, query: {} })
-  // );
 
   return (
     <Card>
@@ -81,7 +74,6 @@ const UserProfileCard = ({ user, onMatch }) => {
           </Box>
         </Stack>
       </CardContent>
-
       <CardActions
         sx={{
           paddingX: (theme) => theme.spacing(2),
@@ -92,7 +84,6 @@ const UserProfileCard = ({ user, onMatch }) => {
       >
         {!matched && (
           <CircularIconButton
-          
             icon={<AddIcon color="primary"/>}
             tooltip="Request match"
             onClick={() => {
@@ -101,30 +92,6 @@ const UserProfileCard = ({ user, onMatch }) => {
             }}
           />
         )}
-
-        {/* <Box
-          sx={{
-            background: (theme) => theme.palette.grey[400],
-            width: "2rem",
-            height: "2rem",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: "50%",
-          }}
-        >
-          {" "}
-          <Tooltip title="View profile">
-            <Link href={`/user/profile/${user._id}`}>
-              <IconButton sx={{ width: "100%", height: "100%" }}>
-                <VisibilityIcon
-                  sx={{ color: (theme) => theme.palette.common.white }}
-                />
-              </IconButton>
-            </Link>
-          </Tooltip>
-        </Box> */}
-
         <CircularIconButton icon={<VisibilityIcon color="secondary"/>} onClick={() => router.push(`/user/profile/${user._id}`)} tooltip="View profile"/>
       </CardActions>
     </Card>
