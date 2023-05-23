@@ -83,13 +83,10 @@ const RequestsPage = () => {
   }
 
   const handleAccept = (user) =>{
-    console.log(user)
     acceptRequest({userId: user._id});
     
   }
 
-
-  console.log(users)
   return (
     
     <Box

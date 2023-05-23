@@ -65,7 +65,7 @@ export class ReviewController {
     
 
     const {reviews, total, pageNumber, pageSize} = await this.reviewService.getReviewsWithSource({target: userId, status: REVIEW_STATUS.PUBLIC});
-    console.log(reviews)
+
     return res.send(new Pagination(
       reviews,
       pageSize,

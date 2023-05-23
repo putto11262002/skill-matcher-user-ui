@@ -30,7 +30,7 @@ export class UserProfileService {
       ],
     );
 
-    console.log(matched, requestTo, requestFrom)
+
     return {
       user,
       userSkills,

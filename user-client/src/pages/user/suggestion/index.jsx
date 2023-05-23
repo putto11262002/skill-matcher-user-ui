@@ -35,7 +35,7 @@ const BrowseUserPage = () => {
       },
       {
         refetchOnWindowFocus: false,
-        // getPreviousPageParam: (firstPage) => console.log(firstPage),
+
         getNextPageParam: (lastPage, allPages) => {
           const nextPage =
             lastPage.length === USER_PAGE_SIZE ? allPages.length : undefined;
