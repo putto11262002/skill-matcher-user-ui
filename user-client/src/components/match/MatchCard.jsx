@@ -30,7 +30,7 @@ import StarIcon from "@mui/icons-material/Star";
 import ReviewsOutlinedIcon from "@mui/icons-material/ReviewsOutlined";
 import Rating from "@mui/material/Rating";
 import { grey } from "@mui/material/colors";
-import ReviewDialog from "../review/reviewDialog";
+import ReviewDialog from "../review/ReviewDialog";
 import { useMutation } from "@tanstack/react-query";
 import reviewService from "@/services/review.service";
 import { enqueueSnackbar } from "notistack";
