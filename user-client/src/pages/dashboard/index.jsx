@@ -25,9 +25,10 @@ import matchService from "@/services/match.service";
 import UserSkillTabs from "@/components/user/skill/UserSkillTabs";
 import Skill from "@/components/user/skill/Skill";
 // import reportService from "../../../../services/report.service";
-// import reviewService from "../../../../services/review.service";
+import reviewService from '@/services/review.service';
 // import { REPORT_CATEGORY } from "../../../../constants/report.constant";
 import ReviewCard from "@/components/user/ReviewCard";
+import ReportDialog from "@/components/report/ReportDialog";
 
 
 const action = (
@@ -97,9 +98,7 @@ const Dashboard = () => {
     const { id } = router.query;
     const { user: authUser } = useSelector((state) => state.auth);
     const [skills, setSkills] = useState([]);
-    const [reportDialogOpen, setReportDialogOpen] = useState(false);
-    const [reportCategory, setReportCategory] = useState('');
-    const [reportReason, setReportReason] = useState('');
+    const [reportDialogOpen, setReportDialogOpen] = useState(undefined);
 
 
     useEffect(() => {
@@ -117,6 +116,19 @@ const Dashboard = () => {
             });
         }
     }, []);
+
+    const {
+        data: reviewRes,
+        refetch: fetchReviews,
+        isLoading: isLoadingReview,
+        error: loadingReviewError,
+    } = useQuery(
+        ["user", id, "reviews"],
+        () => reviewService.getReviewByUser({ userId: authUser?._id, withSource: true }),
+        {
+            enabled: false,
+        }
+    );
 
     const {
         isLoading: isLoadingSkills,
@@ -180,6 +192,9 @@ const Dashboard = () => {
         onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
     });
 
+    const handleOpenReportDialog = (target) => {
+        setReportDialogOpen(target);
+    };
 
     const handleDecline = (user) => {
         declineRequest({ userId: user._id });
@@ -194,10 +209,11 @@ const Dashboard = () => {
     useEffect(() => {
         if (authUser?._id) {
             fetchSkills();
+            fetchReviews()
         }
     }, [authUser?._id]);
 
-    console.log(users)
+    console.log(reviewRes)
 
 
     return (
@@ -229,6 +245,7 @@ const Dashboard = () => {
                         <Typography variant="body1">
 
                         </Typography>
+
 
                         <Box marginTop={5} display="flex" justifyContent="center">
                             <Box display="flex" flexDirection="column" alignItems="center">
@@ -325,7 +342,10 @@ const Dashboard = () => {
         }}>
         </Box> */}
 
-
+                <ReportDialog
+                    target={reportDialogOpen}
+                    open={Boolean(reportDialogOpen)}
+                />
 
                 <Grid item xs={12} md={4}>
                     <Container className="container">
@@ -333,43 +353,20 @@ const Dashboard = () => {
                             Reviews
                         </Typography>
                         <ul>
+                            {(!isLoadingReview && !loadingReviewError && reviewRes?.data?.data?.length > 0) && <Stack spacing={2}>
+                                {!isLoadingReview &&
+                                    reviewRes?.data?.data?.map((review) => (
+                                        <ReviewCard review={review} />
+                                    ))}
+                            </Stack>}
 
-                            {/* <Stack spacing={2}>
-          {/* <Typography display="flex" alignItems="flex-start">
-            {user?.profile?.firstName} {user?.profile?.lastName}&apos;s Reviews
-          </Typography> */}
-                            {/* <ReviewCard
-            user={user} // Pass the user object as a prop to ReviewCard component
-          />
-        </Stack>
-        <Box sx={{
-          display: "flex",
-          justifyContent: "flex-start",
-          alignItems: "center",
-          columnGap: 2,
-        }}>
-        </Box> */}
-                            <li>
-                                <Box marginTop={2} /> {/* Adds vertical space */}
-                                <Box display="flex" alignItems="center">
-                                    <Avatar className={classes.orangeAvatar}>T</Avatar>
-                                    <Typography variant="h6" className={classes.personName} style={{ marginLeft: '8px' }}>
-                                        Tim
-                                    </Typography>
-                                </Box>
-                                <Box display="flex" justifyContent="center">
-                                    <Stack spacing={1}>
-                                        <Rating name="homepage" align="center" defaultValue={4} precision={0.5} readOnly size="medium" />
-                                    </Stack>
-                                </Box>
-                                <Typography variant="subtitle1" justifyContent="alignContent" style={{ fontStyle: 'italic' }}>
-                                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-                                </Typography>
-                                <Box marginBottom={3} /> {/* Adds vertical space */}
-                                <Link href="/profile-creation" underline="none">
-                                    <Button variant="outlined">See All</Button>
-                                </Link>
-                            </li>
+                            <Box sx={{
+                                display: "flex",
+                                justifyContent: "flex-start",
+                                alignItems: "center",
+                                columnGap: 2,
+                            }}>
+                            </Box>
                         </ul>
                     </Container>
                 </Grid>
@@ -394,7 +391,7 @@ const Dashboard = () => {
                     </Typography>
                 </Grid>
             </Grid>
-        </Container>
+        </Container >
     );
 }
 
