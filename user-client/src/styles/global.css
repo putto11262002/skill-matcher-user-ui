@@ -55,6 +55,12 @@ select {
   color: #333333;
 }
 
+avatar {
+  width: '100px';
+  height: '100px';
+}
+
+
 button {
   background-color: #394aea;
   color: #ffffff;
@@ -116,6 +122,10 @@ a {
   border-radius: 10px;
   padding: 2rem;
   box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+}
+.avatar {
+  width: '100px';
+  height: '100px';
 }
 
 .section {

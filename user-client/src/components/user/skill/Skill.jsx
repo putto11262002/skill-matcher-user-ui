@@ -121,9 +121,9 @@ const UserSkillForm = ({
                       {skill.skill}
                     </Typography>{" "}
                     <Box sx={{ flexGrow: 0 }}>
-                      <IconButton onClick={(e) => handleOpenMenu(e, skill)}>
+                      {/* //<IconButton onClick={(e) => handleOpenMenu(e, skill)}> */}
                         <MoreHorizIcon />
-                      </IconButton>
+                      {/* </IconButton> */}
                     </Box>
                   </Box>
                   <Box

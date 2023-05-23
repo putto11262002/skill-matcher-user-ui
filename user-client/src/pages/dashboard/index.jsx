@@ -209,7 +209,7 @@ const Dashboard = () => {
                     </Typography>
                 </Grid> */}
                 <Grid item xs={12} md={20}>
-                    <Container className={classes.container}>
+                    <Container className="container">
                         <Box textAlign="center" display="flex" justifyContent="center" alignItems="center">
                             {/* <AccountCircleIcon sx={{ fontSize: 70 }} /> */}
                             <Avatar className={classes.avatar} src={user?.avatar?.url} />
@@ -284,13 +284,12 @@ const Dashboard = () => {
     </Box> */}
 
 
-                <Grid item xs={13} md={4}>
-                    <Container className={classes.container}>
+                <Grid item xs={12} md={4}>
+                    <Container className="container">
                         <Typography variant="h3" className={classes.sectionTitle} style={{ textAlign: 'center' }}>
-                            Matches
+                            Requests
                         </Typography>
                         <ul>
-
                             {requestingUsersRes?.data?.data?.map(user => <MatchDashboard
                                 hasMore={hasMore}
                                 onNext={() => setPage((prevPage) => prevPage + 1)}
@@ -301,23 +300,10 @@ const Dashboard = () => {
                                 error={error}
                             />)
                             }
-
-                            <li>
-                                <Box marginTop={3} /> {/* Adds vertical space */}
-                                <Box display="flex" alignItems="center" justifyContent="space-between">
-                                    <Box display="flex" alignItems="center">
-                                        <Avatar className={classes.orangeAvatar}>N</Avatar>
-                                        <Typography variant="subtitle1" className={classes.personName} style={{ marginLeft: '8px' }}>
-                                            Karly
-                                        </Typography>
-                                    </Box>
-                                    <DeleteIcon />
-                                </Box>
-                                <Box marginBottom={5} /> {/* Adds vertical space */}
-                                <Link href="/match" underline="none">
-                                    <Button variant="outlined">See All</Button>
-                                </Link>
-                            </li>
+                            <Box marginTop={2} /> {/* Adds vertical space */}
+                            <Link href="/profile-creation" underline="none">
+                                <Button variant="outlined">See All</Button>
+                            </Link>
                         </ul>
                     </Container>
                 </Grid>
@@ -342,17 +328,17 @@ const Dashboard = () => {
 
 
                 <Grid item xs={12} md={4}>
-                    <Container className={classes.container}>
+                    <Container className="container">
                         <Typography variant="h3" className={classes.sectionTitle} style={{ textAlign: 'center' }}>
                             Reviews
                         </Typography>
                         <ul>
 
-                        {/* <Stack spacing={2}>
+                            {/* <Stack spacing={2}>
           {/* <Typography display="flex" alignItems="flex-start">
             {user?.profile?.firstName} {user?.profile?.lastName}&apos;s Reviews
           </Typography> */}
-          {/* <ReviewCard
+                            {/* <ReviewCard
             user={user} // Pass the user object as a prop to ReviewCard component
           />
         </Stack>
@@ -362,7 +348,7 @@ const Dashboard = () => {
           alignItems: "center",
           columnGap: 2,
         }}>
-        </Box> */} 
+        </Box> */}
                             <li>
                                 <Box marginTop={2} /> {/* Adds vertical space */}
                                 <Box display="flex" alignItems="center">
@@ -389,11 +375,11 @@ const Dashboard = () => {
                 </Grid>
 
                 <Grid item xs={12} md={4}>
-                    <Container className={classes.container}>
-                    <Skill
-                    skills={skills}
-                    isLoadingSkills={isLoadingSkills}
-                />
+                    <Container className="container">
+                        <Skill
+                            skills={skills}
+                            isLoadingSkills={isLoadingSkills}
+                        />
                         <Box marginBottom={2} /> {/* Adds vertical space */}
                         <Link href="/match/edit-profile" underline="none">
                             <Button variant="outlined">Edit</Button>
