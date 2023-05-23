@@ -33,7 +33,7 @@ const Home = () => {
       userService.getSelf().then((userData) => {
         setUser(userData.data); // Note the use of userData.data to get the user data from the response object
       }).catch((error) => {
-        console.log('Error fetching user data', error);
+        console.error('Error fetching user data', error);
       });
     }
   }, [isLoggedIn]);
