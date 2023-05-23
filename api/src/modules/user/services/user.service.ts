@@ -81,8 +81,8 @@ export class UserService {
   }
 
   async updateById(id: Types.ObjectId, user: UpdateUserDto): Promise<void> {
-    const exist = await this.userModel.exists({ _id: id });
-    if (!exist) {
+    const existUser = await this.userModel.findOne({ _id: id });
+    if (!existUser) {
       throw new HttpException(
         'User with this id does not exist',
         HttpStatus.NOT_FOUND,
@@ -91,7 +91,7 @@ export class UserService {
     omit(user, NOT_ALLOWED_UPDATE);
 
     await this.userModel
-      .updateOne({ _id: id }, user)
+      .updateOne({ _id: id }, {...user, profile: {...user.profile, skills: existUser.profile.skills}})
      
   }
 
@@ -207,9 +207,9 @@ export class UserService {
     const filer: FilterQuery<User> = {};
     if (query.q) {
       filer.$or = [
-        { 'profile.firstName': { $regex: query.q, $options: 'i' } },
-        { 'profile.lastName': { $regex: query.q, $options: 'i' } },
-        { username: { $regex: query.q, $options: 'i' } },
+        { 'profile.firstName': { $regex: `^${query.q}`, $options: 'i' } },
+        { 'profile.lastName': { $regex: `^${query.q}`, $options: 'i' } },
+        { username: { $regex: `^${query.q}`, $options: 'i' } },
       ];
     }
 
