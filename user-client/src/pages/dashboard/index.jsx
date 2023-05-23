@@ -302,11 +302,11 @@ const Dashboard = () => {
 
 
                 <Grid item xs={12} md={4}>
-                    <Container className="container">
+                <Stack  sx={{padding: 3, background: theme => theme.palette.background.default}} spacing={3}>
                         <Typography variant="h3" className={classes.sectionTitle} style={{ textAlign: 'center' }}>
                             Requests
                         </Typography>
-                        <ul>
+                       
                             {requestingUsersRes?.data?.data?.map(user => <MatchDashboard
                                 hasMore={hasMore}
                                 onNext={() => setPage((prevPage) => prevPage + 1)}
@@ -321,8 +321,8 @@ const Dashboard = () => {
                             <Link href="/profile-creation" underline="none">
                                 <Button variant="outlined">See All</Button>
                             </Link>
-                        </ul>
-                    </Container>
+                        
+                   </Stack>
                 </Grid>
 
                 {/* <Stack spacing={2}>
@@ -348,14 +348,14 @@ const Dashboard = () => {
                 />
 
                 <Grid item xs={12} md={4}>
-                    <Container className="container">
+                    <Stack  sx={{padding: 3, background: theme => theme.palette.background.default}} spacing={3}>
                         <Typography variant="h3" className={classes.sectionTitle} style={{ textAlign: 'center' }}>
                             Reviews
                         </Typography>
-                        <ul>
+                       
                             {(!isLoadingReview && !loadingReviewError && reviewRes?.data?.data?.length > 0) && <Stack spacing={2}>
                                 {!isLoadingReview &&
-                                    reviewRes?.data?.data?.map((review) => (
+                                    reviewRes?.data?.data?.slice(0, 3)?.map((review) => (
                                         <ReviewCard review={review} />
                                     ))}
                             </Stack>}
@@ -367,8 +367,8 @@ const Dashboard = () => {
                                 columnGap: 2,
                             }}>
                             </Box>
-                        </ul>
-                    </Container>
+                            </Stack>
+                  
                 </Grid>
 
                 <Grid item xs={12} md={4}>
