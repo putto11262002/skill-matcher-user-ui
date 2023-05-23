@@ -209,17 +209,7 @@ function EditSelfProfilePage() {
       sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
       <Stack spacing={4} maxWidth={600} sx={{ width: "100%" }}>
-        <Box
-          sx={{}}
-          component="form"
-          onSubmit={handleSubmit((data, e) => {
-            e.preventDefault();
-            handleUpdateUserProfile(data)
-          })}
-        >
-          <Box marginTop={2} />
-
-          <UserAvatarForm
+      <UserAvatarForm
             avatar={user?.avatar}
             onUpload={(file) => handleUploadAvatar(file)}
             loading={isLoadingUpdateAvatar}
@@ -247,6 +237,17 @@ function EditSelfProfilePage() {
               onDeleteSkill={(skill) => handleDeleteSkill(skill.skill)}
             />
           </Grid>
+        <Box
+          sx={{}}
+          component="form"
+          onSubmit={handleSubmit((data, e) => {
+            e.preventDefault();
+            handleUpdateUserProfile(data)
+          })}
+        >
+         
+
+         
           <Typography
             variant="2"
             textAlign="flex-start"
