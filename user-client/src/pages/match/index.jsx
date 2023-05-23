@@ -87,7 +87,7 @@ const BrowseUserPage = () => {
     <Box
       sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
-      <Typography> Match History </Typography>
+      <Typography> Matched Users </Typography>
       <Stack spacing={3} maxWidth={600} sx={{ width: "100%" }}>
         <Box
           onSubmit={(e) => {

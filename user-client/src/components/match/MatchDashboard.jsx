@@ -75,19 +75,7 @@ const MatchRequestCard = ({ user, onDecline, onAccept }) => {
             </IconButton>
           </Tooltip>
         </Box>
-        <Box
-          sx={{
-            background: grey[100],
-            width: "2.5rem",
-            height: "2.5rem",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: "50%",
-          }}
-        >
-
-        </Box>
+        
       </CardActions>
     </Card>
   );

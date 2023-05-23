@@ -22,6 +22,8 @@ import SearchInput from "@/components/common/form/SearchInput";
 import { MATCH_PAGE_SIZE, MATCH_STATUS } from "@/constants/match.constant";
 import MatchDashboard from "@/components/match/MatchDashboard";
 import matchService from "@/services/match.service";
+import UserSkillTabs from "@/components/user/skill/UserSkillTabs";
+import Skill from "@/components/user/skill/Skill";
 
 
 const action = (
@@ -88,6 +90,9 @@ const Dashboard = () => {
     const [hasMore, setHasMore] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [updatedSearchTerm, setUpdateSearchTerm] = useState(true);
+    const { id } = router.query;
+    const { user: authUser } = useSelector((state) => state.auth);
+    const [skills, setSkills] = useState([]);
 
 
     useEffect(() => {
@@ -106,6 +111,16 @@ const Dashboard = () => {
         }
     }, []);
 
+    const {
+        isLoading: isLoadingSkills,
+        error: errorLoadingSkills,
+        refetch: fetchSkills,
+    } = useQuery(
+        ["user", authUser?._id, "skills"],
+        () => userService.getUserSkills({ userId: authUser._id, query: {} }),
+        { onSuccess: (res) => setSkills(res.data?.data), enabled: false }
+    );
+
     const handleSubmit = (event) => {
         event.preventDefault();
         setErrors({});
@@ -117,27 +132,11 @@ const Dashboard = () => {
         });
     };
 
-    // const router = useRouter();
-    // // const { id } = router.query;
-    // const { user: authUser } = useSelector((state) => state.auth);
-    // const [user, setUser] = useState(null);
-    // const dispatch = useDispatch()
-
-    // const { refetch: fetchUser } = useQuery(
-    //     ["user", authUser?._id],
-    //     userService.getSelf,
-    //     {
-    //         onSuccess: (res) => {
-    //             reset(res.data)
-    //             setUser(res.data)
-    //         }, enabled: false
-    //     }
-    // );
 
     const {
         isLoading: isLoadingUsers,
         error,
-       data: requestingUsersRes
+        data: requestingUsersRes
     } = useQuery(
         ["feed", "matched", page, query],
         () =>
@@ -149,7 +148,7 @@ const Dashboard = () => {
                 pageNumber: page,
             }),
         {
-            
+
         }
     );
 
@@ -185,7 +184,11 @@ const Dashboard = () => {
         acceptRequest({ userId: user._id });
 
     }
-
+    useEffect(() => {
+        if (authUser?._id) {
+            fetchSkills();
+        }
+    }, [authUser?._id]);
 
     console.log(users)
 
@@ -281,40 +284,17 @@ const Dashboard = () => {
                         </Typography>
                         <ul>
 
-                          {requestingUsersRes?.data?.data?.map(user =>  <MatchDashboard
+                            {requestingUsersRes?.data?.data?.map(user => <MatchDashboard
                                 hasMore={hasMore}
                                 onNext={() => setPage((prevPage) => prevPage + 1)}
                                 user={user}
                                 onDecline={handleDecline}
-                                onAccept ={handleAccept}
+                                onAccept={handleAccept}
                                 loading={isLoadingUsers}
                                 error={error}
-                            />) 
-}
-                            <li>
-                                <Box marginTop={3} /> {/* Adds vertical space */}
-                                <Box display="flex" alignItems="center" justifyContent="space-between">
-                                    <Box display="flex" alignItems="center">
-                                        <Avatar className={classes.orangeAvatar}>N</Avatar>
-                                        <Typography variant="subtitle1" className={classes.personName} style={{ marginLeft: '8px' }}>
-                                            George
-                                        </Typography>
-                                    </Box>
-                                    <DeleteIcon />
-                                </Box>
-                            </li>
-                            <li>
-                                <Box marginTop={3} /> {/* Adds vertical space */}
-                                <Box display="flex" alignItems="center" justifyContent="space-between">
-                                    <Box display="flex" alignItems="center">
-                                        <Avatar className={classes.orangeAvatar}>N</Avatar>
-                                        <Typography variant="subtitle1" className={classes.personName} style={{ marginLeft: '8px' }}>
-                                            Charlotte
-                                        </Typography>
-                                    </Box>
-                                    <DeleteIcon />
-                                </Box>
-                            </li>
+                            />)
+                            }
+
                             <li>
                                 <Box marginTop={3} /> {/* Adds vertical space */}
                                 <Box display="flex" alignItems="center" justifyContent="space-between">
@@ -382,34 +362,15 @@ const Dashboard = () => {
                     </Container>
                 </Grid>
 
-
                 <Grid item xs={12} md={4}>
                     <Container className={classes.container}>
-                        <Stack spacing={2} sx={{ maxWidth: 600 }}>
-                            <Typography variant="h3" className={classes.sectionTitle}>
-                                Notifications
-                            </Typography>
-                            {/* <SnackbarContent sx={{ background: theme => theme.palette.background.paper, color: "black" }} message="I love snacks." action={action} /> */}
-                            <SnackbarContent sx={{ background: theme => theme.palette.background.paper, color: "black" }}
-                                message={
-                                    'Reece wants to match with you'
-                                }
-                                action={action}
-                            />
-                            <SnackbarContent sx={{ background: theme => theme.palette.background.paper, color: "black" }}
-                                message="Maggie has accepted your request"
-                                action={action}
-                            />
-                            <SnackbarContent sx={{ background: theme => theme.palette.background.paper, color: "black" }}
-                                message={
-                                    'Nathan has accepted your request'
-                                }
-                                action={action}
-                            />
-                        </Stack>
+                    <Skill
+                    skills={skills}
+                    isLoadingSkills={isLoadingSkills}
+                />
                         <Box marginBottom={2} /> {/* Adds vertical space */}
-                        <Link href="/match/requests" underline="none">
-                            <Button variant="outlined">See All</Button>
+                        <Link href="/match/edit-profile" underline="none">
+                            <Button variant="outlined">Edit</Button>
                         </Link>
                     </Container>
                 </Grid>

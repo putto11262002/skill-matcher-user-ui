@@ -110,3 +110,49 @@ a {
   width: 100%;
 
 }
+
+.container {
+  background-color: #ffff;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  margin-bottom: 1rem;
+  font-weight: bold;
+  font-size: 3rem;
+}
+
+.centerIcon {
+  display: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.Typography {
+  color: #000;
+}
+
+.center {
+  text-align: center;
+  margin: auto;
+}
+
+.iconContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.projectLink {
+  color: #222;
+  text-decoration: none;
+}
+
+.projectLink:hover {
+  text-decoration: underline;
+}

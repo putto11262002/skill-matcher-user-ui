@@ -104,7 +104,6 @@ const MatchCard = ({ user, onMatch, onUnmatch }) => {
             </Link>
           </Tooltip>
         </Box>
-
         <Box
           sx={{
             background: grey[100],

@@ -30,8 +30,10 @@ import { useTheme } from "@material-ui/core";
 import matchService from "../../../../services/match.service";
 import FlagIcon from '@mui/icons-material/Flag';
 import { enqueueSnackbar } from "notistack";
-import  reportService  from "../../../../services/report.service";
+import reportService from "../../../../services/report.service";
+import reviewService from "../../../../services/review.service";
 import { REPORT_CATEGORY } from "../../../../constants/report.constant";
+import ReviewCard from "@/components/user/ReviewCard";
 
 
 const UserHomePage = () => {
@@ -127,6 +129,24 @@ const UserHomePage = () => {
   const handleCategoryChange = (event) => {
     setReportCategory(event.target.value);
   };
+
+  //Handling review 
+  const handleReviewSubmit = async () => {
+    try {
+      const reviewData = {
+        target: user._id,
+        score: 0,
+        message: "string",
+        status: "string"
+      };
+      await reviewService.postReview(reviewData);
+      enqueueSnackbar('Your review was a success', { variant: 'success' });
+    } catch (error) {
+      console.error('Error with posting review:', error);
+      enqueueSnackbar('Error with submitting your review, contact us for more information', { variant: 'error' });
+    }
+  };
+
 
   // fetch user when id is available
   useEffect(() => {
@@ -311,17 +331,6 @@ const UserHomePage = () => {
                   ><MenuItem value="" disabled>
                       Select a Category
                     </MenuItem>
-                    {/* 
-    export const REPORT_CATEGORY = {
-    HARASSMENT: 'harassment',
-    HATE_SPEECH: 'hate_speech',
-    INAPPROPRIATE_CONTENT: 'inappropriate_content',
-    SCAM: 'scam',
-    BUG: 'bug',
-    OTHER: 'other'
-}*/}
-
-          
                     {Object.values(REPORT_CATEGORY).map(category => <MenuItem value={category}>{category.replace("_", " ")}</MenuItem>)}
                   </Select>
                   <Box mt={2}>
@@ -356,6 +365,23 @@ const UserHomePage = () => {
               errorLearningSkills={error}
             />
           </Stack>
+        </Box>
+        {/* Viewing reviews section */}
+        <Stack spacing={2}>
+          <Typography display="flex" alignItems="flex-start">
+            {user?.profile?.firstName} {user?.profile?.lastName}&apos;s Reviews
+          </Typography>
+          <ReviewCard
+            user={user} // Pass the user object as a prop to ReviewCard component
+            
+          />
+        </Stack>
+        <Box sx={{
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          columnGap: 2,
+        }}>
         </Box>
       </Box>
     </Box>

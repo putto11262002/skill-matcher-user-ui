@@ -1,6 +1,10 @@
 import Head from 'next/head';
-import { Box, Container, Typography, Button, Link } from '@mui/material';
+import { Box, Container, Typography, Button, Link, Grid } from '@mui/material';
 import useAuth from '@/hooks/useAuth';
+import ConstructionIcon from '@mui/icons-material/Construction';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import ForumIcon from '@mui/icons-material/Forum';
 
 const HomePage = () => {
   useAuth()
@@ -53,32 +57,87 @@ const HomePage = () => {
           start unlocking your full potential!
         </Typography>
 
-        {/*
-          1) Add skills to your profile 
-          2) Check out your suggestions 
-          3) Search for other users 
-          4) Match! 
-          5) Connect with matches 
-        */}
+        <Box marginTop={5} /> {/* Adds vertical space */}
+        <Grid container spacing={2}>
+        <Grid item xs={8} md={3}>
+            <Container className="container">
+              <Box className="iconContainer">
+                <ConstructionIcon style={{ fontSize: 150, color: 'orange' }} />
+              </Box>
+              <Typography variant="h4" align="center">
+                Skills
+              </Typography>
+              <Box marginTop={2} /> {/* Adds vertical space */}
+              <Typography variant="subtitle1" align="center" style={{ fontStyle: 'italic' }}>
+             Add skills to your profile showcase your unique expertise and stand out from the crowd. 
+              </Typography>
+              <Box marginTop={2} /> {/* Adds vertical space */}
+            <Link href="/user/edit-profile" underline="none">
+                            <Button variant="outlined">Add Skills </Button>
+                        </Link>
+            </Container>
+          </Grid>
+        
+          <Grid item xs={8} md={3}>
+          <Container className="container">
+            <Box className="iconContainer">
+              <PeopleAltIcon style={{ fontSize: 150, color: 'orange' }} />
+            </Box>
+            <Typography variant="h4" align="center">
+              Suggestions
+            </Typography>
+            <Box marginTop={2} /> {/* Adds vertical space */}
+            <Typography variant="subtitle1" align="center" style={{ fontStyle: 'italic' }}>
+            Find like-minded individuals to share and expand your knowledge with!
+            </Typography>
+            <Box marginTop={2} /> {/* Adds vertical space */}
+            <Link href="/user/edit-profile" underline="none">
+                            <Button variant="outlined">Edit Profile </Button>
+                        </Link>
+          </Container>
+        </Grid>
 
-        <Link href="/profile-creation" underline="none">
-          <Button variant="contained" color="primary" sx={{
-            my: 4,
-            background: `linear-gradient(to bottom right, #055fef, #58a6ff)`,
-            padding: 4,
-            borderRadius: 2,
-            boxShadow: 4,
-            textAlign: "center",
-            width: { xs: '100%', sm: '75%', md: '100%' }, // adjust button width for different screen sizes
-            height: { xs: '50px', sm: '60px', md: '70px' }, // adjust button height for different screen sizes
-            '&:hover': {
-              background: 'linear-gradient(45deg,#055fef, #58a6ff)',
-              boxShadow: '0px 5px 15px rgba(255, 105, 135, .5)',
-            },
-          }}>
-            Get started on your profile
-          </Button>
-        </Link>
+        <Grid item xs={8} md={3}>
+          <Container className="container">
+            <Box className="iconContainer">
+              <AddCircleOutlineIcon style={{ fontSize: 150, color: 'orange' }} />
+            </Box>
+            <Typography variant="h4" align="center">
+              Match
+            </Typography>
+            <Box marginTop={2} /> {/* Adds vertical space */}
+            <Typography variant="subtitle1" align="center" style={{ fontStyle: 'italic' }}>
+            Match with with like-minded individuals who are eager to learn and grow!
+            </Typography>
+            <Box marginTop={2} /> {/* Adds vertical space */}
+            <Link href="/user/edit-profile" underline="none">
+                            <Button variant="outlined">Edit Profile </Button>
+                        </Link>
+          </Container>
+        </Grid>
+
+        <Grid item xs={8} md={3}>
+          <Container className="container">
+            <Box className="iconContainer">
+              <ForumIcon style={{ fontSize: 150, color: 'orange' }} />
+            </Box>
+            <Typography variant="h4" align="center">
+              Communicate
+            </Typography>
+            <Box marginTop={2} /> {/* Adds vertical space */}
+            <Typography variant="subtitle1" align="center" style={{ fontStyle: 'italic' }}>
+            "Connect with your passionate and knowledgeable matches and share your expertise!"
+            </Typography>
+            <Box marginTop={2} /> {/* Adds vertical space */}
+            <Link href="/user/edit-profile" underline="none">
+                            <Button variant="outlined">Edit Profile </Button>
+                        </Link>
+          </Container>
+        </Grid>
+        </Grid>
+{/* 
+
+
 
         <Link href="/user/browse" underline="none">
           <Button variant="contained" color="primary" sx={{
@@ -97,7 +156,7 @@ const HomePage = () => {
           }}>
             Check out your feed
           </Button>
-        </Link>
+        </Link> */}
       </Box>
     </>
   );
