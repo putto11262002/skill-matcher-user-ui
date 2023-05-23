@@ -158,26 +158,6 @@ const UserHomePage = () => {
     setReportCategory(event.target.value);
   };
 
-  //Handling review
-  const handleReviewSubmit = async () => {
-    try {
-      const reviewData = {
-        target: user._id,
-        score: 0,
-        message: "string",
-        status: "string",
-      };
-      await reviewService.postReview(reviewData);
-      enqueueSnackbar("Your review was a success", { variant: "success" });
-    } catch (error) {
-      console.error("Error with posting review:", error);
-      enqueueSnackbar(
-        "Error with submitting your review, contact us for more information",
-        { variant: "error" }
-      );
-    }
-  };
-
   // fetch user when id is available
   useEffect(() => {
     if (id) {
@@ -408,26 +388,23 @@ const UserHomePage = () => {
               errorLearningSkills={error}
             />
           </Stack>
-
-          {/* Viewing reviews section */}
-          <Stack spacing={2}>
-            <Typography variant="subtitle1" component='p' textAlign='center'>
-
-              Reviews
-            </Typography>
-           {(!isLoadingReview) && reviewRes?.data?.data?.map(review => <ReviewCard review={review}/>)}
-
-          </Stack>
         </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-start",
-            alignItems: "center",
-            columnGap: 2,
-          }}
-        ></Box>
+        {/* Viewing reviews section */}
+        <Stack spacing={2}>
+          <Typography display="flex" alignItems="flex-start">
+            {user?.profile?.firstName} {user?.profile?.lastName}&apos;s Reviews
+          </Typography>
+          <ReviewCard
+            user={user} // Pass the user object as a prop to ReviewCard component
+          />
+        </Stack>
+        <Box sx={{
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          columnGap: 2,
+        }}>
+        </Box>
       </Box>
     </Box>
   );
