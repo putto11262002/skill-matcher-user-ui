@@ -26,34 +26,45 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import CloseIcon from "@mui/icons-material/Close";
 import { truncate } from "lodash";
 import Link from "next/link";
-import StarIcon from '@mui/icons-material/Star';
-import ReviewsOutlinedIcon from '@mui/icons-material/ReviewsOutlined';
+import StarIcon from "@mui/icons-material/Star";
+import ReviewsOutlinedIcon from "@mui/icons-material/ReviewsOutlined";
 import Rating from "@mui/material/Rating";
 import { grey } from "@mui/material/colors";
+import ReviewDialog from "../review/reviewDialog";
+import { useMutation } from "@tanstack/react-query";
+import reviewService from "@/services/review.service";
+import { enqueueSnackbar } from "notistack";
 
 const MatchCard = ({ user, onMatch, onUnmatch }) => {
   const [matched, setMatched] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [ratingValue, setRatingValue] = useState(0);
-  const [ratingComment, setRatingComment] = useState('');
+  const [openReviewDialog, setOpenReviewDialog] = useState(undefined);
 
-  const handleRatingSubmit = () => {
-    // Access the rating and comment values
-    const rating = ratingValue;
-    const comment = ratingComment;
-  
-    //actions with the rating and comment values
- 
-    // Reset the state variables
-    setRatingValue(0);
-    setRatingComment('');
-  
-    // Close the dialog
-    setDialogOpen(false);
+  const { mutate: createReview } = useMutation(reviewService.createReview, {
+    onSuccess: (res) =>
+      enqueueSnackbar("Review submitted", { variant: "success" }),
+     onError: (error) => enqueueSnackbar(error?.message, {variant: 'error'}),
+  });
+
+  const handleOpenReviewDialog = (target) => {
+    setOpenReviewDialog(target);
+  };
+
+  const handleCloseReviewDialog = () => {
+    setOpenReviewDialog(undefined);
+  };
+
+  const handleCreateReview = (review) => {
+    createReview({ ...review, target: user._id, score: Number(review.score) });
   };
 
   return (
     <Card>
+      <ReviewDialog
+        open={Boolean(openReviewDialog)}
+        onSubmit={handleCreateReview}
+        target={openReviewDialog}
+        onClose={handleCloseReviewDialog}
+      />
       <CardHeader
         avatar={<Avatar src={user?.avatar?.url || "/images/no-avatar.jpg"} />}
         subheader={`${user?.email}`}
@@ -93,27 +104,6 @@ const MatchCard = ({ user, onMatch, onUnmatch }) => {
             </Link>
           </Tooltip>
         </Box>
-        {/* <Box
-          sx={{
-            background: grey[100],
-            width: "2.5rem",
-            height: "2.5rem",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: "50%",
-          }}
-        >
-          {" "}
-          <Tooltip title="Unmatch with user">
-            <IconButton onClick={() => onUnmatch(user)}
-              sx={{ width: "100%", height: "100%" }}>
-              <CloseIcon
-                sx={{ color: (theme) => theme.palette.secondary.main }}
-              />
-            </IconButton>
-          </Tooltip>
-        </Box>*/}
 
         <Box
           sx={{
@@ -130,45 +120,16 @@ const MatchCard = ({ user, onMatch, onUnmatch }) => {
           <Tooltip title="Rate user">
             <IconButton
               sx={{ width: "100%", height: "100%" }}
-              onClick={() => setDialogOpen(true)}>
+              onClick={() => handleOpenReviewDialog(user)}
+            >
               <ReviewsOutlinedIcon
                 sx={{ color: (theme) => theme.palette.secondary.main }}
               />
             </IconButton>
           </Tooltip>
         </Box>
-          <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-            <DialogTitle>Rate {user?.profile?.firstName} {user?.profile?.lastName}&apos;s performance </DialogTitle>
-            <DialogContent sx={{ width: 400, height: 200 }}>
-              <Rating
-                name="user-rating"
-                value={ratingValue}
-                onChange={(event, newValue) => setRatingValue(newValue)}
-                size="large"
-              />
-              <TextField
-                id="rating-comment"
-                label="Comment"
-                multiline
-                rows={4}
-                value={ratingComment}
-                onChange={(event) => setRatingComment(event.target.value)}
-                fullWidth
-                variant="outlined"
-                margin="normal"
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setDialogOpen(false)}>Cancel</Button>
-              <Button onClick={() => handleRatingSubmit()} variant="contained" color="primary">
-                Submit
-              </Button>
-            </DialogActions>
-          </Dialog>
       </CardActions>
-    </Card >
-
-
+    </Card>
   );
 };
 
