@@ -182,7 +182,7 @@ const UserHomePage = () => {
               sx={{ width: 130, height: 130 }}
             />
 
-            <Typography sx={{}}>
+            <Typography variant="h4" sx={{}}>
               {user?.profile?.firstName} {user?.profile?.lastName}
             </Typography>
 
