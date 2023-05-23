@@ -331,7 +331,7 @@ const UserHomePage = () => {
                   ><MenuItem value="" disabled>
                       Select a Category
                     </MenuItem>
-                    {Object.values(REPORT_CATEGORY).map(category => <MenuItem value={category}>{category.replace("_", " ")}</MenuItem>)}
+                    {Object.values(REPORT_CATEGORY).map(category => <MenuItem key={category} value={category}>{category.replace("_", " ")}</MenuItem>)}
                   </Select>
                   <Box mt={2}>
                     <TextField

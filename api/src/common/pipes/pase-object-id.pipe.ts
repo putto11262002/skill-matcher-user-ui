@@ -9,7 +9,7 @@ export class ParseObjectIdPipe implements PipeTransform<any, Types.ObjectId> {
         if(!valid){
             throw new BadRequestException('Invalid ObjectId')
         }
-        return value as any;
+        return Types.ObjectId.createFromHexString(value) as any;
     }
 }
 
