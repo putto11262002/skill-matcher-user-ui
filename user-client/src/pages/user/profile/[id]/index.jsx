@@ -184,7 +184,7 @@ const UserHomePage = () => {
               sx={{ width: 130, height: 130 }}
             />
 
-            <Typography sx={{}}>
+            <Typography variant="h4" sx={{}}>
               {user?.profile?.firstName} {user?.profile?.lastName}
             </Typography>
 
@@ -347,15 +347,22 @@ const UserHomePage = () => {
               ))}
           </Stack>
         </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-start",
-            alignItems: "center",
-            columnGap: 2,
-          }}
-        ></Box>
+        {/* Viewing reviews section */}
+        <Stack spacing={2}>
+          <Typography display="flex" alignItems="flex-start">
+            {user?.profile?.firstName} {user?.profile?.lastName}&apos;s Reviews
+          </Typography>
+          <ReviewCard
+            user={user} // Pass the user object as a prop to ReviewCard component
+          />
+        </Stack>
+        <Box sx={{
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          columnGap: 2,
+        }}>
+        </Box>
       </Box>
     </Box>
   );

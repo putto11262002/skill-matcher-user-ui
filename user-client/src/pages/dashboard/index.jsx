@@ -24,6 +24,10 @@ import MatchDashboard from "@/components/match/MatchDashboard";
 import matchService from "@/services/match.service";
 import UserSkillTabs from "@/components/user/skill/UserSkillTabs";
 import Skill from "@/components/user/skill/Skill";
+// import reportService from "../../../../services/report.service";
+// import reviewService from "../../../../services/review.service";
+// import { REPORT_CATEGORY } from "../../../../constants/report.constant";
+import ReviewCard from "@/components/user/ReviewCard";
 
 
 const action = (
@@ -93,6 +97,9 @@ const Dashboard = () => {
     const { id } = router.query;
     const { user: authUser } = useSelector((state) => state.auth);
     const [skills, setSkills] = useState([]);
+    const [reportDialogOpen, setReportDialogOpen] = useState(false);
+    const [reportCategory, setReportCategory] = useState('');
+    const [reportReason, setReportReason] = useState('');
 
 
     useEffect(() => {
@@ -315,28 +322,47 @@ const Dashboard = () => {
                     </Container>
                 </Grid>
 
+                {/* <Stack spacing={2}>
+          <Typography display="flex" alignItems="flex-start">
+            {user?.profile?.firstName} {user?.profile?.lastName}&apos;s Reviews
+          </Typography>
+          <ReviewCard
+            user={user} // Pass the user object as a prop to ReviewCard component
+            
+          />
+        </Stack>
+        <Box sx={{
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          columnGap: 2,
+        }}>
+        </Box> */}
+
+
+
                 <Grid item xs={12} md={4}>
                     <Container className={classes.container}>
                         <Typography variant="h3" className={classes.sectionTitle} style={{ textAlign: 'center' }}>
                             Reviews
                         </Typography>
                         <ul>
-                            <li>
-                                <Box display="flex" alignItems="center">
-                                    <Avatar alignItems="left" className={classes.orangeAvatar}>A</Avatar>
-                                    <Typography variant="h6" className={classes.personName} style={{ marginLeft: '8px' }}>
-                                        Amanda
-                                    </Typography>
-                                </Box>
-                                <Box display="flex" justifyContent="center">
-                                    <Stack spacing={1}>
-                                        <Rating name="homepage" alignItems="center" defaultValue={4.5} precision={0.5} readOnly size="medium" />
-                                    </Stack>
-                                </Box>
-                                <Typography variant="subtitle1" justifyContent="center" style={{ fontStyle: 'italic' }}>
-                                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-                                </Typography>
-                            </li>
+
+                        {/* <Stack spacing={2}>
+          {/* <Typography display="flex" alignItems="flex-start">
+            {user?.profile?.firstName} {user?.profile?.lastName}&apos;s Reviews
+          </Typography> */}
+          {/* <ReviewCard
+            user={user} // Pass the user object as a prop to ReviewCard component
+          />
+        </Stack>
+        <Box sx={{
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          columnGap: 2,
+        }}>
+        </Box> */} 
                             <li>
                                 <Box marginTop={2} /> {/* Adds vertical space */}
                                 <Box display="flex" alignItems="center">

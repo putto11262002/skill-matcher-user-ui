@@ -69,7 +69,7 @@ const HomePage = () => {
               </Typography>
               <Box marginTop={2} /> {/* Adds vertical space */}
               <Typography variant="subtitle1" align="center" style={{ fontStyle: 'italic' }}>
-             Add skills to your profile showcase your unique expertise and stand out from the crowd. 
+             Add skills to your profile showcase your unique expertise and stand out from the crowd! 
               </Typography>
               <Box marginTop={2} /> {/* Adds vertical space */}
             <Link href="/user/edit-profile" underline="none">
@@ -84,15 +84,15 @@ const HomePage = () => {
               <PeopleAltIcon style={{ fontSize: 150, color: 'orange' }} />
             </Box>
             <Typography variant="h4" align="center">
-              Suggestions
+              Search
             </Typography>
             <Box marginTop={2} /> {/* Adds vertical space */}
             <Typography variant="subtitle1" align="center" style={{ fontStyle: 'italic' }}>
             Find like-minded individuals to share and expand your knowledge with!
             </Typography>
             <Box marginTop={2} /> {/* Adds vertical space */}
-            <Link href="/user/edit-profile" underline="none">
-                            <Button variant="outlined">Edit Profile </Button>
+            <Link href="/user/search" underline="none">
+                            <Button variant="outlined">Search </Button>
                         </Link>
           </Container>
         </Grid>
@@ -110,8 +110,8 @@ const HomePage = () => {
             Match with with like-minded individuals who are eager to learn and grow!
             </Typography>
             <Box marginTop={2} /> {/* Adds vertical space */}
-            <Link href="/user/edit-profile" underline="none">
-                            <Button variant="outlined">Edit Profile </Button>
+            <Link href="/user/suggestion" underline="none">
+                            <Button variant="outlined">Suggestions </Button>
                         </Link>
           </Container>
         </Grid>
@@ -126,11 +126,11 @@ const HomePage = () => {
             </Typography>
             <Box marginTop={2} /> {/* Adds vertical space */}
             <Typography variant="subtitle1" align="center" style={{ fontStyle: 'italic' }}>
-            "Connect with your passionate and knowledgeable matches and share your expertise!"
+            Connect with your passionate and knowledgeable matches and share your expertise!
             </Typography>
             <Box marginTop={2} /> {/* Adds vertical space */}
-            <Link href="/user/edit-profile" underline="none">
-                            <Button variant="outlined">Edit Profile </Button>
+            <Link href="/match" underline="none">
+                            <Button variant="outlined">Matches </Button>
                         </Link>
           </Container>
         </Grid>
