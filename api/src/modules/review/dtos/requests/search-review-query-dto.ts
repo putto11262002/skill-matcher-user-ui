@@ -10,17 +10,17 @@ export class SearchReviewQueryDto extends SearchDto {
     @ApiProperty()
     @IsOptional()
     @Type(() => mongoose.Types.ObjectId)
-    @Transform(toMongoObjectId)
-    source: mongoose.Types.ObjectId;
+    @Transform(({value}) => toMongoObjectId({value, key: undefined}))
+    source?: mongoose.Types.ObjectId;
 
     @ApiProperty()
     @IsOptional()
     @Type(() => mongoose.Types.ObjectId)
-    @Transform(toMongoObjectId)
-    target: mongoose.Types.ObjectId;
+    @Transform(({value}) => toMongoObjectId({value, key: undefined}))
+    target?: mongoose.Types.ObjectId;
 
     @ApiProperty()
     @IsOptional()
     @IsIn(Object.values(REVIEW_STATUS))
-    status: string;
+    status?: string;
 }
