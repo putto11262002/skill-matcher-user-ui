@@ -11,10 +11,13 @@ import { ImageService } from "./services/image.service";
     imports: [MongooseModule.forFeature([{name: File.name, schema: fileSchema}])],
     providers: [S3Service, FileService,  ImageService,{inject: [ConfigService], provide: 'S3_CLIENT', useFactory: async (configService: ConfigService) => new S3Client({
         region: configService.get('aws.region'),
+        forcePathStyle: configService.get('aws.useLocal'),
         credentials: {
           accessKeyId: configService.get('aws.accessKeyId'),
           secretAccessKey: configService.get('aws.secretAccessKey'),
         },
+        endpoint: configService.get('aws.useLocal') ? configService.get('aws.s3.endpoint') : undefined
+        
       })}],
       exports: [FileService, ImageService]
     

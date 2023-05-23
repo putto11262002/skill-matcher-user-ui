@@ -155,6 +155,8 @@ const UserHomePage = () => {
     return <Loader />;
   }
 
+  console.log(reviewRes)
+
   return (
     <Box
       sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}

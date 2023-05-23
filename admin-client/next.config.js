@@ -2,14 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: process.env.NEXT_PUBLIC_S3_HOSTNAME,
-        port: '',
-        pathname: '/**'
-      }
-    ]
+    domains: ['localhost', ...(process.env?.IMAGE_DOMAINS?.split(',') || [])]
+  },
+  publicRuntimeConfig: {
+    publicApiBaseUrl: process.env.PUBLIC_API_BASE_URL
   }
 };
 

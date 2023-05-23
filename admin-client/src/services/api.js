@@ -1,10 +1,11 @@
+import getConfig from 'next/config';
 import authService from './auth.service';
 
 const { default: axios } = require('axios');
 const { default: tokenService } = require('./token.service');
-
+const {publicRuntimeConfig} = getConfig()
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  baseURL: publicRuntimeConfig.publicApiBaseUrl,
   headers: {
     'Content-Type': 'application/json',
   },

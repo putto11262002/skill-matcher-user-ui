@@ -13,6 +13,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Loader from '../common/Loader';
 import { upperFirst } from 'lodash';
 import { REPORT_PER_PAGE, REPORT_TABLE } from '../../constants/report.constant';
+import Error from '../common/Error';
 const ReportTable = ({ reports, pageNumber, loading, error, onPageChange, total, onSelect }) => {
   if (loading) {
     return <Loader />;

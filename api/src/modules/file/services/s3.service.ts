@@ -43,6 +43,7 @@ export class S3Service {
   }
 
   generateUrl(key: string): string {
+    if(this.configService.get('aws.useLocal')) return `http://localhost:4566/${this.configService.get('aws.s3.publicBucketName')}/${key}`
     return `https://${this.configService.get('aws.s3.publicBucketName')}.s3.${this.configService.get('aws.region')}.amazonaws.com/${key}`;
   }
 }

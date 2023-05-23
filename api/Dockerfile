@@ -1,6 +1,6 @@
-FROM NODE:16
+FROM node:18 AS builder
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY package*.json ./
 
@@ -10,4 +10,16 @@ COPY . .
 
 RUN npm run build
 
-CMD [ "npm", "run", "start:prod"]
+
+FROM node:18-alpine
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/package*.json ./
+
+RUN npm install --omit=dev
+
+CMD [ "node", "./dist/src/main.js" ]

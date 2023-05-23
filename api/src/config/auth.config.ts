@@ -3,11 +3,11 @@ import { registerAs } from '@nestjs/config';
 export default registerAs('auth', () => ({
   jwt: {
     accessToken: {
-      secret: 'secret',
-      expiresIn: '7d',
+      secret: process.env.ACCESS_TOKEN_JWT_SECRET || 'secret',
+      expiresIn: '5m',
     },
     refreshToken: {
-      secret: 'secret',
+      secret: process.env.REFRESH_TOKEN_JWT_SECRET || 'secret',
       expiresIn: '7d',
     },
   },
