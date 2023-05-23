@@ -3,7 +3,20 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { Button, Grid, IconButton, Stack, Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, Select } from "@mui/material";
+import {
+  Button,
+  Grid,
+  IconButton,
+  Stack,
+  Tooltip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import { Avatar } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -28,13 +41,12 @@ import TextIconButton from "../../../../components/common/buttons/TextIconButton
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import { useTheme } from "@material-ui/core";
 import matchService from "../../../../services/match.service";
-import FlagIcon from '@mui/icons-material/Flag';
+import FlagIcon from "@mui/icons-material/Flag";
 import { enqueueSnackbar } from "notistack";
 import reportService from "../../../../services/report.service";
 import reviewService from "../../../../services/review.service";
 import { REPORT_CATEGORY } from "../../../../constants/report.constant";
 import ReviewCard from "@/components/user/ReviewCard";
-
 
 const UserHomePage = () => {
   useAuth();
@@ -46,8 +58,8 @@ const UserHomePage = () => {
   const [matchStatus, setMatchStatus] = useState(false);
   const theme = useTheme();
   const [reportDialogOpen, setReportDialogOpen] = useState(false);
-  const [reportCategory, setReportCategory] = useState('');
-  const [reportReason, setReportReason] = useState('');
+  const [reportCategory, setReportCategory] = useState("");
+  const [reportReason, setReportReason] = useState("");
 
   // fetching user profile
   const {
@@ -62,35 +74,48 @@ const UserHomePage = () => {
     enabled: false,
   });
 
+  const {data: reviewRes, refetch: fetchReviews,isLoading: isLoadingReview, error: loadingReviewError} = useQuery(['user', id, 'reviews'], () => reviewService.getReviewByUser({userId: id, withSource: true}), {
+    enabled: false
+  })
+  console.log(reviewRes)
+
   const matched = matchStatus === "matched";
   const requested = matchStatus === "requested";
   const requesting = matchStatus === "requesting";
 
-  const { mutate: handleSendMatchRequest } = useMutation(matchService.sendMatchRequest, {
-    onSuccess: () => {
-      setMatchStatus("requested");
-      enqueueSnackbar("Match request has been sent", { variant: "success" });
-    },
-    onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
-  });
 
-  const { mutate: handleAcceptRequest } = useMutation(matchService.acceptMatchRequest, {
-    onSuccess: () => {
-      setMatchStatus("matched");
-      enqueueSnackbar("Match accepted", { variant: "success" });
-    },
-    onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
-  })
+  const { mutate: handleSendMatchRequest } = useMutation(
+    matchService.sendMatchRequest,
+    {
+      onSuccess: () => {
+        setMatchStatus("requested");
+        enqueueSnackbar("Match request has been sent", { variant: "success" });
+      },
+      onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
+    }
+  );
 
+  const { mutate: handleAcceptRequest } = useMutation(
+    matchService.acceptMatchRequest,
+    {
+      onSuccess: () => {
+        setMatchStatus("matched");
+        enqueueSnackbar("Match accepted", { variant: "success" });
+      },
+      onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
+    }
+  );
 
-  const { mutate: handleRejectRequest } = useMutation(matchService.declineRequest, {
-    onSuccess: () => {
-      setMatchStatus("not_matched");
-      enqueueSnackbar("Match rejected", { variant: "success" });
-    },
-    onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
-  })
-
+  const { mutate: handleRejectRequest } = useMutation(
+    matchService.declineRequest,
+    {
+      onSuccess: () => {
+        setMatchStatus("not_matched");
+        enqueueSnackbar("Match rejected", { variant: "success" });
+      },
+      onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
+    }
+  );
 
   const { mutate: handleUnmatch } = useMutation(matchService.unmatchRequest, {
     onSuccess: () => {
@@ -98,7 +123,8 @@ const UserHomePage = () => {
       enqueueSnackbar("Unmatched", { variant: "success" });
     },
     onError: (err) => enqueueSnackbar(err.message, { variant: "error" }),
-  })
+  });
+
 
   const handleReportConfirmation = () => {
     setReportDialogOpen(true);
@@ -109,16 +135,18 @@ const UserHomePage = () => {
       const reportData = {
         target: user._id, // Replace with the actual target
         category: reportCategory,
-        message: reportReason
+        message: reportReason,
       };
 
       await reportService.sendReport(reportData);
 
-      enqueueSnackbar('User has been reported', { variant: 'success' });
+      enqueueSnackbar("User has been reported", { variant: "success" });
       setReportDialogOpen(false);
     } catch (error) {
-      console.error('Error reporting user:', error);
-      enqueueSnackbar('Error reporting user, contact us for more information', { variant: 'error' });
+      console.error("Error reporting user:", error);
+      enqueueSnackbar("Error reporting user, contact us for more information", {
+        variant: "error",
+      });
     }
   };
 
@@ -130,28 +158,32 @@ const UserHomePage = () => {
     setReportCategory(event.target.value);
   };
 
-  //Handling review 
+  //Handling review
   const handleReviewSubmit = async () => {
     try {
       const reviewData = {
         target: user._id,
         score: 0,
         message: "string",
-        status: "string"
+        status: "string",
       };
       await reviewService.postReview(reviewData);
-      enqueueSnackbar('Your review was a success', { variant: 'success' });
+      enqueueSnackbar("Your review was a success", { variant: "success" });
     } catch (error) {
-      console.error('Error with posting review:', error);
-      enqueueSnackbar('Error with submitting your review, contact us for more information', { variant: 'error' });
+      console.error("Error with posting review:", error);
+      enqueueSnackbar(
+        "Error with submitting your review, contact us for more information",
+        { variant: "error" }
+      );
     }
   };
-
 
   // fetch user when id is available
   useEffect(() => {
     if (id) {
       fetchUser();
+      fetchReviews();
+      
     }
   }, [id]);
 
@@ -327,11 +359,18 @@ const UserHomePage = () => {
                     onChange={handleCategoryChange}
                     fullWidth
                     displayEmpty
-                    renderValue={(selected) => (selected ? selected : 'Select a Category')}
-                  ><MenuItem value="" disabled>
+                    renderValue={(selected) =>
+                      selected ? selected : "Select a Category"
+                    }
+                  >
+                    <MenuItem value="" disabled>
                       Select a Category
                     </MenuItem>
-                    {Object.values(REPORT_CATEGORY).map(category => <MenuItem key={category} value={category}>{category.replace("_", " ")}</MenuItem>)}
+                    {Object.values(REPORT_CATEGORY).map((category) => (
+                      <MenuItem key={category} value={category}>
+                        {category.replace("_", " ")}
+                      </MenuItem>
+                    ))}
                   </Select>
                   <Box mt={2}>
                     <TextField
@@ -346,7 +385,11 @@ const UserHomePage = () => {
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handleCancelReport}>Cancel</Button>
-                  <Button onClick={handleReportAccount} variant="contained" color="primary">
+                  <Button
+                    onClick={handleReportAccount}
+                    variant="contained"
+                    color="primary"
+                  >
                     Submit
                   </Button>
                 </DialogActions>
@@ -365,24 +408,26 @@ const UserHomePage = () => {
               errorLearningSkills={error}
             />
           </Stack>
+
+          {/* Viewing reviews section */}
+          <Stack spacing={2}>
+            <Typography variant="subtitle1" component='p' textAlign='center'>
+
+              Reviews
+            </Typography>
+           {(!isLoadingReview) && reviewRes?.data?.data?.map(review => <ReviewCard review={review}/>)}
+
+          </Stack>
         </Box>
-        {/* Viewing reviews section */}
-        <Stack spacing={2}>
-          <Typography display="flex" alignItems="flex-start">
-            {user?.profile?.firstName} {user?.profile?.lastName}&apos;s Reviews
-          </Typography>
-          <ReviewCard
-            user={user} // Pass the user object as a prop to ReviewCard component
-            
-          />
-        </Stack>
-        <Box sx={{
-          display: "flex",
-          justifyContent: "flex-start",
-          alignItems: "center",
-          columnGap: 2,
-        }}>
-        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-start",
+            alignItems: "center",
+            columnGap: 2,
+          }}
+        ></Box>
       </Box>
     </Box>
   );

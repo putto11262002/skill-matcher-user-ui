@@ -5,8 +5,8 @@ export class ReviewService {
         return api.post('/review', payload)
     }
 
-    async getRiewByUser(userId){
-        return api.get(`user/${userId}/reviews`)
+    async getReviewByUser({userId, withSource= false}){
+        return api.get(`user/${userId}/review`, {params: {withSource: withSource}})
     }
 }
 
