@@ -13,11 +13,11 @@ const ReviewCard = ({ review }) => {
         <Card>
             <CardHeader
                 avatar={<Avatar src={review?.source?.avatar?.url || "/images/no-avatar.jpg"} />}
-                subheader={<Rating size="small" readOnly value={review.score}/>}
+                subheader={<Rating size="small" readOnly value={review?.score}/>}
                 title={`${review?.source?.profile?.firstName} ${review?.source?.profile?.lastName}`}
             />
             <CardContent>
-             <Typography>{review.message}</Typography>
+             <Typography>{review?.message}</Typography>
             </CardContent>
         </Card>
     );

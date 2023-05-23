@@ -337,7 +337,7 @@ const UserHomePage = () => {
           </Stack>
 
           {/* Viewing reviews section */}
-          <Stack spacing={2}>
+        {(!isLoadingReview && !loadingReviewError && reviewRes?.data?.data?.length > 0) &&  <Stack spacing={2}>
             <Typography variant="subtitle1" component="p" textAlign="center">
               Reviews
             </Typography>
@@ -345,17 +345,9 @@ const UserHomePage = () => {
               reviewRes?.data?.data?.map((review) => (
                 <ReviewCard review={review} />
               ))}
-          </Stack>
+          </Stack>}
         </Box>
-        {/* Viewing reviews section */}
-        <Stack spacing={2}>
-          <Typography display="flex" alignItems="flex-start">
-            {user?.profile?.firstName} {user?.profile?.lastName}&apos;s Reviews
-          </Typography>
-          <ReviewCard
-            user={user} // Pass the user object as a prop to ReviewCard component
-          />
-        </Stack>
+       
         <Box sx={{
           display: "flex",
           justifyContent: "flex-start",
