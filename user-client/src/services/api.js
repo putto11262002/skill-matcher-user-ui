@@ -63,6 +63,11 @@ api.interceptors.response.use(
       }
     }
 
+    if(err.response.status === 403){
+      await authService.signOut();
+      Router.push('/landing?clearAuth=true');
+    }
+
     return Promise.reject(err.response.data);
   },
 );
