@@ -23,7 +23,7 @@ services:
       - EDGE_PORT=4566
       - DATA_DIR=/tmp/localstack/data
   api:
-    build: ./api
+    build: ../api
     container_name: skill_matcher_api
     depends_on:
       - mongodb
@@ -40,25 +40,25 @@ services:
       - 8080:8080
 
   admin_client: 
-    build: ./admin-client
+    build: 
+      context: ../admin-client
+      args:
+        - ARG_NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
     container_name: skill_matcher_admin_client
     depends_on:
       - api
-    environment:
-      - PUBLIC_API_BASE_URL=http://localhost:8080
     ports:
-      - 8082:8082
+      - 8082:3000
 
    
-  # user-client:
-  #   build: ./user-client
-  #   container_name: skill-matcher-user-client
-  #   networks:
-  #     - skill-matcher-net
-  #   env_file:
-  #     - ./user-client.env
-  #   ports:
-  #     - "8084:8081"
+  user-client:
+    build: 
+      context: ../user-client
+      args:
+        - ARG_NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
+    container_name: skill_matcher_user_client
+    ports:
+      - "8081:3000"
 
 
 
