@@ -80,7 +80,7 @@ Note: OpenAPI specification can be found at `<base url>/api-docs`
 
 - `yarn build`: Build the application. 
 
-## Running Skill Matcher with docker compose locally
+## Run Skill Matcher with docker compose locally
 
 - clone the repository
 
@@ -96,9 +96,87 @@ Note: OpenAPI specification can be found at `<base url>/api-docs`
   - The user client runs on `http://localhost:8081`
 
 
+## Run Skill Matcher in development mode
+
+## MongoDB and S3 (Optional)
+
+- If you do not already have MongoDB and/or S3 running. We do provide a docker compose file in `docker/infras` to spin up the required infrastructure locally. 
+- To initialise a S3 bucket run the script in `docker/init_s3.sh`. This will create an S3 bucket called `skill-matcher-bucket`
+- MongoDB default configuration are:
+  - Host: `localhost`
+  - Port: `27017`
+  - Root user: `root`
+  - Root password: `password`
+  - Database: `skill-matcher`
+- S3 default configurations are:
+  - Endpoint: `http://localhost:4566/`
+  - Bucket name: `skill-matcher-bucket`
+  - Region: Any valid AWS region 
+  - Access key Id: Any random string
+  - Secret Access Key: Any random string
+
+### API
+
+- Configure environment variable in `api/.env` file appropriately. See `api/exmaple.env` to see a list of all the variables.
+
+- If you are using the provided docker compose to run MongoDB and S3 with the default configuration. Use the copy the following configuration into your `api/.env` file:
+
+```
+NODE_ENV=development
+
+MONGO_URI=mongodb://root:password@localhost:27017/skill-matcher
+
+PORT=8080
+
+ROOT_USER_USERNAME=root
+ROOT_USER_PASSWORD=password
+ROOT_USER_EMAIL=root@example.com
+
+AWS_USE_LOCAL=true
+AWS_REGION=ap-southeast-2
+AWS_ACCESS_KEY_ID=demo
+AWS_SECRET_ACCESS_KEY=demo
+
+AWS_S3_PUBLIC_BUCKET_NAME=skill-matcher-bucket
+AWS_S3_ENDPOINT=http://localhost:4566
+```
+
+- Navigate into `api`
+
+- To populate the application with dummy data run `npm run migrate up`.
+
+- Run the `npm run start:dev` to start the application in development mode.
 
 
-  
+### User client
+
+- Configure environment variable in `user-client/.env`. See `api/example.env` to see all the available variables.
+
+- If you are using the default configuration for the API. Copy the following configuration into your `user-client/.env`.
+```
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
+SERVER_SIDE_API_BASE_URL=http://localhost:8080
+```
+
+- Navigate to `user-client`
+
+- Run `yarn dev` to start the application in development mode.
+
+
+### Admin client
+
+- Configure environment variable in `admin-client/.env`. See `admin/example.env` to see all the available variables.
+
+- If you are using the default configuration for the API. Copy the following configuration into your `user-client/.env`.
+```
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
+SERVER_SIDE_API_BASE_URL=http://localhost:8080
+```
+
+- Navigate to `admin-client`
+
+- Run `yarn dev` to start the application in development mode.
+
 
 
 
