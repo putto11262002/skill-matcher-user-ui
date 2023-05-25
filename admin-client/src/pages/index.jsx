@@ -3,15 +3,15 @@ import { Inter } from 'next/font/google';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
+import useAuth from '@/hooks/useAuth';
+import Loader from '@/components/common/Loader';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home({}) {
-  const router = useRouter();
-  const { isLoggedIn } = useSelector((state) => state.auth);
-  useEffect(() => {
-    if (!isLoggedIn) router.push('/sign-in');
-  }, []);
+   useAuth()
+
+  
   return (
     <>
       <Head>

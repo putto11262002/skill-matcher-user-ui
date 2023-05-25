@@ -1,3 +1,4 @@
+import { setCookie } from 'cookies-next';
 import { USER_ROLE } from '../constants/user.contant';
 import api from './api';
 import tokenService from './token.service';
@@ -9,17 +10,17 @@ export class AuthService {
   }
 
   setLocalUser(user) {
-    if (typeof window === 'undefined') return null;
+    if (!process.browser) return null;
     return window.localStorage.setItem('user', user ? JSON.stringify(user) : null);
   }
 
   getLocalUser() {
-    if (typeof window === 'undefined') return null;
+    if (!process.browser) return null;
     return JSON.parse(window.localStorage.getItem('user'));
   }
 
   removeLocalUser() {
-    if (typeof window === undefined) return null;
+    if (!process.browser) return null;
     return window.localStorage.removeItem('user');
   }
 
@@ -30,9 +31,15 @@ export class AuthService {
       statusCode: 403,
       message: 'Forbidden',
     });
+
+    // set local storage
     tokenService.setLocalAccessToken(accessToken);
     tokenService.setLocalRefreshToken(refreshToken);
     this.setLocalUser(user);
+
+    // set cookies
+    tokenService.setCookieAccessToken(accessToken);
+    tokenService.setCookieRefreshToken(refreshToken)
     return res;
   }
 

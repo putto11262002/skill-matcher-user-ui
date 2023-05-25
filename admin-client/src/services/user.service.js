@@ -16,6 +16,10 @@ export class UserService {
   //   return window.localStorage.removeItem('user');
   // }
 
+  async getSelf() {
+    return api.get("/user/self");
+  }
+
   async addUser(payload) {
     return api.post('/admin/user', payload);
   }

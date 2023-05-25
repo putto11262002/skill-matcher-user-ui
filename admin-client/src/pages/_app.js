@@ -1,12 +1,16 @@
 import Layout from '@/components/common/Layout';
 import '@/styles/globals.css';
 import { CssBaseline } from '@mui/material';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import store from '@/redux/stores';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SnackbarProvider } from 'notistack';
 import { ThemeProvider } from '@emotion/react';
 import { theme } from '../styles/theme';
+import userService from '@/services/user.service';
+import { setCookie, setCookies } from 'cookies-next';
+import api from '@/services/api';
+
 const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }) {
@@ -30,4 +34,11 @@ export default function App({ Component, pageProps }) {
       </QueryClientProvider>
     </Provider>
   );
+}
+
+
+App.getInitialProps = async (context) =>{
+  return {
+   
+  }
 }

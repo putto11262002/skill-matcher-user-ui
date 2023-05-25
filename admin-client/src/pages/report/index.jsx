@@ -6,8 +6,10 @@ import { useQuery } from '@tanstack/react-query';
 import reportService from '../../services/report.service';
 import { REPORT_PER_PAGE } from '../../constants/report.constant';
 import ReportDialog from '../../components/report/ReportDialog';
+import useAuth from '@/hooks/useAuth';
 
 const ReportPage = () => {
+  useAuth()
   const [page, setPage] = useState(0);
   const [query, setQuery] = useState({});
   const [selectedReport, setSelectedReport] = useState(undefined);
