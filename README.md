@@ -102,7 +102,7 @@ Note: OpenAPI specification can be found at `<base url>/api-docs`
 
 ## Run Skill Matcher in development mode
 
-## MongoDB and S3 (Optional)
+### MongoDB and S3 (Optional)
 
 - If you do not already have MongoDB and/or S3 running. We do provide a docker compose file in `docker/infras` to spin up the required infrastructure locally. 
 - To initialise a S3 bucket run the script in `docker/init_s3.sh`. This will create an S3 bucket called `skill-matcher-bucket`
