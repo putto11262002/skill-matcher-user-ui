@@ -51,7 +51,7 @@ api.interceptors.response.use(
         return api(originalConfig);
       } catch (_err) {
         await authService.signOut();
-        Router.push('/sign-in');
+        Router.push('/sign-in?clearAuth=true');
 
         if (_err.message && _err.statusCode) {
           return Promise.reject(_err);

@@ -3,16 +3,28 @@ import { createSlice } from '@reduxjs/toolkit';
 import { signIn, signOut } from '../thunks/user.thunk';
 import authService from '@/services/auth.service';
 
-const user = authService.getLocalUser();
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    user,
-    isLoggedIn: user ? true : false,
+    user: authService.getLocalUser(),
+    isLoggedIn: authService.getLocalUser() ? true : false,
     loading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    clearAuth: (state, action) => ({
+      ...state,
+      user: undefined,
+      isLoggedIn: false,
+      loading: false,
+      error: null
+    }),
+    updateUser: (state, {payload}) => ({
+      ...state,
+      user: payload
+    })
+  },
   extraReducers(builder) {
     builder
       .addCase(signIn.pending, (state, action) => ({
@@ -51,7 +63,7 @@ export const authSlice = createSlice({
   },
 });
 
-export const {} = authSlice.actions;
+export const {clearAuth, updateUser} = authSlice.actions;
 
 const authReducer = authSlice.reducer;
 

@@ -10,13 +10,16 @@ const inter = Inter({ subsets: ['latin'] });
 
 export default function Home({}) {
    useAuth()
+   const router = useRouter()
+
+   useEffect(() => {
+    router.push('/user')
+   }, [])
 
   
   return (
     <>
-      <Head>
-        <title>Skill matcher</title>
-      </Head>
+      
     </>
   );
 }
