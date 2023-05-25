@@ -1,14 +1,15 @@
-import Router  from 'next/router'
-import React, { useEffect, useState } from 'react'
+import { useRouter }  from 'next/router'
+import  { useEffect,  } from 'react'
 import { useSelector } from 'react-redux'
 
 const useAuth = () => {
   
     const {isLoggedIn} = useSelector(state => state.auth)
-    
-   if(!isLoggedIn && process.browser){
-    Router.push('/sign-in')
-   }
+
+    const router = useRouter()
+    useEffect(() => {
+        if(!isLoggedIn) router.push('/sign-in')
+    }, [isLoggedIn])
    
   return null
 }
