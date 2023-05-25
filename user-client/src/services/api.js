@@ -4,18 +4,22 @@ const { default: axios } = require('axios');
 const { default: tokenService } = require('./token.service');
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
+
 api.interceptors.request.use(
   (config) => {
-    const accessToken = tokenService.getLocalAcessToken();
-    if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
+    if (process.browser) {
+      const accessToken = tokenService.getLocalAcessToken();
+      if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
     }
+    config.baseURL = process.browser
+      ? process.env.NEXT_PUBLIC_API_BASE_URL
+      : process.env.SERVER_SIDE_API_BASE_URL;
+
     return config;
   },
   (error) => Promise.reject(error),
@@ -24,58 +28,44 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (res) => res,
   async (err) => {
+    if (!process.browser) return;
     const originalConfig = err.config;
-    if (err.response) {
-      // Access Token was expired
-      if (
-        err.response.status === 401 &&
-        !["/auth/sign-in", "/auth/sign-out", "/auth/refresh"].includes(originalConfig.url)
-      ) {
-      
 
-        try {
-          const rs = await authService.refresh();
-          const { accessToken } = rs.data;
-          tokenService.setLocalAccessToken(accessToken);
-          api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+    if (!err.response)
+      return Promise.reject({
+        statusCode: 500,
+        message: 'Something went wrong, please try again later',
+      });
 
-          return api(originalConfig);
-        } catch (_err) {
-          await  authService.signOut()
-          if (_err.message && _err.statusCode) {
-            return Promise.reject(_err);
-          }
+    if (/^\/auth.*/.test(originalConfig.url)) return Promise.reject(err.response.data);
 
-          return Promise.reject({
-            statusCode: 500,
-            message: 'Something went wrong, please try again later',
-          });
+    if (err.response.status === 401) {
+      try {
+        const rs = await authService.refresh();
+        const { accessToken } = rs.data;
+
+        tokenService.setLocalAccessToken(accessToken);
+        tokenService.setCookieAccessToken(accessToken);
+
+        return api(originalConfig);
+      } catch (_err) {
+        await authService.signOut();
+        Router.push('/landing?clearAuth=true');
+
+        if (_err.message && _err.statusCode) {
+          return Promise.reject(_err);
         }
+
+        return Promise.reject({
+          statusCode: 500,
+          message: 'Something went wrong, please try again later',
+        });
       }
-
-      // if (err.response.status === 403 && err.response.data) {
-      //   return Promise.reject(err.response.data);
-      // }
     }
 
-    if (err.response && err.response.data) {
-      return Promise.reject(err.response.data);
-    }
-
-    return Promise.reject({
-      statusCode: 500,
-      message: 'Something went wrong, please try again later',
-    });
+    return Promise.reject(err.response.data);
   },
 );
 
-api.signUp = async ({ name, email, password }) => {
-  try {
-    const res = await authService.signUp(name, email, password);
-    return res.data;
-  } catch (err) {
-    return Promise.reject(err);
-  }
-};
 
 export default api;

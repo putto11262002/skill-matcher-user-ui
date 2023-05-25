@@ -6,7 +6,7 @@ const useAuth = () => {
     const {isLoggedIn} = useSelector(state => state.auth)
     const router = useRouter()
     useEffect(() => {
-        if(!isLoggedIn) router.push('/login')
+        if(!isLoggedIn) router.push('/landing')
     }, [isLoggedIn])
   return null
 }

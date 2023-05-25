@@ -1,3 +1,5 @@
+import { setCookie } from "cookies-next";
+
 export class TokenService {
   getLocalAcessToken() {
     if (typeof window === 'undefined') return null;
@@ -27,6 +29,14 @@ export class TokenService {
   removeLocalRefreshToken() {
     if (typeof window === 'undefined') return null;
     return window.localStorage.removeItem('refreshToken');
+  }
+
+  setCookieAccessToken(token){
+    setCookie('accessToken', token)
+  }
+
+  setCookieRefreshToken(token){
+    setCookie('refreshToken', token)
   }
 }
 

@@ -27,6 +27,9 @@ export class AuthService {
     tokenService.setLocalAccessToken(accessToken);
     tokenService.setLocalRefreshToken(refreshToken);
     this.setLocalUser(user);
+
+    tokenService.setCookieAccessToken(accessToken)
+    tokenService.setCookieRefreshToken(refreshToken)
     return res;
   }
 
@@ -40,7 +43,7 @@ export class AuthService {
       const res = await api.delete('/auth/sign-out');
       return res;
       }catch(e){
-        throw e
+        return e
       }finally{
         tokenService.removeLocalAccessToken();
         tokenService.removeLocalRefreshToken();

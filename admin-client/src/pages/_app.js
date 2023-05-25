@@ -63,7 +63,7 @@ const InnerApp = ({children}) => {
   // listen to when sign out is perform in api.js but redux state not updated
   useEffect(() => {
     if(_clearAuth === 'true') dispatch(clearAuth())
-  }, [clearAuth])
+  }, [_clearAuth])
 
   // Fetch new user data every time app first load
   useEffect(() => {
