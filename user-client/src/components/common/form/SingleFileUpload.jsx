@@ -10,7 +10,7 @@ import {
   Stack,
   useMediaQuery,
 } from '@mui/material';
-import Image from 'next/image';
+
 import React, { useEffect, useRef, useState } from 'react';
 import { VALID_IMAGE_MIME } from '@/constants/image.constant';
 import { USER_DEFAULT_AVATAR } from '@/constants/user.constant';
@@ -69,8 +69,8 @@ const SingleFileUpload = ({  imageUrl, onUpload, loading, error }) => {
     <Box>
       <Stack flex alignItems='center' justifyContent='center' spacing={3}>
         <input onChange={handleChange} type='file' ref={inputRef} hidden />
-        <Image
-        priority={true}
+        <img
+       
        
           src={url}
           style={{ objectFit: 'cover' }}

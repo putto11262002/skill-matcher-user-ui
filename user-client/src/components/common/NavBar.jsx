@@ -36,7 +36,7 @@ import authService from "@/services/auth.service";
 import { signOut } from "@/redux/thunks/user.thunk";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useSnackbar } from 'notistack';
-import Image from "next/image";
+
 
 const drawerWidth = 240;
 const navLinks = [
@@ -174,7 +174,7 @@ const NavBar = ({ }) => {
           </Box>
           {/* Logo icon */}
           <Box sx={{ flexGrow: 0 }}>
-          <Image src="/images/logoIcon.png" alt="logo"  height={40} width={40} placeholder="blue" />
+          <img src="/images/logoIcon.png" alt="logo"  height={40} width={40} placeholder="blue" />
           
           </Box>
 
@@ -304,9 +304,9 @@ const NavBar = ({ }) => {
                 <Tooltip title={`Settings`}>
                   <IconButton onClick={handleOpenUserMenu}>
                     <Avatar
-                      sx={{ width: 30, height: 30 }}
+                    
                       src={user?.avatar?.url || "/images/no-avatar.jpg"}
-                      sizes="s"
+                     
                     />
                   </IconButton>
                 </Tooltip>

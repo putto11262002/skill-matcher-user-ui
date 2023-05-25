@@ -10,7 +10,7 @@ import {
   Stack,
   useMediaQuery,
 } from '@mui/material';
-import Image from 'next/image';
+
 import React, { useEffect, useRef, useState } from 'react';
 import { VALID_IMAGE_MIME } from '@/constants/image.constant';
 import { USER_DEFAULT_AVATAR } from '@/constants/user.contant';
@@ -69,15 +69,14 @@ const SingleFileUpload = ({  imageUrl, onUpload, loading, error }) => {
     <Box>
       <Stack spacing={3}>
         <input onChange={handleChange} type='file' ref={inputRef} hidden />
-        <Image
-        priority={true}
-       
-          src={url}
+        <img
+         src={url}
           style={{ objectFit: 'cover' }}
           width={isLargeScreen ? 180 : 100}
           height={isLargeScreen ? 180 : 100}
           alt='user avatar'
-        />
+         />
+        
         {errorMessage && <FormHelperText error={true}>{errorMessage}</FormHelperText>}
         <Box>
           <Button disabled={loading}  onClick={handleClick}  variant='contained'>

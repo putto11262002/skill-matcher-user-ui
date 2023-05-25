@@ -62,7 +62,7 @@ const TopBar = ({ handleDrawerToggle }) => {
 
           <Box>
             <IconButton onClick={handleOpenUserMenu} >
-              <Avatar sx={{ width: 30, height: 30 }} sizes='s' src={user?.profile?.avatar} />
+              <Avatar sizes='s' src={user?.profile?.avatar} />
             </IconButton>
           </Box>
         </Box>
