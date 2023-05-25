@@ -8,7 +8,7 @@ export default registerAs('auth', () => ({
     },
     refreshToken: {
       secret: process.env.REFRESH_TOKEN_JWT_SECRET || 'secret',
-      expiresIn: '5m',
+      expiresIn: '300d',
     },
   },
   hash: { saltRounds: 10 },
