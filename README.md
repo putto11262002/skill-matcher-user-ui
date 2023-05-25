@@ -14,7 +14,7 @@
 
 - `ROOT_USER_PASSWORD`: The password of the root user. By default it is set to `password`
 
-- `ACCESS_TOKEN_JWT_SECRET`: Secret used to sign the access token. By default it is set to `secret`. It change should be changed in production.
+- `ACCESS_TOKEN_JWT_SECRET`: Secret used to sign the access token. By default it is set to `secret`. Should be changed in production.
 
 - `REFRESH_TOKEN_JWT_SECRET`: Secret used to sign the refresh token. By default it is set to `secret`. Should be changed in production.
 
@@ -86,7 +86,7 @@ Note: OpenAPI specification can be found at `<base url>/api-docs`
 
 - navigate to `docker` folder
 
-- Build and run the application by running `docker compose up`. Use `-d` flag to run in detach model
+- Build and run the application by running `docker compose up`. Use `-d` flag to run in detach mode.
 
 - Run the script in `docker/init_s3.sh` to initialise a local s3 bucket.
 
