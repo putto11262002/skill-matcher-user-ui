@@ -1,5 +1,5 @@
 import { createTheme, } from "@mui/material";
-import { blue, grey, lightBlue, red } from "@mui/material/colors";
+import { amber, blue, grey, lightBlue, orange, red, yellow } from "@mui/material/colors";
 
 
 export const theme = createTheme({
@@ -10,7 +10,7 @@ export const theme = createTheme({
          
         },
         secondary: {
-            main: '#f9c013'
+            main: amber[400]
         }
     },
   components: {
